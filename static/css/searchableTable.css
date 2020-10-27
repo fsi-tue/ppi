@@ -1,0 +1,32 @@
+table.gridtable {
+    font-size: 15px;
+    color: #333333;
+    border-width: 1px;
+    border-color: #666666;
+    border-collapse: collapse;
+    line-height: 25px;
+}
+
+table.gridtable th {
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #666666;
+    background-color: #000080;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+table.gridtable td {
+    border-width: 1px;
+    padding: 5px;
+    margin: 0px;
+    border-style: solid;
+    border-color: #666666;
+    background-color: #ffffff;
+}
+
+#search {
+    height: 30px;
+    width: calc(100% - 18px);
+}

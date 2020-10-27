@@ -1,0 +1,15 @@
+
+    /*
+      Dein Protokoll wurde angenommen. Vielen Dank für deine Mithilfe.
+      Das Protokoll sollte nicht zu knapp formuliert sein (nicht nur Stichworte der behandelten Themen!).
+      Neben den Fragen sollten auch die korrekten Antworten (oder die Folgen falscher Antworten) enthalten.
+      Im Protokoll fehlen wesentliche Angaben.
+      Das Protokoll ist im System bereits vorhanden oder scheint zumindest in Teilen abgeschrieben zu sein.
+      Das Dateiformat entspricht nicht den Vorgaben (PDF oder Plain-Text).
+      Das Protokoll wurde nicht selbst geschrieben.
+      Das hochgeladene Dokument ist kein Prüfungsprotokoll.
+      Siehe separate Mail zur Begründung
+    */
+    
+    
+  

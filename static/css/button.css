@@ -1,0 +1,62 @@
+#styledButton, #styledButtonGreen, #styledButtonRed, #styledButtonGray {
+	background-color: #000080;
+    font-family: Arial;
+	border-radius: 5px;
+	box-shadow: 0px 0px 1px 1px #999;
+	width: 320px;
+	font-weight: bold;
+	text-align: center;
+	font-size: 15px;
+	color: white;
+	vertical-align: middle;
+	line-height: 50px;
+	cursor: pointer;
+	border-width: 0px;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	margin-top: 0px;
+	margin-right: 10px;
+	margin-bottom: 0px;
+	margin-left: 10px;
+	text-decoration: none;
+}
+
+#styledButton:hover {
+	background-color: #2929a9;
+}
+
+#styledButtonGreen {
+	background-color: #008000;
+}
+
+#styledButtonGreen:hover {
+	background-color: #29a929;
+}
+
+#styledButtonRed {
+	background-color: #800000;
+}
+
+#styledButtonRed:hover {
+	background-color: #a92929;
+}
+
+#styledButtonGray {
+	background-color: #cccccc;
+	color: black;
+	box-shadow: 0px 0px 1px 1px #ccc;
+	cursor: default;
+}
+
+#styledButtonGray:hover {
+}
+
+#styledButtonTransparent {
+	background-color: rgba(0, 0, 0, 0.0);
+	cursor: default;
+}
+
+#styledButtonTransparent:hover {
+}
