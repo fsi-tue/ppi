@@ -2,9 +2,11 @@
     require_once('core/Main.php');
     
     if (!$userSystem->isLoggedIn()) {
+        $log->info('userslist.php', 'User was not logged in');
         $redirect->redirectTo('login.php');
     }
     if ($currentUser->getRole() != Constants::USER_ROLES['admin']) {
+        $log->error('userslist.php', 'User was not admin');
         $redirect->redirectTo('lectures.php');
     }
     
@@ -23,11 +25,14 @@
             $result = $userSystem->updateUser($userID, $passwordHash, $role, $status, $tokens, $lastLoggedIn, $language, $comment);
             if ($result) {
                 $postStatus = 'UPDATED_USER_DATA';
+                $log->debug('userslist.php', 'Successfully updated user data');
             } else {
                 $postStatus = 'ERROR_ON_UPDATING_USER_DATA';
+                $log->debug('userslist.php', 'Error on updating user data');
             }
         } else {
             $postStatus = 'ERROR_ON_UPDATING_USER_DATA';
+            $log->debug('userslist.php', 'Missing on updating user data');
         }
     }
     
@@ -41,11 +46,39 @@
         $role = filter_input(INPUT_GET, 'role', FILTER_SANITIZE_ENCODED);
         $username = filter_input(INPUT_GET, 'username', FILTER_SANITIZE_ENCODED);
         $userID = filter_input(INPUT_GET, 'userID', FILTER_SANITIZE_ENCODED);
+        $deleteID = filter_input(INPUT_GET, 'deleteID', FILTER_SANITIZE_ENCODED);
         if (is_numeric($pageValue)) {
             $page = intval($pageValue);
+        } else {
+            if ($pageValue != '') {
+                $log->debug('userslist.php', 'Page value is not numeric: ' . $pageValue);
+            }
         }
         if (isset($_GET['role']) || isset($_GET['username']) || isset($_GET['userID'])) {
             $open = ' open';
+        }
+        if (isset($_GET['deleteID'])) {
+            if (is_numeric($deleteID)) {
+                if ($deleteID != '1') {
+                    $user = $userSystem->getUser($deleteID);
+                    if ($user != null) {
+                        $result = $userSystem->updateUser($deleteID, $user->getPasswordHash(), 'TO_BE_DELETED', $user->getStatus(), $user->getTokens(), $user->getlastLoggedIn(), $user->getLanguage(), $user->getComment());
+                        if (!$result) {
+                            $postStatus = 'ERROR_ON_UPDATING_USER_DATA';
+                            $log->error('userslist.php', 'User could not be marked for deletion with user ID: ' . $deleteID);
+                        }
+                    } else {
+                        $postStatus = 'ERROR_ON_UPDATING_USER_DATA';
+                        $log->error('userslist.php', 'User ID to be deleted not found: ' . $deleteID);
+                    }
+                } else {
+                    $postStatus = 'ERROR_ON_UPDATING_USER_DATA';
+                    $log->error('userslist.php', 'Can not delete the admin user with ID 1');
+                }
+            } else {
+                $postStatus = 'ERROR_ON_UPDATING_USER_DATA';
+                $log->error('userslist.php', 'ID of user to be deleted is not numeric: ' . $deleteID);
+            }
         }
     }
     
@@ -106,9 +139,10 @@
     echo '<div style="width: 5%; display: inline-block;">' . $i18n->get('language') . '</div>';
     echo '<div style="width: 10%; display: inline-block;">' . $i18n->get('comment') . '</div>';
     echo '<div style="width: 10%; display: inline-block; text-align: center;">' . $i18n->get('numberOfBorrowedLectures') . '</div>';
-    echo '<div style="width: 10%; display: inline-block; text-align: center;">' . $i18n->get('viewBorrowedLectures') . '</div>';
-    echo '<div style="width: 10%; display: inline-block; text-align: center;">' . $i18n->get('viewUploadedLectures') . '</div>';
-    echo '<div style="width: 10%; display: inline-block; text-align: center;">' . $i18n->get('save') . '</div>';
+    echo '<div style="width: 7%; display: inline-block; text-align: center;">' . $i18n->get('viewBorrowedLectures') . '</div>';
+    echo '<div style="width: 7%; display: inline-block; text-align: center;">' . $i18n->get('viewUploadedLectures') . '</div>';
+    echo '<div style="width: 8%; display: inline-block; text-align: center;">' . $i18n->get('markForDeletion') . '</div>';
+    echo '<div style="width: 8%; display: inline-block; text-align: center;">' . $i18n->get('save') . '</div>';
     
     $allUsers = $userSystem->getUsers(Constants::NUMBER_OF_ENTRIES_PER_PAGE, $page, $role, $username, $userID);
     foreach ($allUsers as &$user) {
@@ -123,17 +157,22 @@
         echo '<div style="width: 5%; display: inline-block;">' . '<input type="text" name="language" value="' . $user->getLanguage() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>';
         echo '<div style="width: 10%; display: inline-block;">' . '<input type="text" name="comment" value="' . $user->getComment() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>';
         echo '<div style="width: 10%; display: inline-block; text-align: center;">' . count($user->getBorrowRecords()) . '</div>';
-        echo '<div style="width: 10%; display: inline-block; text-align: center;">
+        echo '<div style="width: 7%; display: inline-block; text-align: center;">
                     <a href="examprotocolslist.php?borrowedByUsername=' . $user->getUsername() . '" id="styledButton">
                         <img src="static/img/viewBorrowed.png" alt="view protocol" style="height: 24px; vertical-align: middle;">
                     </a>
                 </div>';
-        echo '<div style="width: 10%; display: inline-block; text-align: center;">
+        echo '<div style="width: 7%; display: inline-block; text-align: center;">
                     <a href="examprotocolslist.php?uploadedByUsername=' . $user->getUsername() . '" id="styledButton">
                         <img src="static/img/viewUploaded.png" alt="view protocol" style="height: 24px; vertical-align: middle;">
                     </a>
                 </div>';
-        echo '<div style="width: 10%; display: inline-block; text-align: center;">' . 
+        echo '<div style="width: 8%; display: inline-block; text-align: center;">
+                    <a href="?deleteID=' . $user->getID() . '" id="styledButtonRed">
+                        <img src="static/img/delete.png" alt="view protocol" style="height: 24px; vertical-align: middle;">
+                    </a>
+                </div>';
+        echo '<div style="width: 8%; display: inline-block; text-align: center;">' . 
                     '<button type="submit" id="styledButton" name="id" value="' . $user->getID() . '" style="padding: 3px; width: 40px; height: 40px; vertical-align: middle;">
                         <img src="static/img/save.png" alt="submit" style="height: 24px;">
                     </button>' .

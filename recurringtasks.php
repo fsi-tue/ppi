@@ -2,10 +2,29 @@
     require_once('core/Main.php');
     
     if (!$userSystem->isLoggedIn()) {
+        $log->info('recurringtasks.php', 'User was not logged in');
         $redirect->redirectTo('login.php');
     }
     if ($currentUser->getRole() != Constants::USER_ROLES['admin']) {
+        $log->error('recurringtasks.php', 'User was not admin');
         $redirect->redirectTo('lectures.php');
+    }
+    
+    if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+        $recurringTaskID = filter_input(INPUT_GET, 'run', FILTER_SANITIZE_ENCODED);
+        if (isset($_GET['run'])) {
+            if (is_numeric($recurringTaskID)) {
+                $result = $recurringTasksSystem->setUpTaskForRun($recurringTaskID);
+                if ($result) {
+                    $log->debug('recurringtasks.php', 'Successfully set up task to be run with ID: ' . $recurringTaskID);
+                    $redirect->redirectTo('recurringtasks.php');
+                } else {
+                    $log->error('recurringtasks.php', 'Setting up task to be run unsuccessful with ID ' . $recurringTaskID);
+                }
+            } else {
+                $log->error('recurringtasks.php', 'Recurring task ID is not numeric: ' . $recurringTaskID);
+            }
+        }
     }
     
     echo $header->getHeader($i18n->get('title'), $i18n->get('recurringTasks'), array('protocols.css', 'button.css', 'searchableTable.css'));
@@ -14,22 +33,27 @@
     
     echo '<div id="protocolsTable" style="padding-left: 40px; padding-bottom: 40px; padding-right: 40px; margin: 0px;">';
     
-    // TODO: remove this
-    echo '<br><br>max 100000 log entries, cleanup<br><br><br>delete outdated borrow records<br><br><br>delete protocols that are marked for deletion regularly<br><br><br>clean up the zip files folder<br><br><br>what else are recurring tasks?<br><br><br>';
+    $recurringTasksData = $recurringTasksSystem->getLastResults();
 
-    $headers = array($i18n->get('recurringTasks'), $i18n->get('date'), $i18n->get('status'));
-    $widths = array(60, 20, 20);
-    $textAlignments = array('left', 'left', 'center');
+    $headers = array($i18n->get('ID'), $i18n->get('recurringTaskName'), $i18n->get('lastSuccessfulRun'), $i18n->get('nextRun'), $i18n->get('status'), $i18n->get('runNow'));
+    $widths = array(10, 40, 10, 10, 10, 10);
+    $textAlignments = array('left', 'left', 'left', 'left', 'center', 'center');
     $data = array();
-    // TODO implement
-    $recurringTasksNames = array();
-    $recurringTasksDates = array();
-    $recurringTasksStatus = array();
-    for ($i = 0; $i < count($recurringTasksNames); $i++) {
+    for ($i = 0; $i < count($recurringTasksData); $i++) {
+        $color = Constants::FAILED_COLOR;
+        if ($recurringTasksData[$i][4] == 'SUCCESS') {
+            $color = Constants::SUCCESS_COLOR;
+        } else if ($recurringTasksData[$i][4] == 'NOT_TO_BE_RUN') {
+            $color = 'rgba(0, 0, 0, 0)';
+        }
         $row = array();
-        $row[] = $recurringTasksNames[$i];
-        $row[] = $recurringTasksDates[$i];
-        $row[] = $recurringTasksStatus[$i];
+        $id = $recurringTasksData[$i][0];
+        $row[] = $id;
+        $row[] = $recurringTasksData[$i][1];
+        $row[] = $dateUtil->dateTimeToStringForDisplaying($recurringTasksData[$i][2], $currentUser->getLanguage());
+        $row[] = $dateUtil->dateTimeToStringForDisplaying($recurringTasksData[$i][3], $currentUser->getLanguage());
+        $row[] = '<div style="background-color: ' . $color . ';">' . $recurringTasksData[$i][4] . '</div>';
+        $row[] = '<a id="styledButton" href="?run=' . $id . '"><nobr><img src="static/img/run.png" style="height: 24px; vertical-align: middle;">&nbsp;&nbsp;' . $i18n->get('runNow') . '</nobr></a>';
         $data[] = $row;
     }
     

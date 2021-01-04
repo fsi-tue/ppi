@@ -34,6 +34,9 @@ class LectureDao {
         return $this->getLecturesImpl($sql, true);
     }
     
+    /**
+     * Executes the query to get exam protocols from the DB.
+     */
     function getLecturesImpl($sql, $lecturesWithAcceptedExamProtocolsOnly) {
         $result = $this->dbConn->query($sql);
         $retList = array();
@@ -56,15 +59,20 @@ class LectureDao {
         return $retList;
     }
     
+    /**
+     * Constructs a lecture object from the given data array.
+     */
     function createLectureFromData($data) {
         $ID = $data['ID'];
-        $longName = $data['longName'];
-        $shortName = $data['shortName'];
-        $field = $data['field'];
+        $name = $data['name'];
+        $status = $data['status'];
         $assignedExamProtocols = $data['assignedExamProtocols'];
-        return new Lecture($ID, $longName, $shortName, $field, $assignedExamProtocols);
+        return new Lecture($ID, $name, $status, $assignedExamProtocols);
     }
     
+    /**
+     * Constructs an exam protocol assigned to lecture object from the given data array.
+     */
     function createExamProtocolAssignedToLectureFromData($data) {
         $ID = $data['ID'];
         $lectureID = $data['lectureID'];
@@ -78,13 +86,10 @@ class LectureDao {
      * If the operation was not successful, FALSE will be returned.
      */
     function addLecture($lecture) {
-        $this->dbConn->beginTransaction(); 
-        
-        $sql = "INSERT INTO \"Lectures\" (\"longName\", \"shortName\", \"field\") VALUES (?, ?, ?)";
-        $result = $this->dbConn->exec($sql, [$lecture->getLongName(), $lecture->getShortName(), $lecture->getField()]);
+        $sql = "INSERT INTO \"Lectures\" (\"name\", \"status\") VALUES (?, ?)";
+        $result = $this->dbConn->exec($sql, [$lecture->getName(), $lecture->getStatus()]);
         $id = $result['lastInsertId'];
         if ($id < 1) {
-            $this->dbConn->rollbackTransaction(); 
             return false;
         }
         
@@ -97,14 +102,10 @@ class LectureDao {
             $result = $this->dbConn->exec($sql, [$assignedProtocol->getLectureID(), $assignedProtocol->getExamProtocolID()]);
             $id = $result['lastInsertId'];
             if ($id < 1) {
-                $this->dbConn->rollbackTransaction(); 
                 return false;
             }
             $assignedProtocol->setID($id);
         }
-        
-        $this->dbConn->commitTransaction(); 
-        
         return $lecture;
     }
     
@@ -113,13 +114,10 @@ class LectureDao {
      * Returns TRUE if the transaction was successful, FALSE otherwise.
      */
     function updateLecture($lecture) {
-        $this->dbConn->beginTransaction(); 
-        
-        $sql = "UPDATE \"Lectures\" SET \"longName\"=?, \"shortName\"=?, \"field\"=? WHERE \"ID\"=?;";
-        $result = $this->dbConn->exec($sql, [$lecture->getLongName(), $lecture->getShortName(), $lecture->getField(), $lecture->getID()]);
+        $sql = "UPDATE \"Lectures\" SET \"name\"=?, \"status\"=? WHERE \"ID\"=?;";
+        $result = $this->dbConn->exec($sql, [$lecture->getName(), $lecture->getStatus(), $lecture->getID()]);
         $rowCount = $result['rowCount'];
         if ($rowCount <= 0) {
-            $this->dbConn->rollbackTransaction(); 
             return false;
         }
         
@@ -133,14 +131,10 @@ class LectureDao {
             $result = $this->dbConn->exec($sql, [$assignedProtocol->getLectureID(), $assignedProtocol->getExamProtocolID()]);
             $id = $result['lastInsertId'];
             if ($id < 1) {
-                $this->dbConn->rollbackTransaction(); 
                 return false;
             }
             $assignedProtocol->setID($id);
         }
-        
-        $this->dbConn->commitTransaction(); 
-        
         return true;
     }
     
@@ -149,8 +143,6 @@ class LectureDao {
      * Returns TRUE if the transaction was successful, FALSE otherwise.
      */
     function deleteLecture($ID) {
-        $this->dbConn->beginTransaction(); 
-        
         $sql = "DELETE FROM \"ExamProtocolAssignedToLectures\" WHERE \"lectureID\"=?;";
         $result = $this->dbConn->exec($sql, [$ID]);
         
@@ -158,12 +150,8 @@ class LectureDao {
         $result = $this->dbConn->exec($sql, [$ID]);
         $rowCount = $result['rowCount'];
         if ($rowCount <= 0) {
-            $this->dbConn->rollbackTransaction(); 
             return false;
         }
-        
-        $this->dbConn->commitTransaction(); 
-        
         return true;
     }
 }

@@ -6,6 +6,7 @@ class UserSystem {
     private $hashUtil = null;
     private $urlUtil = null;
     private $dateUtil = null;
+    private $log = null;
 
     function __construct($userDao, $email, $i18n, $hashUtil, $urlUtil, $dateUtil) {
         $this->userDao = $userDao;
@@ -14,6 +15,13 @@ class UserSystem {
         $this->hashUtil = $hashUtil;
         $this->urlUtil = $urlUtil;
         $this->dateUtil = $dateUtil;
+    }
+
+    /**
+     * Set the log to enable error logging.
+     */
+    function setLog($log) {
+        $this->log = $log;
     }
     
     /**
@@ -110,7 +118,9 @@ class UserSystem {
         $user = new User(NULL, $username, $passwordHash, Constants::USER_ROLES['notActivated'], $randomString, '0', '', Constants::DEFAULT_LANGUAGE, '', array());
         $result = $this->userDao->addUser($user);
         if ($result != false) {
-            $this->email->send($result->getUsername() . Constants::EMAIL_USER_DOMAIN, $this->i18n->get('activationMailSubject'), $this->i18n->getWithValues('activationMailMessage', [$result->getUsername(), $this->urlUtil->getCurrentDirname() . '/activate.php?user=' . $result->getUsername() . '&key=' . $randomString]));
+            $this->email->send($result->getUsername() . Constants::EMAIL_USER_DOMAIN, $this->i18n->get('activationMailSubject'), $this->i18n->getWithValues('activationMailMessage', [$result->getUsername(), $this->urlUtil->getCurrentDirname() . 'activate.php?user=' . $result->getUsername() . '&key=' . $randomString]));
+        } else {
+            $this->log->error(static::class . '.php', 'Error on creating user with username ' . $username . '!');
         }
         return $result;
     }
@@ -124,6 +134,8 @@ class UserSystem {
             $user->setPasswordHash($passwordHash);
             $result = $this->userDao->updateUser($user);
             return $result;
+        } else {
+            $this->log->error(static::class . '.php', 'Error on changing the password of the currently logged in user!');
         }
         return false;
     }
@@ -137,6 +149,8 @@ class UserSystem {
             $user->setLanguage($newLanguage);
             $result = $this->userDao->updateUser($user);
             return $result;
+        } else {
+            $this->log->error(static::class . '.php', 'Error on changing the language of the currently logged in user!');
         }
         return false;
     }
@@ -156,6 +170,8 @@ class UserSystem {
             $newTokens = intval($newTokens);
             $user->setTokens($newTokens);
             return $this->userDao->updateUser($user);
+        } else {
+            $this->log->error(static::class . '.php', 'Error on adding tokens to the currently logged in user!');
         }
         return false;
     }
@@ -167,10 +183,10 @@ class UserSystem {
     function askTokens($message) {
         $user = $this->getLoggedInUser();
         if ($user != NULL) {
-            $messageFull = $this->i18n->get('userAsksForTokensMessage');
-            $messageFull .= $this->urlUtil->getCurrentDirname() . '/asktokens.php?username=' . $user->getUsername();
-            $messageFull .= $message;
+            $messageFull = $this->i18n->getWithValues('userAsksForTokensMessage', [$this->urlUtil->getCurrentDirname() . 'asktokens.php?username=' . $user->getUsername(), $message]);
             return $this->email->send(Constants::EMAIL_ADMIN, $this->i18n->get('userAsksForTokens'), $messageFull);
+        } else {
+            $this->log->error(static::class . '.php', 'Error on asking for tokens by the currently logged in user!');
         }
         return false;
     }
@@ -189,8 +205,11 @@ class UserSystem {
             $user->setTokens(Constants::START_BALANCE);
             $result = $this->userDao->updateUser($user);
             if ($result == false) {
+                $this->log->error(static::class . '.php', 'Error on activating the user ' . $username . '!');
                 return false;
             }
+        } else {
+            $this->log->error(static::class . '.php', 'Error on getting the user with the username ' . $username . '!');
         }
         return $user;
     }
@@ -209,7 +228,11 @@ class UserSystem {
             if ($result != false) {
                 $this->email->send($user->getUsername() . Constants::EMAIL_USER_DOMAIN, $this->i18n->get('resetPasswordMailSubject'), $this->i18n->getWithValues('resetPasswordMailMessagePleaseLogInAndChangePassword', [$username, $randomString]));
                 return true;
+            } else {
+                $this->log->error(static::class . '.php', 'Error on resetting the password of the user ' . $username . '!');
             }
+        } else {
+            $this->log->error(static::class . '.php', 'Error on getting the user with the username ' . $username . '!');
         }
         return false;
     }
@@ -245,7 +268,7 @@ class UserSystem {
     function updateUser($userID, $passwordHash, $role, $status, $tokens, $lastLoggedIn, $language, $comment) {
         $user = $this->userDao->getUser($userID);
         if ($user == NULL) {
-            // TODO log error
+            $this->log->error(static::class . '.php', 'Error on getting the user with the user ID ' . $userID . '!');
             return false;
         }
         $user->setPasswordHash($passwordHash);
@@ -264,7 +287,8 @@ class UserSystem {
      */
     function grantTokensAndMailToUploader($uploadedByUsername, $tokensToAdd, $reply) {
         if ($reply != '') {
-            $this->email->send($uploadedByUsername . Constants::EMAIL_USER_DOMAIN, $this->i18n->get('uploadedExamProtocolSubject'), $reply);
+            $messageFull = $this->i18n->getWithValues('uploadFeedbackMailMessage', [$uploadedByUsername, $reply]);
+            $this->email->send($uploadedByUsername . Constants::EMAIL_USER_DOMAIN, $this->i18n->get('uploadedExamProtocolSubject'), $messageFull);
         }
         return $this->addTokensToUser($uploadedByUsername, $tokensToAdd);
     }

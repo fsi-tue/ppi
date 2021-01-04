@@ -1,6 +1,7 @@
 <?php
 class UserDao {
     private $dbConn = null;
+    private $dateUtil = null;
 
     function __construct($dbConn, $dateUtil) {
         $this->dbConn = $dbConn;
@@ -71,6 +72,9 @@ class UserDao {
         return $this->getUsersImpl($sql);
     }
     
+    /**
+     * Executes the query to get users from the DB.
+     */
     function getUsersImpl($sql) {
         $result = $this->dbConn->query($sql);
         $retList = array();
@@ -88,6 +92,9 @@ class UserDao {
         return $retList;
     }
     
+    /**
+     * Constructs a user object from the given data array.
+     */
     function createUserFromData($data) {
         $ID = $data['ID'];
         $username = $data['username'];
@@ -102,6 +109,9 @@ class UserDao {
         return new User($ID, $username, $passwordHash, $role, $status, $tokens, $lastLoggedIn, $language, $comment, $borrowRecords);
     }
     
+    /**
+     * Constructs a borrow record object from the given data array.
+     */
     function createBorrowRecordFromData($data) {
         $ID = $data['ID'];
         $lectureID = $data['lectureID'];
@@ -116,13 +126,10 @@ class UserDao {
      * If the operation was not successful, FALSE will be returned.
      */
     function addUser($user) {
-        $this->dbConn->beginTransaction(); 
-        
         $sql = "INSERT INTO \"Users\" (\"username\", \"passwordHash\", \"role\", \"status\", \"tokens\", \"lastLoggedIn\", \"language\", \"comment\") VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         $result = $this->dbConn->exec($sql, [$user->getUsername(), $user->getPasswordHash(), $user->getRole(), $user->getStatus(), $user->getTokens(), $user->getLastLoggedIn(), $user->getLanguage(), $user->getComment()]);
         $id = $result['lastInsertId'];
         if ($id < 1) {
-            $this->dbConn->rollbackTransaction(); 
             return false;
         }
         
@@ -135,14 +142,10 @@ class UserDao {
             $result = $this->dbConn->exec($sql, [$record->getLectureID(), $record->getBorrowedByUserID(), $this->dateUtil->dateTimeToString($record->getBorrowedUntilDate())]);
             $id = $result['lastInsertId'];
             if ($id < 1) {
-                $this->dbConn->rollbackTransaction(); 
                 return false;
             }
             $record->setID($id);
         }
-        
-        $this->dbConn->commitTransaction(); 
-        
         return $user;
     }
     
@@ -151,13 +154,10 @@ class UserDao {
      * Returns TRUE if the transaction was successful, FALSE otherwise.
      */
     function updateUser($user) {
-        $this->dbConn->beginTransaction(); 
-        
         $sql = "UPDATE \"Users\" SET \"username\"=?, \"passwordHash\"=?, \"role\"=?, \"status\"=?, \"tokens\"=?, \"lastLoggedIn\"=?, \"language\"=?, \"comment\"=? WHERE \"ID\"=?;";
         $result = $this->dbConn->exec($sql, [$user->getUsername(), $user->getPasswordHash(), $user->getRole(), $user->getStatus(), $user->getTokens(), $user->getLastLoggedIn(), $user->getLanguage(), $user->getComment(), $user->getID()]);
         $rowCount = $result['rowCount'];
         if ($rowCount <= 0) {
-            $this->dbConn->rollbackTransaction(); 
             return false;
         }
         
@@ -171,14 +171,10 @@ class UserDao {
             $result = $this->dbConn->exec($sql, [$record->getLectureID(), $record->getBorrowedByUserID(), $this->dateUtil->dateTimeToString($record->getBorrowedUntilDate())]);
             $id = $result['lastInsertId'];
             if ($id < 1) {
-                $this->dbConn->rollbackTransaction(); 
                 return false;
             }
             $record->setID($id);
         }
-        
-        $this->dbConn->commitTransaction(); 
-        
         return true;
     }
     
@@ -187,8 +183,6 @@ class UserDao {
      * Returns TRUE if the transaction was successful, FALSE otherwise.
      */
     function deleteUser($ID) {
-        $this->dbConn->beginTransaction(); 
-        
         $sql = "DELETE FROM \"BorrowRecords\" WHERE \"borrowedByUserID\"=?;";
         $result = $this->dbConn->exec($sql, [$ID]);
         
@@ -196,11 +190,8 @@ class UserDao {
         $result = $this->dbConn->exec($sql, [$ID]);
         $rowCount = $result['rowCount'];
         if ($rowCount <= 0) {
-            $this->dbConn->rollbackTransaction(); 
             return false;
         }
-        
-        $this->dbConn->commitTransaction(); 
         
         return true;
     }

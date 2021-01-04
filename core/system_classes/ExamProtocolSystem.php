@@ -4,12 +4,20 @@ class ExamProtocolSystem {
     private $dateUtil = null;
     private $fileUtil = null;
     private $hashUtil = null;
+    private $log = null;
 
     function __construct($examProtocolDao, $dateUtil, $fileUtil, $hashUtil) {
         $this->examProtocolDao = $examProtocolDao;
         $this->dateUtil = $dateUtil;
         $this->fileUtil = $fileUtil;
         $this->hashUtil = $hashUtil;
+    }
+
+    /**
+     * Set the log to enable error logging.
+     */
+    function setLog($log) {
+        $this->log = $log;
     }
     
     /**
@@ -27,7 +35,7 @@ class ExamProtocolSystem {
         for ($i = 0; $i < count($user->getBorrowRecords()); $i++) {
             $record = $user->getBorrowRecords()[$i];
             $examProtocolID = $record->getExamProtocolID();
-            $borrowedDate = $record->getBorrowedUntilDate();
+            $borrowedUntilDate = $record->getBorrowedUntilDate();
             $now = $this->dateUtil->getDateTimeNow();
             if ($this->dateUtil->isSmallerThan($now, $borrowedUntilDate)) {
                 $retArray[] = $examProtocolID;
@@ -40,13 +48,14 @@ class ExamProtocolSystem {
      * Returns file paths of exam protocols from given exam protocol IDs.
      */
     function getFilePathsFromProtocolIDs($protocolIDs) {
+        $basePath = $this->fileUtil->getFullPathToBaseDirectory();
         $retArray = array();
         for ($i = 0; $i < count($protocolIDs); $i++) {
             $protocol = $this->examProtocolDao->getExamProtocol($protocolIDs[$i]);
             if ($protocol != NULL) {
-                $retArray[] = $protocol->getFilePath();
+                $retArray[] = $basePath . 'exam_protocols/protocols/' . $protocol->getFilePath();
             } else {
-                // TODO: log error
+                $this->log->error(static::class . '.php', 'Protocol to ID ' . $protocolIDs[$i] . ' not found!');
             }
         }
         return $retArray;
@@ -63,17 +72,18 @@ class ExamProtocolSystem {
      * Adds an exam protocol to the database and moves the protocol file to the protocols location with a randomly generated name.
      * Returns the just added protocol with the ID set if the operation was successful, NULL otherwise.
      */
-    function addProtocol($currentUser, $remark, $examiner, $fileNameTmp, $fileNameExtension, $fileSize, $fileType) {
+    function addProtocol($currentUser, $collaboratorIDs, $remark, $examiner, $fileNameTmp, $fileNameExtension, $fileSize, $fileType) {
         $filePath = $this->fileUtil->getFullPathToBaseDirectory() . Constants::UPLOADED_PROTOCOLS_DIRECTORY . '/' . $this->hashUtil->generateRandomString() . '.' . $fileNameExtension;
         move_uploaded_file($fileNameTmp, $filePath);
         
         $status = Constants::EXAM_PROTOCOL_STATUS['unchecked'];
         $uploadedByUserID = $currentUser->getID();
         $uploadedDate = $this->dateUtil->getDateTimeNow();
-        $examProtocol = new ExamProtocol(NULL, $status, $uploadedByUserID, $uploadedDate, $remark, $examiner, $filePath, $fileSize, $fileType, $fileNameExtension);
+        $examProtocol = new ExamProtocol(NULL, $status, $uploadedByUserID, $collaboratorIDs, $uploadedDate, $remark, $examiner, $filePath, $fileSize, $fileType, $fileNameExtension);
     
         $examProtocol = $this->examProtocolDao->addExamProtocol($examProtocol);
         if ($examProtocol == false) {
+            $this->log->error(static::class . '.php', 'Error on adding exam protocol!');
             return NULL;
         }
         return $examProtocol;
@@ -86,7 +96,7 @@ class ExamProtocolSystem {
     function updateExamProtocol($examProtocolID, $remark, $examiner) {
         $examProtocol = $this->examProtocolDao->getExamProtocol($examProtocolID);
         if ($examProtocol == NULL) {
-            // TODO log error
+            $this->log->error(static::class . '.php', 'Protocol to ID ' . $examProtocolID . ' not found!');
             return false;
         }
         $examProtocol->setRemark($remark);
@@ -98,14 +108,15 @@ class ExamProtocolSystem {
      * Updates the exam protocol in the database with the given data.
      * Returns TRUE if the operation was successful, FALSE otherwise.
      */
-    function updateExamProtocolFully($examProtocolID, $status, $uploadedByUserID, $uploadedDate, $remark, $examiner, $filePath, $fileSize, $fileType, $fileExtension) {
+    function updateExamProtocolFully($examProtocolID, $collaboratorIDs, $status, $uploadedByUserID, $uploadedDate, $remark, $examiner, $filePath, $fileSize, $fileType, $fileExtension) {
         $examProtocol = $this->examProtocolDao->getExamProtocol($examProtocolID);
         if ($examProtocol == NULL) {
-            // TODO log error
+            $this->log->error(static::class . '.php', 'Protocol to ID ' . $examProtocolID . ' not found!');
             return false;
         }
         $examProtocol->setStatus($status);
         $examProtocol->setUploadedByUserID($uploadedByUserID);
+        $examProtocol->setCollaboratorIDs($collaboratorIDs);
         $examProtocol->setUploadedDate($uploadedDate);
         $examProtocol->setRemark($remark);
         $examProtocol->setExaminer($examiner);

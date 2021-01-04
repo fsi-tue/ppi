@@ -27,16 +27,21 @@
             $colorStyle = ' style="background-color: red;"';
         }
         return '<div id="loginField">
+                    <br>
                     <img src="static/img/ppiLogo.png" id="ppiLogo" alt="ppi logo">
+                    <br>
+                    <br>
                     <form method="POST" action="">
                         <input type="text" id="username" name="username" placeholder="' . $i18n->get('userZxShort') . '"' . $colorStyle . ' required>
                         <input type="password" id="password" name="password" placeholder="' . $i18n->get('password') . '"' . $colorStyle . ' required>
                         <input type="submit" id="login" value="' . $i18n->get('login') . '">
                     </form>
+                    <br>
                     <div id="leftRightLink">
                         <a href="recovery.php" id="leftLink">' . $i18n->get('forgotPassword') . '</a>
                         <a href="create.php" id="rightLink">' . $i18n->get('createAccount') . '</a>
                     </div>
+                    <br>
                 </div>';
     }
 
@@ -47,3 +52,4 @@
     }
 
     echo $footer->getFooter();
+?>

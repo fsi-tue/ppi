@@ -2,9 +2,11 @@
     require_once('core/Main.php');
     
     if (!$userSystem->isLoggedIn()) {
+        $log->info('logevents.php', 'User was not logged in');
         $redirect->redirectTo('login.php');
     }
     if ($currentUser->getRole() != Constants::USER_ROLES['admin']) {
+        $log->error('logevents.php', 'User was not admin');
         $redirect->redirectTo('lectures.php');
     }
     
@@ -15,6 +17,10 @@
         $pageValue = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_ENCODED);
         if (is_numeric($pageValue)) {
             $page = intval($pageValue);
+        } else {
+            if ($pageValue != '') {
+                $log->error('logevents.php', 'Page value is not numeric: ' . $pageValue);
+            }
         }
         $username = filter_input(INPUT_GET, 'username', FILTER_SANITIZE_ENCODED);
         $level = filter_input(INPUT_GET, 'level', FILTER_SANITIZE_ENCODED);
@@ -54,8 +60,8 @@
          '<div style="width: 20%; display: inline-block;">' . $i18n->get('date') . '</div>' .
          '<div style="width: 10%; display: inline-block;">' . $i18n->get('username') . '</div>' .
          '<div style="width: 10%; display: inline-block;">' . $i18n->get('level') . '</div>' .
-         '<div style="width: 45%; display: inline-block;">' . $i18n->get('remark') . '</div>' .
-         '<div style="width: 10%; display: inline-block;">' . $i18n->get('origin') . '</div>';
+         '<div style="width: 35%; display: inline-block;">' . $i18n->get('remark') . '</div>' .
+         '<div style="width: 20%; display: inline-block;">' . $i18n->get('origin') . '</div>';
     
     $allLogEvents = $logEventSystem->getLogEvents(Constants::NUMBER_OF_ENTRIES_PER_PAGE, $page, $username, $level);
     
@@ -75,8 +81,8 @@
              '<div style="width: 20%; display: inline-block;">' . $dateUtil->dateTimeToString($event->getDate()) . '</div>' .
              '<div style="width: 10%; display: inline-block;">' . $event->getUsername() . '</div>' .
              '<div style="width: 10%; display: inline-block;">' . $event->getLevel() . '</div>' .
-             '<div style="width: 45%; display: inline-block;">' . $event->getRemark() . '</div>' .
-             '<div style="width: 10%; display: inline-block;">' . $event->getOrigin() . '</div>' .
+             '<div style="width: 35%; display: inline-block;">' . $event->getRemark() . '</div>' .
+             '<div style="width: 20%; display: inline-block;">' . $event->getOrigin() . '</div>' .
              '</form>';
     }
     

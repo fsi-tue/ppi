@@ -43,7 +43,7 @@ class SearchableTable {
                             }
                         </script>';
         $table = $searchScript;
-        $table .= '<input type="text" id="search" placeholder="&#128269;&nbsp;&nbsp;' . $this->i18n->get('search') . ' (' . $this->i18n->get('needsJavaScript') . ')' . '" onkeyup="searchTable()"><br><br>';
+        $table .= '<input type="text" id="search" placeholder="&nbsp;&nbsp;&#128269;&nbsp;&nbsp;' . $this->i18n->get('search') . ' (' . $this->i18n->get('needsJavaScript') . ')' . '" onkeyup="searchTable()"><br><br>';
         $table .= '<table id="table" class="gridtable" width="100%">';
         $table .= '<tr width="100%">';
         $w = 0;

@@ -1,9 +1,9 @@
 <?php
 class Passwords {
     // SQL
-    const POSTGRES_PASSWORD = 'XX';
+    const POSTGRES_PASSWORD = '';
     
     // admin
-    const PASSWORD_ADMIN = 'XX';
+    const PASSWORD_ADMIN = '';
 }
 ?>

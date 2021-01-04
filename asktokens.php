@@ -2,6 +2,7 @@
     require_once('core/Main.php');
     
     if (!$userSystem->isLoggedIn()) {
+        $log->info('asktokens.php', 'User was not logged in');
         $redirect->redirectTo('login.php');
     }
     
@@ -12,8 +13,10 @@
             $result = $userSystem->askTokens($message);
             if ($result) {
                 $status = 'ASKED_FOR_TOKENS';
+                $log->debug('asktokens.php', 'Successfully asked for tokens for user: ' . $currentUser->getUsername());
             } else {
                 $status = 'ASKING_FOR_TOKENS_FAILED';
+                $log->error('asktokens.php', 'Asking for tokens failed! Message by the user who wants tokens: ' . $message);
             }
         }
     }
@@ -24,11 +27,14 @@
                 $result = $userSystem->addTokensToUser($username, Constants::TOKENS_ADDED_PER_UPLOAD);
                 if ($result) {
                     $status = 'ADDED_TOKENS_TO_USER';
+                    $log->debug('asktokens.php', 'Successfully added tokens to user: ' . $currentUser->getUsername());
                 } else {
                     $status = 'FAILED_ADDING_TOKENS_TO_USER';
+                    $log->error('asktokens.php', 'Failed adding tokens to user: ' . $currentUser->getUsername());
                 }
             } else {
                 $status = 'CAN_NOT_ADD_TOKENS_NO_ADMIN';
+                $log->error('asktokens.php', 'User who is not admin tried to add tokens: ' . $currentUser->getUsername());
             }
         }
     }

@@ -2,9 +2,11 @@
     require_once('core/Main.php');
     
     if (!$userSystem->isLoggedIn()) {
+        $log->info('examprotocolslist.php', 'User was not logged in');
         $redirect->redirectTo('login.php');
     }
     if ($currentUser->getRole() != Constants::USER_ROLES['admin']) {
+        $log->error('examprotocolslist.php', 'User was not admin');
         $redirect->redirectTo('lectures.php');
     }
     
@@ -18,11 +20,14 @@
             $result = $examProtocolSystem->updateExamProtocol($examProtocolID, $remark, $examiner);
             if ($result) {
                 $postStatus = 'UPDATED_EXAM_PROTOCOL_DATA';
+                $log->debug('examprotocolslist.php', 'Successfully updated exam protocol: ' . $examProtocolID);
             } else {
                 $postStatus = 'ERROR_ON_UPDATING_EXAM_PROTOCOL_DATA';
+                $log->error('examprotocolslist.php', 'Updating exam protocol not successfull: ' . $examProtocolID);
             }
         } else {
             $postStatus = 'ERROR_ON_UPDATING_EXAM_PROTOCOL_DATA';
+            $log->info('examprotocolslist.php', 'Can not update exam protocol due to invalid data: ' . $examiner . ', ' . $examProtocolID);
         }
     }
     
@@ -39,6 +44,10 @@
         $borrowedByUsername = filter_input(INPUT_GET, 'borrowedByUsername', FILTER_SANITIZE_ENCODED);
         if (is_numeric($pageValue)) {
             $page = intval($pageValue);
+        } else {
+            if ($pageValue != '') {
+                $log->error('examprotocolslist.php', 'Page value is not numeric: ' . $pageValue);
+            }
         }
         if ($uploadedByUsername != '') {
             $uploadedByUser = $userSystem->getUserByUsername($uploadedByUsername);
@@ -46,7 +55,7 @@
                 $uploadedByUserID = $uploadedByUser->getID();
             } else {
                 $uploadedByUserID = '0';
-                // TODO: report error
+                $log->error('examprotocolslist.php', 'Could not find uploaded by user with username ' . $uploadedByUsername);
             }
         }
         if ($borrowedByUsername != '') {
@@ -55,7 +64,7 @@
                 $borrowedByUserID = $borrowedByUser->getID();
             } else {
                 $borrowedByUserID = '0';
-                // TODO: report error
+                $log->error('examprotocolslist.php', 'Could not find borrowed by user with username ' . $borrowedByUsername);
             }
         }
         if (isset($_GET['download'])) {
@@ -65,10 +74,10 @@
                 if ($protocol != NULL) {
                     $fileUtil->downloadFile($protocol->getFilePath(), $protocol->getFileType());
                 } else {
-                    $log->warning('examprotocolslist.php', 'Could not find exam protocol with ID: ' . $examProtocolToDownloadID);
+                    $log->error('examprotocolslist.php', 'Could not find exam protocol with ID: ' . $examProtocolToDownloadID);
                 }
             } else {
-                $log->warning('examprotocolslist.php', 'Got invalid exam protocol ID to download: ' . $examProtocolToDownloadID);
+                $log->error('examprotocolslist.php', 'Got invalid exam protocol ID to download: ' . $examProtocolToDownloadID);
             }
         }
     }
@@ -118,8 +127,8 @@
          '<div style="width: 10%; display: inline-block;">' . $i18n->get('uploadedByUserID') . '</div>' .
          '<div style="width: 10%; display: inline-block;">' . $i18n->get('uploadedDate') . '</div>' .
          '<div style="width: 10%; display: inline-block;">' . $i18n->get('remark') . '</div>' .
-         '<div style="width: 5%; display: inline-block;">' . $i18n->get('examiners') . '</div>' .
-         '<div style="width: 10%; display: inline-block;">' . $i18n->get('filePath') . '</div>' .
+         '<div style="width: 10%; display: inline-block;">' . $i18n->get('examiners') . '</div>' .
+         '<div style="width: 5%; display: inline-block;">' . $i18n->get('filePath') . '</div>' .
          '<div style="width: 5%; display: inline-block;">' . $i18n->get('fileSize') . '</div>' .
          '<div style="width: 10%; display: inline-block;">' . $i18n->get('fileType') . '</div>' .
          '<div style="width: 10%; display: inline-block;">' . $i18n->get('fileExtension') . '</div>' .
@@ -146,8 +155,8 @@
              '<div style="width: 10%; display: inline-block;">' . '<input type="text" readonly name="uploadedByUserID" value="' . $protocol->getUploadedByUserID() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>' .
              '<div style="width: 10%; display: inline-block;">' . '<input type="text" readonly name="uploadedDate" value="' . $dateUtil->dateTimeToString($protocol->getUploadedDate()) . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>' .
              '<div style="width: 10%; display: inline-block;">' . '<input type="text" name="remark" value="' . $protocol->getRemark() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>' .
-             '<div style="width: 5%; display: inline-block;">' . '<input type="text" name="examiner" value="' . $protocol->getExaminer() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>' .
-             '<div style="width: 10%; display: inline-block;">' . '<input type="text" readonly name="filePath" value="' . $protocol->getFilePath() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>' .
+             '<div style="width: 10%; display: inline-block;">' . '<input type="text" name="examiner" value="' . $protocol->getExaminer() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>' .
+             '<div style="width: 5%; display: inline-block;">' . '<input type="text" readonly name="filePath" value="' . $protocol->getFilePath() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>' .
              '<div style="width: 5%; display: inline-block;">' . '<input type="text" readonly name="fileSize" value="' . $protocol->getFileSize() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>' .
              '<div style="width: 10%; display: inline-block;">' . '<input type="text" readonly name="fileType" value="' . $protocol->getFileType() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>' .
              '<div style="width: 10%; display: inline-block;">' . '<input type="text" readonly name="fileExtension" value="' . $protocol->getFileExtension() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>' .

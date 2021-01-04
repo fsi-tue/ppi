@@ -2,6 +2,7 @@
     require_once('core/Main.php');
     
     if (!$userSystem->isLoggedIn()) {
+        $log->info('upload.php', 'User was not logged in');
         $redirect->redirectTo('login.php');
     }
     
@@ -11,13 +12,16 @@
         $lectureID2 = filter_input(INPUT_POST, 'lectureSelection2', FILTER_SANITIZE_NUMBER_INT);
         $lectureID3 = filter_input(INPUT_POST, 'lectureSelection3', FILTER_SANITIZE_NUMBER_INT);
         $examiner = filter_input(INPUT_POST, 'examiner', FILTER_SANITIZE_SPECIAL_CHARS);
+        $collaborators = filter_input(INPUT_POST, 'collaborators', FILTER_SANITIZE_SPECIAL_CHARS);
         $remark = filter_input(INPUT_POST, 'remark', FILTER_SANITIZE_SPECIAL_CHARS);
         
         $status = 'CHECK_FILE';
         if ($lectureID1 == '') {
             $status = 'LECTURE_MISSING';
+            $log->warning('upload.php', 'Lecture missing for uploaded file');
         } else if ($examiner == '') {
             $status = 'EXAMINER_MISSING';
+            $log->warning('upload.php', 'Examiner missing for uploaded file');
         }
         
         if ($status == 'CHECK_FILE') {
@@ -32,58 +36,56 @@
             if ($fileError == UPLOAD_ERR_OK) {
                 if (in_array($fileNameExtension, Constants::ALLOWED_FILE_EXTENSION_UPLOAD)) {
                     $status = 'ACCEPT_FILE';
+                    $log->debug('upload.php', 'Accepting uploaded file: ' . $fileNameTmp);
                 } else {
                     $status = 'WRONG_EXTENSION';
+                    $log->warning('upload.php', 'Uploaded file extension forbidden: ' . $fileNameExtension);
                 }
             } else {
                 $status = 'NO_FILE_UPLOADED_ERROR';
+                $log->warning('upload.php', 'No file uploaded error: ' . $fileError);
             }
         }
         
         if ($status == 'ACCEPT_FILE') {
-            $justAddedProtocol = $examProtocolSystem->addProtocol($currentUser, $remark, $examiner, $fileNameTmp, $fileNameExtension, $fileSizeBytes, $fileType);
+            $justAddedProtocol = $examProtocolSystem->addProtocol($currentUser, $collaborators, $remark, $examiner, $fileNameTmp, $fileNameExtension, $fileSizeBytes, $fileType);
             if ($justAddedProtocol == NULL) {
                 $status = 'ERROR_ON_INSERTING_PROTOCOL';
+                $log->error('upload.php', 'Error on inserting exam protocol into DB');
             } else {
                 $lectureIDs = array($lectureID1);
-                if ($lectureID2 != '') {
+                if ($lectureID2 != '' && $lectureID1 != $lectureID2) {
                     $lectureIDs[] = $lectureID2;
                 }
-                if ($lectureID3 != '') {
+                if ($lectureID3 != '' && $lectureID1 != $lectureID3 && $lectureID2 != $lectureID3) {
                     $lectureIDs[] = $lectureID3;
                 }
                 $result = $lectureSystem->addProtocolIDsToLecture($lectureIDs, $justAddedProtocol->getID());
                 if ($result) {
                     $status = 'PROTOCOL_UPLOADED_SUCCESSFULLY';
+                    $log->debug('upload.php', 'Inserted protocol successfully');
                 } else {
                     $status = 'ERROR_ON_INSERTING_PROTOCOL';
+                    $log->error('upload.php', 'Error on inserting exam protocol IDs into lecture on DB');
                 }
             }
         }
     }
     
     if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-        $longName = filter_input(INPUT_GET, 'long_name', FILTER_SANITIZE_SPECIAL_CHARS);
-        $shortName = filter_input(INPUT_GET, 'short_name', FILTER_SANITIZE_SPECIAL_CHARS);
-        $field = filter_input(INPUT_GET, 'field', FILTER_SANITIZE_SPECIAL_CHARS);
+        $name = filter_input(INPUT_GET, 'name', FILTER_SANITIZE_SPECIAL_CHARS);
         
-        if (isset($_GET['long_name']) || isset($_GET['short_name']) || isset($_GET['field'])) {
-            $status = 'NEW_LECTURE_CREATION';
-        }
-        
-        if ($status == 'NEW_LECTURE_CREATION') {
-            if ($longName == '') {
-                $status = 'LONG_NAME_MISSING';
-            } else if ($shortName == '') {
-                $status = 'SHORT_NAME_MISSING';
-            } else if ($field == '') {
-                $status = 'FIELD_MISSING';
+        if (isset($_GET['name'])) {
+            if ($name == '') {
+                $status = 'NAME_MISSING';
             } else {
-                $justAddedLecture = $lectureSystem->addLecture($longName, $shortName, $field);
+                $justAddedLecture = $lectureSystem->addLecture($name);
                 if ($justAddedLecture == NULL) {
                     $status = 'ERROR_ON_INSERTING_LECTURE';
+                    $log->error('upload.php', 'Error on inserting lecture into DB');
                 } else {
                     $status = 'LECTURE_ADDED_SUCCESSFULLY';
+                    $log->debug('upload.php', 'Successfully inserted lecture into DB');
                 }
             }
         }
@@ -94,10 +96,15 @@
     echo $mainMenu->getMainMenu($i18n, $currentUser);
 
     $allLectures = $lectureSystem->getAllLectures();
+    #Sort list of lectures by name
+    usort($allLectures, function($a, $b) {
+        return strcmp($a->getName(), $b->getName());
+    });
+
     $allLectureOptions = '';
     for ($i = 0; $i < count($allLectures); $i++) {
         $lecture = $allLectures[$i];
-        $allLectureOptions .= '<option value="' . $lecture->getID() . '">' . $lecture->getLongName() . ' (' . $lecture->getShortName() . '), ' . $lecture->getField() . '</option>';
+        $allLectureOptions .= '<option value="' . $lecture->getID() . '">' . $lecture->getName() . '</option>';
     }
     
     echo '<script type="text/javascript">
@@ -127,20 +134,12 @@
     }
     
     $addLectureFieldOpen = '';
-    $colorLongName = '';
-    $colorShortName = '';
-    $colorField = '';
-    if ($status == 'LONG_NAME_MISSING' || $status == 'SHORT_NAME_MISSING' || $status == 'FIELD_MISSING' || $status == 'ERROR_ON_INSERTING_LECTURE') {
+    $colorName = '';
+    if ($status == 'NAME_MISSING' || $status == 'ERROR_ON_INSERTING_LECTURE') {
         $addLectureFieldOpen = 'open ';
     }
-    if ($status == 'LONG_NAME_MISSING' || $status == 'ERROR_ON_INSERTING_LECTURE') {
-        $colorLongName = ' background-color: #A11E3B;';
-    }
-    if ($status == 'SHORT_NAME_MISSING' || $status == 'ERROR_ON_INSERTING_LECTURE') {
-        $colorShortName = ' background-color: #A11E3B;';
-    }
-    if ($status == 'FIELD_MISSING' || $status == 'ERROR_ON_INSERTING_LECTURE') {
-        $colorField = ' background-color: #A11E3B;';
+    if ($status == 'NAME_MISSING' || $status == 'ERROR_ON_INSERTING_LECTURE') {
+        $colorName = ' background-color: #A11E3B;';
     }
     
     $lectureAddedSuccessfullyMessage = '';
@@ -191,11 +190,15 @@
                             </tr>
                             <tr>
                                 <td style="width: 20%;' . $colorExaminer . '">' . $i18n->get('examiners') . ':</td>
-                                <td><input type="text" name="examiner" placeholder="" style="display: table-cell; width: calc(100% - 18px);' . $colorExaminer . '" required></td>
+                                <td><input type="text" name="examiner" placeholder="' . $i18n->get('lecturersAndAssessors') . '" style="display: table-cell; width: calc(100% - 18px);' . $colorExaminer . '" required></td>
                             </tr>
                             <tr>
-                                <td style="width: 20%;">' . $i18n->get('remark') . ' (' . $i18n->get('optional') . '):</td>
-                                <td><input type="text" name="remark" placeholder="" style="display: table-cell; width: calc(100% - 18px);"></td>
+                                <td style="width: 20%;">' . $i18n->get('collaborators') . ':</td>
+                                <td><input type="text" name="collaborators" placeholder="' . $i18n->get('zxShortsOfPeopleThatHelpedAndAlsoShallGetTokens') . ' (' . $i18n->get('optional') . ')" style="display: table-cell; width: calc(100% - 18px);"></td>
+                            </tr>
+                            <tr>
+                                <td style="width: 20%;">' . $i18n->get('remark') . ':</td>
+                                <td><input type="text" name="remark" placeholder="' . $i18n->get('remark') . ' (' . $i18n->get('optional') . ')" style="display: table-cell; width: calc(100% - 18px);"></td>
                             </tr>
                             <tr>
                                 <td style="width: 20%;' . $colorFile . '">' . $i18n->get('file') . ':</td>
@@ -215,16 +218,8 @@
                     <form action="upload.php" method="GET">
                         <table style="width: 100%;">
                             <tr>
-                                <td style="width: 20%;' . $colorLongName . '">' . $i18n->get('longName') . ':</td>
-                                <td><input type="text" name="long_name" placeholder="" style="display: table-cell; width: calc(100% - 18px);' . $colorLongName . '" required></td>
-                            </tr>
-                            <tr>
-                                <td style="width: 20%;' . $colorShortName . '">' . $i18n->get('shortName') . ':</td>
-                                <td><input type="text" name="short_name" placeholder="" style="display: table-cell; width: calc(100% - 18px);' . $colorShortName . '" required></td>
-                            </tr>
-                            <tr>
-                                <td style="width: 20%;' . $colorField . '">' . $i18n->get('field') . ':</td>
-                                <td><input type="text" name="field" placeholder="" style="display: table-cell; width: calc(100% - 18px);' . $colorField . '" required></td>
+                                <td style="width: 20%;' . $colorName . '">' . $i18n->get('lectureTitle') . ':</td>
+                                <td><input type="text" name="name" placeholder="" style="display: table-cell; width: calc(100% - 18px);' . $colorName . '" required></td>
                             </tr>
                         </table>
                         <br>

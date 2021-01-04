@@ -26,11 +26,6 @@
     // include the database connection class
     require_once('lib_classes/PostgresDBConn.php');
     $postgresDbConn = new PostgresDBConn(Constants::POSTGRES_HOST, Constants::POSTGRES_PORT, Constants::POSTGRES_DB_NAME, Constants::POSTGRES_USER, Constants::POSTGRES_PASSWORD, 'COLUMN_NAMES');
-
-    // include the database untility class
-    require_once('lib_classes/PostgresDBConnDatabaseUtility.php');
-    $databaseUtility = new PostgresDBConnDatabaseUtility($postgresDbConn);
-    //$databaseUtility->recreateDatabase();
     
     // internationalization
     include_once 'i18n/I18n.php';
@@ -49,6 +44,11 @@
     $urlUtil = new UrlUtil();
     $redirect = new Redirect($urlUtil);
     $fileUtil = new FileUtil();
+    
+    // include the database untility class
+    require_once('lib_classes/PostgresDBConnDatabaseUtility.php');
+    $databaseUtility = new PostgresDBConnDatabaseUtility($postgresDbConn, $dateUtil);
+    //$databaseUtility->recreateDatabase();
 
     // include all data classes
     require_once('data_classes/BorrowRecord.php');
@@ -57,39 +57,53 @@
     require_once('data_classes/Lecture.php');
     require_once('data_classes/LogEvent.php');
     require_once('data_classes/User.php');
+    require_once('data_classes/RecurringTask.php');
 
     // include all dao classes
     require_once('dao_classes/ExamProtocolDao.php');
     require_once('dao_classes/LectureDao.php');
     require_once('dao_classes/LogEventDao.php');
     require_once('dao_classes/UserDao.php');
+    require_once('dao_classes/RecurringTasksDao.php');
     $examProtocolDao = new ExamProtocolDao($postgresDbConn, $dateUtil);
     $lectureDao = new LectureDao($postgresDbConn);
     $logEventDao = new LogEventDao($postgresDbConn, $dateUtil);
     $userDao = new UserDao($postgresDbConn, $dateUtil);
+    $recurringTasksDao = new RecurringTasksDao($postgresDbConn, $dateUtil);
 
     // include all system classes
     require_once('system_classes/ExamProtocolSystem.php');
     require_once('system_classes/LectureSystem.php');
     require_once('system_classes/LogEventSystem.php');
     require_once('system_classes/UserSystem.php');
+    require_once('system_classes/RecurringTasksSystem.php');
     $examProtocolSystem = new ExamProtocolSystem($examProtocolDao, $dateUtil, $fileUtil, $hashUtil);
     $lectureSystem = new LectureSystem($lectureDao);
     $logEventSystem = new LogEventSystem($logEventDao, $email, $dateUtil);
     $userSystem = new UserSystem($userDao, $email, $i18n, $hashUtil, $urlUtil, $dateUtil);
+    $recurringTasksSystem = new RecurringTasksSystem($recurringTasksDao, $dateUtil, $fileUtil);
 
     // include logging class
     require_once('log/Log.php');
     $log = new Log($logEventSystem, $dateUtil);
     
-    // TODO set log object reference to all classes where logging can happen
+    // set log object reference to all classes where logging shall happen
     $postgresDbConn->setLog($log);
     $fileUtil->setLog($log);
+    $i18n->setLog($log);
+    $examProtocolSystem->setLog($log);
+    $lectureSystem->setLog($log);
+    $logEventSystem->setLog($log);
+    $userSystem->setLog($log);
+    $recurringTasksSystem->setLog($log);
     
-    // run unit tests if wanted
+    // run the recurring tasks if they have been run the last time too far in the past
+    $recurringTasksSystem->runRecurringTasks();
+    
+    // instantiate the unit tests so they can be run from the admin page
     require_once('test/TestUtil.php');
     $postgresDbConnTests = new PostgresDBConn(Constants::POSTGRES_HOST, Constants::POSTGRES_PORT, Constants::POSTGRES_DB_NAME_UNIT_TESTS, Constants::POSTGRES_USER, Constants::POSTGRES_PASSWORD, 'COLUMN_NAMES');
-    $testUtil = new TestUtil($log, $postgresDbConnTests);
+    $testUtil = new TestUtil($log, $postgresDbConnTests, $dateUtil, $fileUtil);
     
     // show phpinfo on top of page if wanted
     if (Constants::SHOW_PHP_INFO) {

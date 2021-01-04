@@ -1,9 +1,24 @@
 <?php
 class LectureSystem {
     private $lectureDao = null;
+    private $log = null;
 
     function __construct($lectureDao) {
         $this->lectureDao = $lectureDao;
+    }
+
+    /**
+     * Set the log to enable error logging.
+     */
+    function setLog($log) {
+        $this->log = $log;
+    }
+    
+    /**
+     * Returns the lecture from the DB according to the given unique lecture ID or NULL if the lecture was not found.
+     */
+    function getLecture($ID) {
+        return $this->lectureDao->getLecture($ID, false);
     }
     
     /**
@@ -25,8 +40,8 @@ class LectureSystem {
      * Returns the given lecture with also the ID set.
      * If the operation was not successful, FALSE will be returned.
      */
-    function addLecture($longName, $shortName, $field) {
-        $lecture = new Lecture(NULL, $longName, $shortName, $field, array());
+    function addLecture($name) {
+        $lecture = new Lecture(NULL, $name, Constants::LECTURE_STATUS['ok'], array());
         return $this->lectureDao->addLecture($lecture);
     }
     
@@ -36,15 +51,14 @@ class LectureSystem {
      * Returns the given lecture with also the ID set.
      * If the operation was not successful, FALSE will be returned.
      */
-    function updateLecture($lectureID, $longName, $shortName, $field) {
+    function updateLecture($lectureID, $name, $status) {
         $lecture = $this->lectureDao->getLecture($lectureID, false);
         if ($lecture == NULL) {
-            // TODO log error
+            $this->log->error(static::class . '.php', 'Lecture to ID ' . $lectureID . ' not found!');
             return false;
         }
-        $lecture->setLongName($longName);
-        $lecture->setShortName($shortName);
-        $lecture->setField($field);
+        $lecture->setName($name);
+        $lecture->setStatus($status);
         return $this->lectureDao->updateLecture($lecture);
     }
     
@@ -60,7 +74,7 @@ class LectureSystem {
                 $retArray[] = $assignedExamProtocols[$i]->getExamProtocolID();
             }
         } else {
-            //TODO: log error
+            $this->log->error(static::class . '.php', 'Lecture to ID ' . $lectureID . ' not found!');
         }
         return $retArray;
     }
@@ -73,15 +87,18 @@ class LectureSystem {
         $lectureIDs = array_unique($lectureIDs);
         for ($i = 0; $i < count($lectureIDs); $i++) {
             $lecture = $this->lectureDao->getLecture($lectureIDs[$i], false);
-            $assignedExamProtocols = $lecture->getAssignedExamProtocols();
-            $examProtocolAssignedToLecture = new ExamProtocolAssignedToLecture(NULL, $lectureIDs[$i], $examProtocolID);
-            $assignedExamProtocols[] = $examProtocolAssignedToLecture;
-            $lecture->setAssignedExamProtocols($assignedExamProtocols);
-            $result = $this->lectureDao->updateLecture($lecture);
-            if ($result == false) {
-                // TODO log error, db is inconsistent now
-                // best delete lecture and all protocols assigned to it now
-                return false;
+            if ($lecture != NULL) {
+                $assignedExamProtocols = $lecture->getAssignedExamProtocols();
+                $examProtocolAssignedToLecture = new ExamProtocolAssignedToLecture(NULL, $lectureIDs[$i], $examProtocolID);
+                $assignedExamProtocols[] = $examProtocolAssignedToLecture;
+                $lecture->setAssignedExamProtocols($assignedExamProtocols);
+                $result = $this->lectureDao->updateLecture($lecture);
+                if ($result == false) {
+                    $this->log->error(static::class . '.php', 'Error on updating lecture data on the DB! The DB is inconsistent now! Best delete the lecture with the ID ' . $lectureIDs[$i] . ' and all protocols assigned to it!');
+                    return false;
+                }
+            } else {
+                $this->log->error(static::class . '.php', 'Lecture to ID ' . $lectureIDs[$i] . ' not found!');
             }
         }
         return true;

@@ -2,6 +2,7 @@
     require_once('core/Main.php');
     
     if (!$userSystem->isLoggedIn()) {
+        $log->info('download.php', 'User was not logged in');
         $redirect->redirectTo('login.php');
     }
     
@@ -20,7 +21,7 @@
                     $log->warning('download.php', 'User tried to download protocols of a lecture that he or she has not borrowed: ' . $lectureToDownloadID);
                 }
             } else {
-                $log->warning('download.php', 'Got invalid lecture ID to download: ' . $lectureToDownloadID);
+                $log->error('download.php', 'Got invalid lecture ID to download (not numeric): ' . $lectureToDownloadID);
             }
         }
     }
@@ -31,9 +32,9 @@
 
     echo '<div id="protocolsTable" style="padding-left: 40px; padding-bottom: 40px; padding-right: 40px; margin: 0px;">';
 
-    $headers = array($i18n->get('lectureTitle'), $i18n->get('lectureCode'), $i18n->get('examField'), $i18n->get('borrowedUntil'), $i18n->get('download'));
-    $widths = array(60, 10, 10, 10, 10);
-    $textAlignments = array('left', 'left', 'left', 'left', 'center');
+    $headers = array($i18n->get('lectureTitle'), $i18n->get('borrowedUntil'), $i18n->get('download'));
+    $widths = array(60, 20, 20);
+    $textAlignments = array('left', 'left', 'center');
     
     $allLectures = $lectureSystem->getAllLectures();
     $borrowRecords = $currentUser->getBorrowRecords();
@@ -43,12 +44,13 @@
         $currentlyBorrowedLectureIds[] = $record->getLectureID();
     }
     
-    function getBorrowedUntilFromLectureId($borrowRecords, $lectureId, $dateUtil, $currentUser) {
+    function getBorrowedUntilFromLectureId($borrowRecords, $lectureId, $dateUtil, $currentUser, $log) {
         foreach ($borrowRecords as &$record) {
             if ($record->getLectureID() == $lectureId) {
                 return $dateUtil->dateTimeToStringForDisplaying($record->getBorrowedUntilDate(), $currentUser->getLanguage());
             }
         }
+        $log->error('download.php', 'Error: borrowed until not found! Lecture ID: ' . $lectureId);
         return 'Error: borrowed until not found!';
     }
     
@@ -69,10 +71,8 @@
     foreach ($allLectures as &$lecture) {
         if (in_array($lecture->getID(), $currentlyBorrowedLectureIds)) {
             $row = array();
-            $row[] = $lecture->getLongName();
-            $row[] = $lecture->getShortName();
-            $row[] = $lecture->getField();
-            $row[] = '<nobr>' . getBorrowedUntilFromLectureId($borrowRecords, $lecture->getID(), $dateUtil, $currentUser) . '</nobr>';
+            $row[] = $lecture->getName();
+            $row[] = '<nobr>' . getBorrowedUntilFromLectureId($borrowRecords, $lecture->getID(), $dateUtil, $currentUser, $log) . '</nobr>';
             if (userHasBorrowed($lecture->getID(), $dateUtil, $currentUser)) {
                 $row[] = '<a id="styledButtonGreen" href="?lecture=' . $lecture->getID() . '"><nobr><img src="static/img/protocolDownload.png" style="height: 24px; vertical-align: middle;">&nbsp;&nbsp;' . $i18n->get('download') . '</nobr></a>';
             } else {

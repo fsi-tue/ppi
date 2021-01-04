@@ -3,6 +3,7 @@ class ExamProtocol {
     private $ID;
     private $status;
     private $uploadedByUserID;
+    private $collaboratorIDs;
     private $uploadedDate;
     private $remark;
     private $examiner;
@@ -11,10 +12,11 @@ class ExamProtocol {
     private $fileType;
     private $fileExtension;
 
-    function __construct($ID, $status, $uploadedByUserID, $uploadedDate, $remark, $examiner, $filePath, $fileSize, $fileType, $fileExtension) {
+    function __construct($ID, $status, $uploadedByUserID, $collaboratorIDs, $uploadedDate, $remark, $examiner, $filePath, $fileSize, $fileType, $fileExtension) {
         $this->ID = $ID;
         $this->status = $status;
         $this->uploadedByUserID = $uploadedByUserID;
+        $this->collaboratorIDs = $collaboratorIDs;
         $this->uploadedDate = $uploadedDate;
         $this->remark = $remark;
         $this->examiner = $examiner;
@@ -46,6 +48,14 @@ class ExamProtocol {
 
     public function setUploadedByUserID($uploadedByUserID){
         $this->uploadedByUserID = $uploadedByUserID;
+    }
+
+    public function getCollaboratorIDs(){
+        return $this->collaboratorIDs;
+    }
+
+    public function setCollaboratorIDs($collaboratorIDs){
+        $this->collaboratorIDs = $collaboratorIDs;
     }
 
     public function getUploadedDate(){

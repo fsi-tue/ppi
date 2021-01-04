@@ -2,9 +2,11 @@
     require_once('core/Main.php');
     
     if (!$userSystem->isLoggedIn()) {
+        $log->info('viewexamprotocol.php', 'User was not logged in');
         $redirect->redirectTo('login.php');
     }
     if ($currentUser->getRole() != Constants::USER_ROLES['admin']) {
+        $log->error('viewexamprotocol.php', 'User was not admin');
         $redirect->redirectTo('lectures.php');
     }
     
@@ -21,6 +23,7 @@
         $status = filter_input(INPUT_POST, 'status', FILTER_SANITIZE_ENCODED);
         $uploadedByUserID = filter_input(INPUT_POST, 'uploadedByUserID', FILTER_SANITIZE_ENCODED);
         $uploadedByUsername = filter_input(INPUT_POST, 'uploadedByUsername', FILTER_SANITIZE_ENCODED);
+        $collaboratorIDs = filter_input(INPUT_POST, 'collaboratorIDs', FILTER_SANITIZE_SPECIAL_CHARS);
         $uploadedDateString = filter_input(INPUT_POST, 'uploadedDate', FILTER_SANITIZE_SPECIAL_CHARS);
         $uploadedDate = $dateUtil->stringToDateTime($uploadedDateString);
         $remark = filter_input(INPUT_POST, 'remark', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -35,7 +38,7 @@
         $action = filter_input(INPUT_POST, 'action', FILTER_SANITIZE_ENCODED);
         $reply = filter_input(INPUT_POST, 'reply', FILTER_SANITIZE_ENCODED);
         
-        if ($uploadedByUserID != '' && $uploadedDate != NULL && $examiner != '' && $filePath != '' && $fileSize != '' && $fileType != '' && $fileExtension != '' && is_numeric($examProtocolID)) {
+        if ($lectureID1 != '0' && $uploadedByUserID != '' && $uploadedDate != NULL && $examiner != '' && $filePath != '' && $fileSize != '' && $fileType != '' && $fileExtension != '' && is_numeric($examProtocolID)) {
             $tokensToAdd = Constants::TOKENS_ADDED_PER_UPLOAD;
             if ($action == 'accept') {
                 $status = Constants::EXAM_PROTOCOL_STATUS['accepted'];
@@ -49,15 +52,22 @@
                 $tokensToAdd = 0;
             } else if ($action == 'deleteButGrantTokens') {
                 $status = Constants::EXAM_PROTOCOL_STATUS['toBeDeleted'];
+            } else if ($action == 'noChange') {
+                $examProtocol = $examProtocolSystem->getExamProtocol($examProtocolID);
+                if ($examProtocolSystem != NULL) {
+                    $status = $examProtocol->getStatus();
+                } else {
+                    $log->error('viewexamprotocol.php', 'Could not find exam protocol with ID ' . $examProtocolID);
+                }
             }
             
-            $result = $examProtocolSystem->updateExamProtocolFully($examProtocolID, $status, $uploadedByUserID, $uploadedDate, $remark, $examiner, $filePath, $fileSize, $fileType, $fileExtension);
+            $result = $examProtocolSystem->updateExamProtocolFully($examProtocolID, $collaboratorIDs, $status, $uploadedByUserID, $uploadedDate, $remark, $examiner, $filePath, $fileSize, $fileType, $fileExtension);
             if ($result) {
                 $lectureIDs = array($lectureID1);
-                if ($lectureID2 != '0') {
+                if ($lectureID2 != '0' && $lectureID1 != $lectureID2) {
                     $lectureIDs[] = $lectureID2;
                 }
-                if ($lectureID3 != '0') {
+                if ($lectureID3 != '0' && $lectureID1 != $lectureID3 && $lectureID2 != $lectureID3) {
                     $lectureIDs[] = $lectureID3;
                 }
                 if ($lectureID1 != '0') {
@@ -72,23 +82,30 @@
                             $result = $userSystem->grantTokensAndMailToUploader($uploadedByUsername, $tokensToAdd, $replyToSend);
                             if ($result) {
                                 $postStatus = 'UPDATED_EXAM_PROTOCOL_DATA';
+                                $log->debug('viewexamprotocol.php', 'Updated exam protocol data with ID ' . $examProtocolID);
                             } else {
                                 $postStatus = 'ERROR_ON_REPLYING_TO_UPLOADER';
+                                $log->error('viewexamprotocol.php', 'Error on replying to uploader');
                             }
                         } else {
                             $postStatus = 'ERROR_ON_INSERTING_PROTOCOL_IDS_TO_LECTURE';
+                            $log->error('viewexamprotocol.php', 'Error on inserting protocol ids to lecture');
                         }
                     } else {
                         $postStatus = 'ERROR_ON_DELETING_PROTOCOL_ASSIGNMENTS';
+                        $log->error('viewexamprotocol.php', 'Error on deleting protocol assignments');
                     }
                 } else {
                     $postStatus = 'LECTURE_ONE_MUST_BE_SELECTED';
+                    $log->info('viewexamprotocol.php', 'One lecture must be selected');
                 }
             } else {
                 $postStatus = 'ERROR_ON_UPDATING_EXAM_PROTOCOL_DATA';
+                $log->error('viewexamprotocol.php', 'Error on updating exam protocol data: internal server error');
             }
         } else {
             $postStatus = 'ERROR_ON_UPDATING_EXAM_PROTOCOL_DATA';
+            $log->error('viewexamprotocol.php', 'Error on updating exam protocol data: invalid data');
         }
     }
     
@@ -96,6 +113,8 @@
         $examProtocolIDValue = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_ENCODED);
         if (is_numeric($examProtocolIDValue)) {
             $examProtocolID = $examProtocolIDValue;
+        } else {
+            $log->error('viewexamprotocol.php', 'Exam protocol ID value is not numeric: ' . $examProtocolIDValue);
         }
     }
     
@@ -129,6 +148,8 @@
         $uploadedByUsername = 'error, username to that ID not found';
         if ($uploadedByUser != NULL) {
             $uploadedByUsername = $uploadedByUser->getUsername();
+        } else {
+            $log->error('viewexamprotocol.php', 'Username to ID not found: ' . $examProtocol->getUploadedByUserID());
         }
         
         $color = '';
@@ -159,9 +180,9 @@
             if (count($lectureIDsOfExamProtocol) > 2 && $lecture->getID() == $lectureIDsOfExamProtocol[2]) {
                 $selected2 = 'selected ';
             }
-            $allLectureOptions1 .= '<option ' . $selected1 . 'value="' . $lecture->getID() . '">' . $lecture->getLongName() . ' (' . $lecture->getShortName() . '), ' . $lecture->getField() . '</option>';
-            $allLectureOptions2 .= '<option ' . $selected2 . 'value="' . $lecture->getID() . '">' . $lecture->getLongName() . ' (' . $lecture->getShortName() . '), ' . $lecture->getField() . '</option>';
-            $allLectureOptions3 .= '<option ' . $selected3 . 'value="' . $lecture->getID() . '">' . $lecture->getLongName() . ' (' . $lecture->getShortName() . '), ' . $lecture->getField() . '</option>';
+            $allLectureOptions1 .= '<option ' . $selected1 . 'value="' . $lecture->getID() . '">' . $lecture->getName() . '</option>';
+            $allLectureOptions2 .= '<option ' . $selected2 . 'value="' . $lecture->getID() . '">' . $lecture->getName() . '</option>';
+            $allLectureOptions3 .= '<option ' . $selected3 . 'value="' . $lecture->getID() . '">' . $lecture->getName() . '</option>';
         }
         
         echo '<form method="POST" action="viewexamprotocol.php?id=' . $examProtocol->getID() . '">
@@ -183,6 +204,9 @@
                             <div style="width: 20%; display: inline-block;">' . $i18n->get('uploadedByUser') . '</div>
                             <div style="width: 40%; display: inline-block; padding-bottom: 10px;">' . '<input type="text" name="uploadedByUserID" value="' . $examProtocol->getUploadedByUserID() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>
                             <div style="width: 38%; display: inline-block; padding-bottom: 10px;">' . '<input type="text" name="uploadedByUsername" value="' . $uploadedByUsername . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>
+                            
+                            <div style="width: 20%; display: inline-block;">' . $i18n->get('collaborators') . '</div>
+                            <div style="width: 79%; display: inline-block; padding-bottom: 10px;">' . '<input type="text" name="collaboratorIDs" value="' . $examProtocol->getCollaboratorIDs() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>
                             
                             <div style="width: 20%; display: inline-block;">' . $i18n->get('uploadedDate') . '</div>
                             <div style="width: 79%; display: inline-block; padding-bottom: 10px;">' . '<input type="text" name="uploadedDate" value="' . $dateUtil->dateTimeToString($examProtocol->getUploadedDate()) . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>
@@ -239,8 +263,10 @@
                             <div style="width: 30%; display: inline-block; padding-bottom: 10px; vertical-align: top;">
                                 <input type="radio" id="declineButGrantTokens" name="action" value="declineButGrantTokens" style="margin: 0px 0px 10px 0px; padding: 0px;">
                                 <label for="declineButGrantTokens">' . $i18n->get('declineButGrantTokens') . '</label><br>
-                                <input type="radio" id="declineAndDeleteProtocol" name="action" value="declineAndDeleteProtocol" style="margin: 0px; padding: 0px;">
-                                <label for="declineAndDeleteProtocol">' . $i18n->get('declineAndDeleteProtocol') . '</label>
+                                <input type="radio" id="declineAndDeleteProtocol" name="action" value="declineAndDeleteProtocol" style="margin: 0px 0px 10px 0px; padding: 0px;">
+                                <label for="declineAndDeleteProtocol">' . $i18n->get('declineAndDeleteProtocol') . '</label><br>
+                                <input type="radio" id="noChange" name="action" value="noChange" style="margin: 0px; padding: 0px;">
+                                <label for="noChange">' . $i18n->get('noChange') . '</label>
                             </div>
                             <div style="width: 20%; display: inline-block;">' . $i18n->get('reply') . '</div>
                             <div style="width: 79%; display: inline-block; padding-bottom: 50px;">
@@ -259,7 +285,7 @@
                 </form>';
     } else {
         echo '<br><center>' . $i18n->get('examProtocolNotFound') . '</center><br>';
-        // TODO log error
+        $log->error('viewexamprotocol.php', 'Could not display exam protocol with ID ' . $examProtocolID);
     }
     
     echo $footer->getFooter();

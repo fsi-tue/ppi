@@ -1,16 +1,14 @@
 <?php
 class Lecture {
     private $ID;
-    private $longName;
-    private $shortName;
-    private $field;
+    private $name;
+    private $status;
     private $assignedExamProtocols;
 
-    function __construct($ID, $longName, $shortName, $field, $assignedExamProtocols) {
+    function __construct($ID, $name, $status, $assignedExamProtocols) {
         $this->ID = $ID;
-        $this->longName = $longName;
-        $this->shortName = $shortName;
-        $this->field = $field;
+        $this->name = $name;
+        $this->status = $status;
         $this->assignedExamProtocols = $assignedExamProtocols;
     }
     
@@ -22,28 +20,20 @@ class Lecture {
         $this->ID = $ID;
     }
 
-    public function getLongName(){
-        return $this->longName;
+    public function getName(){
+        return $this->name;
     }
 
-    public function setLongName($longName){
-        $this->longName = $longName;
+    public function setName($name){
+        $this->name = $name;
     }
 
-    public function getShortName(){
-        return $this->shortName;
+    public function getStatus(){
+        return $this->status;
     }
 
-    public function setShortName($shortName){
-        $this->shortName = $shortName;
-    }
-
-    public function getField(){
-        return $this->field;
-    }
-
-    public function setField($field){
-        $this->field = $field;
+    public function setStatus($status){
+        $this->status = $status;
     }
 
     public function getAssignedExamProtocols(){

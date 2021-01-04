@@ -1,14 +1,29 @@
 <?php
 class DateUtil {
-
+    /**
+     * Get the current timestamp (now) as datetime object.
+     */
     function getDateTimeNow() {
         return new DateTime();
     }
     
+    /**
+     * Get a timestamp from the year 2000 as datetime object.
+     */
+    function getDateTimeFarInThePast() {
+        return $this->stringToDateTime('2000-01-01 01:01:01.001');
+    }
+    
+    /**
+     * Convert a datetime object to a string in the system date format.
+     */
     function dateTimeToString($dateTime) {
         return $dateTime->format(Constants::DATE_FORMAT);
     }
     
+    /**
+     * Convert a datetime object to a string in the date format of the given language locale.
+     */
     function dateTimeToStringForDisplaying($dateTime, $language) {
         if ($language == 'en') {
             return $dateTime->format(Constants::DATE_FORMAT_ENGLISH);
@@ -16,6 +31,9 @@ class DateUtil {
         return $dateTime->format(Constants::DATE_FORMAT_GERMAN);
     }
     
+    /**
+     * Convert a given string representing a date to a datetime object.
+     */
     function stringToDateTime($dateString) {
         return new DateTime($dateString);
     }

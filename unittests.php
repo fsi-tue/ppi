@@ -2,9 +2,11 @@
     require_once('core/Main.php');
     
     if (!$userSystem->isLoggedIn()) {
+        $log->info('unittests.php', 'User was not logged in');
         $redirect->redirectTo('login.php');
     }
     if ($currentUser->getRole() != Constants::USER_ROLES['admin']) {
+        $log->error('unittests.php', 'User was not admin');
         $redirect->redirectTo('lectures.php');
     }
     

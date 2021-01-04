@@ -2,6 +2,7 @@
     require_once('core/Main.php');
     
     if (!$userSystem->isLoggedIn()) {
+        $log->info('changepassword.php', 'User was not logged in');
         $redirect->redirectTo('login.php');
     }
 
@@ -17,23 +18,27 @@
         $success = $hashUtil->checkPasswordHashWithSaltIncluded($oldPassword, $currentUser->getPasswordHash());
         if (!$success) {
             $status = 'INCORRECT_PASSWORD';
+            $log->info('changepassword.php', 'User entered invalid password on password change: ' . $currentUser->getUsername());
         } else if ($newPassword != $newPasswordRepeated) {
             $status = 'PASSWORDS_DO_NOT_MATCH';
+            $log->info('changepassword.php', 'User did not enter new matching passwords on password change: ' . $currentUser->getUsername());
         }
         
         if ($status == 'CHANGE_PASSWORD') {
             $result = $userSystem->changePasswordOfCurrentUser($newPasswordHash);
             if ($result) {
                 $status = 'SUCCESSFUL';
+                $log->info('changepassword.php', 'User successfully changed password: ' . $currentUser->getUsername());
             } else {
                 $status = 'NOT_SUCCESSFUL';
+                $log->error('changepassword.php', 'Password change was not successful: ' . $currentUser->getUsername());
             }
         }
     }
 
     echo $header->getHeader($i18n->get('title'), $i18n->get('changePassword'), array('login.css', 'create.css', 'button.css'));
 
-    function getLoginField($incorrectPassword, $passwordsDoNotMatch, $notSuccessful, $changed, $message, $i18n) {
+    function getChangePasswordField($incorrectPassword, $passwordsDoNotMatch, $notSuccessful, $changed, $message, $i18n) {
         $colorOldPassword = '';
         $colorNewPasswords = '';
         if ($incorrectPassword) {
@@ -52,10 +57,10 @@
         if ($changed) {
             $typePassword = 'hidden';
             $typeSubmit = 'hidden';
-            $backButton = '<a href="lectures.php"><div id="login">' .  $i18n->get('back') . '</div></a>';
+            $backButton = '<center><a href="lectures.php" id="styledButton">' .  $i18n->get('back') . '</a></center>';
         }
         return '<div id="loginField">
-                    <div id="ppiLogo"><img src="static/img/ppiLogo.png" style="height: 55px;" alt="ppi logo"></div>
+                    <center><div id="ppiLogo"><img src="static/img/ppiLogo.png" style="height: 55px;" alt="ppi logo"></div></center>
                     <div id="infoText">' . $message . '</div>
                     <form method="POST" action="">
                         <input type="' . $typePassword . '" id="username" name="old_password" placeholder="' . $i18n->get('oldPassword') . '"' . $colorOldPassword . ' required>
@@ -68,15 +73,15 @@
     }
 
     if ($status == NULL) {
-        echo getLoginField(false, false, false, false, $i18n->get('changePasswordHowToMessage'), $i18n);
+        echo getChangePasswordField(false, false, false, false, $i18n->get('changePasswordHowToMessage'), $i18n);
     } else if ($status == 'INCORRECT_PASSWORD') {
-        echo getLoginField(true, false, false, false, $i18n->get('incorrectPassword'), $i18n);
+        echo getChangePasswordField(true, false, false, false, $i18n->get('incorrectPassword'), $i18n);
     } else if ($status == 'PASSWORDS_DO_NOT_MATCH') {
-        echo getLoginField(false, true, false, false, $i18n->get('passwordsDoNotMatch'), $i18n);
+        echo getChangePasswordField(false, true, false, false, $i18n->get('passwordsDoNotMatch'), $i18n);
     } else if ($status == 'SUCCESSFUL') {
-        echo getLoginField(false, false, false, true, $i18n->get('passwordChangedSuccessfully'), $i18n);
+        echo getChangePasswordField(false, false, false, true, $i18n->get('passwordChangedSuccessfully'), $i18n);
     } else if ($status == 'NOT_SUCCESSFUL') {
-        echo getLoginField(false, false, true, false, $i18n->get('changingOfPasswordFailed'), $i18n);
+        echo getChangePasswordField(false, false, true, false, $i18n->get('changingOfPasswordFailed'), $i18n);
     }
 
     echo $footer->getFooter();

@@ -21,22 +21,29 @@ html, body {
     justify-content: space-between;
     align-items:center;
 }
+
 #headerLogo {
     margin-left: 10px;
 }
+
 #headerTitle {
     color: white;
     text-align: center;
     font-size: 18px;
     font-weight: bold;
 }
-#headerMenues > div{
+
+#headerMenues > div {
     cursor: pointer;
     text-align: right;
     color: white;
     font-size: 18px;
     display: inline;
+    right: 10px;
+    padding-right: 10px;
+    top: 2px;
 }
+
 .dropdown {
     position: relative;
     cursor: default;
@@ -51,8 +58,8 @@ html, body {
     z-index: 1;
     float: left;
     text-align: left;
-    right: 0px;
-    top: 35px;
+    right: 10px;
+    top: 20px;
     color: black;
     padding: 10px 10px 0px 10px;
     margin: 0px;

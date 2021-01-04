@@ -1,6 +1,7 @@
 <?php
 class PostgresDBConn {
-    //https://www.howtoforge.de/anleitung/wie-man-postgresql-und-phppgadmin-auf-ubuntu-1804-lts-installiert/
+    // postgres installation hints
+    // https://www.howtoforge.de/anleitung/wie-man-postgresql-und-phppgadmin-auf-ubuntu-1804-lts-installiert/
     
     private $pdo = null;
     private $mode = null; // can be 'INDICES', 'COLUMN_NAMES' or 'BOTH'
@@ -19,25 +20,16 @@ class PostgresDBConn {
         $this->mode = $mode;
     }
     
+    /**
+     * Set the log to enable error logging.
+     */
     function setLog($log) {
         $this->log = $log;
     }
     
-    function beginTransaction() {
-        // TODO: make transactions work
-        //$stmt = $this->pdo->prepare('BEGIN TRANSACTION;')->execute();
-    }
-    
-    function commitTransaction() {
-        // TODO: make transactions work
-        //$stmt = $this->pdo->prepare('COMMIT;')->execute();
-    }
-    
-    function rollbackTransaction() {
-        // TODO: make transactions work
-        //$stmt = $this->pdo->prepare('ROLLBACK;')->execute();
-    }
-    
+    /**
+     * Executes the SQL insert/update command(s) using the values in the given list returning the last insert id and the row count.
+     */
     function exec($sqlString, $values) {
         $stmt = $this->pdo->prepare($sqlString);
         $stmt->execute($values);
@@ -48,6 +40,9 @@ class PostgresDBConn {
         return $retVal;
     }
     
+    /**
+     * Executes the SQL select command(s) returning the results or FALSE if there was an error.
+     */
     function query($sqlString) {
         $retArray = array();
         $query = $this->pdo->query($sqlString);
@@ -76,6 +71,9 @@ class PostgresDBConn {
         return false;
     }
     
+    /**
+     * If something went wrong on executing SQL statements, log the errors.
+     */
     function logPdoError($errorInfo) {
         $error = '[';
         $error .= 'SQLSTATE error code: ' . $errorInfo[0];

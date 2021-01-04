@@ -2,28 +2,53 @@
     require_once('core/Main.php');
     
     if (!$userSystem->isLoggedIn()) {
+        $log->info('lectureslist.php', 'User was not logged in');
         $redirect->redirectTo('login.php');
     }
     if ($currentUser->getRole() != Constants::USER_ROLES['admin']) {
+        $log->error('lectureslist.php', 'User was not admin');
         $redirect->redirectTo('lectures.php');
     }
     
     $status = NULL;
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $longName = filter_input(INPUT_POST, 'longName', FILTER_SANITIZE_ENCODED);
-        $shortName = filter_input(INPUT_POST, 'shortName', FILTER_SANITIZE_ENCODED);
-        $field = filter_input(INPUT_POST, 'field', FILTER_SANITIZE_ENCODED);
+        $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_ENCODED);
+        $status = filter_input(INPUT_POST, 'status', FILTER_SANITIZE_ENCODED);
         $lectureID = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_ENCODED);
         
-        if ($longName != '' && $shortName != '' && $field != '' && $lectureID != '' && is_numeric($lectureID)) {
-            $result = $lectureSystem->updateLecture($lectureID, $longName, $shortName, $field);
+        if ($name != '' && $status != '' && $lectureID != '' && is_numeric($lectureID)) {
+            $result = $lectureSystem->updateLecture($lectureID, $name, $status);
             if ($result) {
                 $status = 'UPDATED_LECTURE_DATA';
+                $log->debug('lectureslist.php', 'Successfully updated lecture data ' . $lectureID);
             } else {
                 $status = 'ERROR_ON_UPDATING_LECTURE_DATA';
+                $log->error('lectureslist.php', 'Updating lecture data failed ' . $lectureID . ' ' . $name);
             }
         } else {
             $status = 'ERROR_ON_UPDATING_LECTURE_DATA';
+            $log->error('lectureslist.php', 'Updating lecture failed due to invalid data');
+        }
+    }
+    if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+        $deleteID = filter_input(INPUT_GET, 'deleteID', FILTER_SANITIZE_ENCODED);
+        if (isset($_GET['deleteID'])) {
+            if (is_numeric($deleteID)) {
+                $lecture = $lectureSystem->getLecture($deleteID);
+                if ($lecture != null) {
+                    $result = $lectureSystem->updateLecture($deleteID, $lecture->getName(), 'TO_BE_DELETED');
+                    if (!$result) {
+                        $status = 'ERROR_ON_UPDATING_LECTURE_DATA';
+                        $log->error('lectureslist.php', 'Lecture could not be marked for deletion with ID: ' . $deleteID);
+                    }
+                } else {
+                    $status = 'ERROR_ON_UPDATING_LECTURE_DATA';
+                    $log->error('lectureslist.php', 'Lecture ID to be deleted not found: ' . $deleteID);
+                }
+            } else {
+                $status = 'ERROR_ON_UPDATING_LECTURE_DATA';
+                $log->error('lectureslist.php', 'ID of lecture to be deleted is not numeric: ' . $deleteID);
+            }
         }
     }
     
@@ -38,24 +63,28 @@
     }
     
     echo '<div style="width: 5%; display: inline-block; text-align: center;">' . $i18n->get('ID') . '</div>';
-    echo '<div style="width: 25%; display: inline-block;">' . $i18n->get('longName') . '</div>';
-    echo '<div style="width: 20%; display: inline-block;">' . $i18n->get('shortName') . '</div>';
-    echo '<div style="width: 20%; display: inline-block;">' . $i18n->get('field') . '</div>';
-    echo '<div style="width: 10%; display: inline-block; text-align: center;">' . $i18n->get('numberOfProtocols') . '</div>';
-    echo '<div style="width: 10%; display: inline-block; text-align: center;">' . $i18n->get('viewProtocols') . '</div>';
+    echo '<div style="width: 25%; display: inline-block;">' . $i18n->get('lectureTitle') . '</div>';
+    echo '<div style="width: 10%; display: inline-block;">' . $i18n->get('status') . '</div>';
+    echo '<div style="width: 20%; display: inline-block; text-align: center;">' . $i18n->get('numberOfProtocols') . '</div>';
+    echo '<div style="width: 20%; display: inline-block; text-align: center;">' . $i18n->get('viewProtocols') . '</div>';
+    echo '<div style="width: 10%; display: inline-block; text-align: center;">' . $i18n->get('markForDeletion') . '</div>';
     echo '<div style="width: 10%; display: inline-block; text-align: center;">' . $i18n->get('save') . '</div>';
         
     $allLectures = $lectureSystem->getAllLectures();
     foreach ($allLectures as &$lecture) {
         echo '<form method="POST" action="lectureslist.php">';
         echo '<div style="width: 5%; display: inline-block; text-align: center;">' . $lecture->getID() . '</div>';
-        echo '<div style="width: 25%; display: inline-block;">' . '<input type="text" name="longName" value="' . $lecture->getLongName() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>';
-        echo '<div style="width: 20%; display: inline-block;">' . '<input type="text" name="shortName" value="' . $lecture->getShortName() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>';
-        echo '<div style="width: 20%; display: inline-block;">' . '<input type="text" name="field" value="' . $lecture->getField() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>';
-        echo '<div style="width: 10%; display: inline-block; text-align: center;">' . count($lecture->getAssignedExamProtocols()) . '</div>';
-        echo '<div style="width: 10%; display: inline-block; text-align: center;">
+        echo '<div style="width: 25%; display: inline-block;">' . '<input type="text" name="name" value="' . $lecture->getName() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>';
+        echo '<div style="width: 10%; display: inline-block;">' . '<input type="text" name="status" value="' . $lecture->getStatus() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>';
+        echo '<div style="width: 20%; display: inline-block; text-align: center;">' . count($lecture->getAssignedExamProtocols()) . '</div>';
+        echo '<div style="width: 20%; display: inline-block; text-align: center;">
                     <a href="examprotocolslist.php?lectureID=' . $lecture->getID() . '" id="styledButton">
                         <img src="static/img/viewProtocol.png" alt="view protocol" style="height: 24px; vertical-align: middle;">
+                    </a>
+                </div>';
+        echo '<div style="width: 10%; display: inline-block; text-align: center;">
+                    <a href="?deleteID=' . $lecture->getID() . '" id="styledButtonRed">
+                        <img src="static/img/delete.png" alt="view protocol" style="height: 24px; vertical-align: middle;">
                     </a>
                 </div>';
         echo '<div style="width: 10%; display: inline-block; text-align: center;">' . 

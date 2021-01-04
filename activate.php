@@ -24,35 +24,45 @@
                 } else {
                     $status = 'USER_ALREADY_ACTIVATED';
                     $log->setUsername($username);
-                    $log->error('activate.php', 'User activation unsuccessful, user already activated');
+                    $log->warning('activate.php', 'User activation unsuccessful, user already activated');
                 }
             } else {
                 $status = 'USER_NOT_FOUND';
                 $log->setUsername($username);
-                $log->error('activate.php', 'User activation unsuccessful, user not found');
+                $log->warning('activate.php', 'User activation unsuccessful, user not found');
             }
         }
     }
 
-    echo $header->getHeader($i18n->get('title'), $i18n->get('activateAccount'), array('login.css', 'activate.css'));
+    echo $header->getHeader($i18n->get('title'), $i18n->get('activateAccount'), array('login.css', 'activate.css', 'button.css'));
 
     function getActivationField($message, $success, $i18n) {
         $image = 'ppiLogo.png';
         $goToLogin = '';
         if ($success == 'SUCCESS') {
             $image = 'activation_successful.png';
-            $goToLogin = '<a href="login.php"><div id="login">' . $i18n->get('backToLogin') . '</div></a>';
+            $goToLogin = '<center><a href="login.php" id="styledButton">' . $i18n->get('backToLogin') . '</a></center><br><br>';
         } else if ($success == 'NO_SUCCESS') {
             $image = 'activation_unsuccessful.png';
         }
         return '<div id="loginField">
-                <div id="ppiLogo"><img src="static/img/' . $image . '" style="height: 55px;" alt="ppi logo"></div>
+                <br>
+                <center>
+                    <div id="ppiLogo">
+                        <img src="static/img/' . $image . '" style="height: 55px;" alt="ppi logo">
+                    </div>
+                </center>
+                <br>
+                <br>
                 <div id="infoText">' . $message . '</div>
+                <br>
+                <br>
                 ' . $goToLogin . '
                 <div id="forgotPassword">
                     <span style="float: left;"><a href="login.php" style="color: black;">' . $i18n->get('backToLogin') . '</a></span>
                     <span style="float: right;"><a href="recovery.php" style="color: black;">' . $i18n->get('forgotPassword') . '</a></span>
                 </div>
+                <br>
             </div>';
     }
 

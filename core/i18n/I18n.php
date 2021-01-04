@@ -2,22 +2,35 @@
     class I18n {
         // map that contains all strings in the language that will be used by the internationalization (can be any of 'de', 'en')
         private $internationalization = NULL;
+        private $log = NULL;
         
-        // constructor, language to be used must be set
         function __construct($lang) {
             $this->init($lang);
         }
+
+        /**
+         * Set the log to enable error logging.
+         */
+        function setLog($log) {
+            $this->log = $log;
+        }
         
+        /**
+         * Initialize the internationalization functionality.
+         * Loads the contents from the internationalized strings file and parses it to an array for lookup.
+         */
         function init($lang) {
             if (($i18nFileContent = file_get_contents($lang . '.txt', 'r')) !== FALSE) {
                 $this->internationalization = $this->parseI18nFile($i18nFileContent);
             }
             if (!isset($this->internationalization)) {
-                // TODO: error handling for unknown languages
+                $this->log->error(static::class . '.php', 'Unknown language: ' . $lang . '!');
             }
         }
         
-        // get the internationalizon string corresponding to the given key
+        /**
+         * Get the internationalizon string corresponding to the given key.
+         */
         function get($key) {
             $s = $this->getString($key);
             if ($s != null) {
@@ -26,7 +39,9 @@
             return '!' . $key . '!';
         }
         
-        // get the internationalizon string corresponding to the given key with replacement of placeholders
+        /**
+         * Get the internationalizon string corresponding to the given key with replacement of placeholders.
+         */
         function getWithValues($key, $values) {
             $s = $this->getString($key);
             if ($s != null) {
@@ -38,7 +53,10 @@
             return '!' . $key . '!';
         }
         
-        // get the internationalizon string corresponding to the given key with replacement of placeholders
+        /**
+         * Get the internationalizon string corresponding to the given key.
+         * This function shall not be called from outside this class.
+         */
         function getString($key) {
             if (!array_key_exists($key, $this->internationalization)) {
                 return null;
@@ -50,9 +68,11 @@
             return null;
         }
         
-        // parse a internationalizon file
-        // Splits each line at the first =
-        // left part is the key for the german/english string
+        /**
+         * Parse an internationalizon file.
+         * Split each line at the first '='.
+         * The left part is the key, the right part the internationalized string.
+         */
         function parseI18nFile($fileContent) {
             $i18n = array();
             $fileContent = str_replace('\r', '', $fileContent);

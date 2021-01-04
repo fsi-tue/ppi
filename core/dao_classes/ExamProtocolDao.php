@@ -1,6 +1,7 @@
 <?php
 class ExamProtocolDao {
     private $dbConn = null;
+    private $dateUtil = null;
 
     function __construct($dbConn, $dateUtil) {
         $this->dbConn = $dbConn;
@@ -31,25 +32,6 @@ class ExamProtocolDao {
      * Returns the number of exam protocols that are in the DB.
      */
     function getNumberOfExamProtocolsTotal($lectureID, $uploadedByUserID, $borrowedByUserID) {
-        // TODO test if this is correct 
-        /*$sql = "SELECT COUNT(*) FROM \"ExamProtocols\"
-        INNER JOIN ExamProtocolAssignedToLectures ON ExamProtocols.ID=ExamProtocolAssignedToLectures.examProtocolID";
-        if ($lectureID != '') {
-            $sql = "SELECT COUNT(*) FROM \"ExamProtocols\"
-                    INNER JOIN ExamProtocolAssignedToLectures ON ExamProtocols.ID=ExamProtocolAssignedToLectures.examProtocolID
-                    WHERE lectureID='" . $lectureID;
-        } else if ($uploadedByUserID != '') {
-            $sql = "SELECT COUNT(*) FROM \"ExamProtocols\" WHERE uploadedByUserID='" . $uploadedByUserID;
-        } else if ($borrowedByUserID != '') {
-            $sql = "SELECT COUNT(*) FROM \"ExamProtocols\"
-                    INNER JOIN ExamProtocolAssignedToLectures ON ExamProtocols.ID=ExamProtocolAssignedToLectures.examProtocolID
-                    INNER JOIN BorrowRecords ON ExamProtocolAssignedToLectures.lectureID=BorrowRecords.lectureID
-                    WHERE borrowedByUserID='" . $borrowedByUserID;
-        }
-        $sql .= " GROUP BY lectureID;";
-        $result = $this->dbConn->query($sql);
-        return $result[0]['count'];*/
-        
         // TODO get rid of this correct but inefficient solution
         return count($this->getExamProtocols(PHP_INT_MAX, 0, $lectureID, $uploadedByUserID, $borrowedByUserID));
     }
@@ -77,6 +59,9 @@ class ExamProtocolDao {
         return $this->getExamProtocolsImpl($sql, 'examProtocolID');
     }
     
+    /**
+     * Executes the query to get exam protocols from the DB.
+     */
     function getExamProtocolsImpl($sql, $idColumn) {
         $result = $this->dbConn->query($sql);
         $retList = array();
@@ -90,10 +75,14 @@ class ExamProtocolDao {
         return $retList;
     }
     
+    /**
+     * Constructs an exam protocol object from the given data array.
+     */
     function createExamProtocolFromData($data) {
         $ID = $data['ID'];
         $status = $data['status'];
         $uploadedByUserID = $data['uploadedByUserID'];
+        $collaboratorIDs = $data['collaboratorIDs'];
         $uploadedDate = $this->dateUtil->stringToDateTime($data['uploadedDate']);
         $remark = $data['remark'];
         $examiner = $data['examiner'];
@@ -101,7 +90,7 @@ class ExamProtocolDao {
         $fileSize = $data['fileSize'];
         $fileType = $data['fileType'];
         $fileExtension = $data['fileExtension'];
-        return new ExamProtocol($ID, $status, $uploadedByUserID, $uploadedDate, $remark, $examiner, $filePath, $fileSize, $fileType, $fileExtension);
+        return new ExamProtocol($ID, $status, $uploadedByUserID, $collaboratorIDs, $uploadedDate, $remark, $examiner, $filePath, $fileSize, $fileType, $fileExtension);
     }
     
     /**
@@ -110,8 +99,8 @@ class ExamProtocolDao {
      * If the operation was not successful, FALSE will be returned.
      */
     function addExamProtocol($examProtocol) {
-        $sql = "INSERT INTO \"ExamProtocols\" (\"status\", \"uploadedByUserID\", \"uploadedDate\", \"remark\", \"examiner\", \"filePath\", \"fileSize\", \"fileType\", \"fileExtension\") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        $result = $this->dbConn->exec($sql, [$examProtocol->getStatus(), $examProtocol->getUploadedByUserID(), $this->dateUtil->dateTimeToString($examProtocol->getUploadedDate()), $examProtocol->getRemark(), $examProtocol->getExaminer(), $examProtocol->getFilePath(), $examProtocol->getFileSize(), $examProtocol->getFileType(), $examProtocol->getFileExtension()]);
+        $sql = "INSERT INTO \"ExamProtocols\" (\"status\", \"uploadedByUserID\", \"collaboratorIDs\", \"uploadedDate\", \"remark\", \"examiner\", \"filePath\", \"fileSize\", \"fileType\", \"fileExtension\") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $result = $this->dbConn->exec($sql, [$examProtocol->getStatus(), $examProtocol->getUploadedByUserID(), $examProtocol->getCollaboratorIDs(), $this->dateUtil->dateTimeToString($examProtocol->getUploadedDate()), $examProtocol->getRemark(), $examProtocol->getExaminer(), $examProtocol->getFilePath(), $examProtocol->getFileSize(), $examProtocol->getFileType(), $examProtocol->getFileExtension()]);
         $id = $result['lastInsertId'];
         if ($id < 1) {
             return false;
@@ -125,8 +114,8 @@ class ExamProtocolDao {
      * Returns TRUE if the transaction was successful, FALSE otherwise.
      */
     function updateExamProtocol($examProtocol) {
-        $sql = "UPDATE \"ExamProtocols\" SET \"status\"=?, \"uploadedByUserID\"=?, \"uploadedDate\"=?, \"remark\"=?, \"examiner\"=?, \"filePath\"=?, \"fileSize\"=?, \"fileType\"=?, \"fileExtension\"=? WHERE \"ID\"=?;";
-        $result = $this->dbConn->exec($sql, [$examProtocol->getStatus(), $examProtocol->getUploadedByUserID(), $this->dateUtil->dateTimeToString($examProtocol->getUploadedDate()), $examProtocol->getRemark(), $examProtocol->getExaminer(), $examProtocol->getFilePath(), $examProtocol->getFileSize(), $examProtocol->getFileType(), $examProtocol->getFileExtension(), $examProtocol->getID()]);
+        $sql = "UPDATE \"ExamProtocols\" SET \"status\"=?, \"uploadedByUserID\"=?, \"collaboratorIDs\"=?, \"uploadedDate\"=?, \"remark\"=?, \"examiner\"=?, \"filePath\"=?, \"fileSize\"=?, \"fileType\"=?, \"fileExtension\"=? WHERE \"ID\"=?;";
+        $result = $this->dbConn->exec($sql, [$examProtocol->getStatus(), $examProtocol->getUploadedByUserID(), $examProtocol->getCollaboratorIDs(), $this->dateUtil->dateTimeToString($examProtocol->getUploadedDate()), $examProtocol->getRemark(), $examProtocol->getExaminer(), $examProtocol->getFilePath(), $examProtocol->getFileSize(), $examProtocol->getFileType(), $examProtocol->getFileExtension(), $examProtocol->getID()]);
         $rowCount = $result['rowCount'];
         if ($rowCount <= 0) {
             return false;

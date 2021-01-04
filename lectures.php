@@ -2,6 +2,7 @@
     require_once('core/Main.php');
     
     if (!$userSystem->isLoggedIn()) {
+        $log->info('lectures.php', 'User was not logged in');
         $redirect->redirectTo('login.php');
     }
     
@@ -12,9 +13,12 @@
                 $allProtocolIDsOfLecture = $lectureSystem->getAllProtocolIDsOfLecture($borrowLectureID);
                 if (count($allProtocolIDsOfLecture) > 0) {
                     $userSystem->borrowLecture($currentUser, $borrowLectureID);
+                    $log->debug('lectures.php', 'User ' . $currentUser->getUsername() . ' successfully borrowed lecture ' . $borrowLectureID);
                 } else {
                     $log->error('lectures.php', 'User tried to borrow lecture that has no accepted exam protocols: ' . $borrowLectureID);
                 }
+            } else {
+                $log->error('lectures.php', 'Lecture ID is not numeric: ' . $borrowLectureID);
             }
         }
     }
@@ -25,11 +29,15 @@
 
     echo '<div id="protocolsTable" style="padding-left: 40px; padding-bottom: 40px; padding-right: 40px; margin: 0px;">';
 
-    $headers = array($i18n->get('lectureTitle'), $i18n->get('lectureCode'), $i18n->get('examField'), $i18n->get('borrow'));
-    $widths = array(70, 10, 10, 10);
-    $textAlignments = array('left', 'left', 'left', 'center');
+    $headers = array($i18n->get('lectureTitle'), $i18n->get('numberOfProtocols'), $i18n->get('borrow'));
+    $widths = array(80, 10, 10);
+    $textAlignments = array('left', 'center', 'center');
     
     $allLectures = $lectureSystem->getAllLecturesWithAcceptedProtocols();
+    #Sort list of lectures by name
+    usort($allLectures, function($a, $b) {
+        return strcmp($a->getName(), $b->getName());
+    });
     $borrowRecords = $currentUser->getBorrowRecords();
     
     $currentlyBorrowedLectureIds = array();
@@ -38,12 +46,14 @@
     }
     
     $data = array();
+    $insertBeginningOfArray = false;
     foreach ($allLectures as &$lecture) {
         $row = array();
-        $row[] = $lecture->getLongName();
-        $row[] = $lecture->getShortName();
-        $row[] = $lecture->getField();
+        $row[] = $lecture->getName();
+        $row[] = count($lecture->getAssignedExamProtocols());
+        $insertBeginningOfArray = false;
         if (in_array($lecture->getID(), $currentlyBorrowedLectureIds)) {
+            $insertBeginningOfArray = true;
             $row[] = '<a id="styledButtonGreen" href="download.php"><nobr><img src="static/img/protocolCheckmark.png" style="height: 24px; vertical-align: middle;">&nbsp;&nbsp;' . $i18n->get('borrowed') . '</nobr></a>';
         } else {
             if ($currentUser->getTokens() <= 0) {
@@ -54,7 +64,12 @@
                 $row[] = '<a id="styledButtonGray" href=""><nobr><img src="static/img/protocolNotAvailable.png" style="height: 24px; vertical-align: middle;">&nbsp;&nbsp;' . $i18n->get('noProtocols') . '</nobr></a>';
             }
         }
-        $data[] = $row;
+        
+        if ($insertBeginningOfArray) {
+            array_splice($data, 0, 0, array($row));
+        } else {
+            $data[] = $row;
+        }
     }
     echo $searchableTable->createTable($headers, $data, $widths, $textAlignments);
     

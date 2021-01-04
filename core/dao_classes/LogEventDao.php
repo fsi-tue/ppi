@@ -28,6 +28,9 @@ class LogEventDao {
         return $this->getLogEventsImpl($sql);
     }
     
+    /**
+     * Count the log events in the DB, possibly filtered by username or log event level.
+     */
     function getNumberOfLogEventsTotal($username, $level) {
         $sql = "SELECT COUNT(*) FROM \"LogEvents\"";
         if ($username != '') {
@@ -40,6 +43,9 @@ class LogEventDao {
         return $result[0]['count'];
     }
     
+    /**
+     * Get log events from the DB, possibly filtered by number of wanted rows, page, username or log event level.
+     */
     function getLogEvents($numberOfResultsWanted, $page, $username, $level) {
         $offset = $numberOfResultsWanted * $page;
         $sql = "SELECT * FROM \"LogEvents\"";
@@ -52,6 +58,9 @@ class LogEventDao {
         return $this->getLogEventsImpl($sql);
     }
     
+    /**
+     * Executes the query to get log events from the DB.
+     */
     function getLogEventsImpl($sql) {
         $result = $this->dbConn->query($sql);
         $retList = array();
@@ -61,6 +70,9 @@ class LogEventDao {
         return $retList;
     }
     
+    /**
+     * Constructs a log event from the given data array.
+     */
     function createLogEventFromData($data) {
         $ID = $data['ID'];
         $date = $this->dateUtil->stringToDateTime($data['date']);
