@@ -164,6 +164,7 @@ studentUnionTuebingen=Fachschaft Informatik Tübingen
 submit=Absenden
 successfullyAddedTokensToUserMessage=Es wurden erfolgreich Tokens hinzugefügt.
 successfullyAskedForTokensMessage=Vielen Dank! Wir überprüfen deinen Antrag für mehr Tokens.
+templateRemark=Hier findest du zwei Templates für das Protokoll.<br>Du musst das Template nicht nutzen.
 title=PPI | FSI Tübingen
 tokens=Tokens
 tokensWillBeGrantedAfterReviewOfProtocol=Sobald dein Protokoll geprüft und akzeptiert wurde, erhälst du deine Tokens.

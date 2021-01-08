@@ -164,6 +164,7 @@ studentUnionTuebingen=Student Council Computer Science Tübingen
 submit=Submit
 successfullyAddedTokensToUserMessage=Tokens have been added successfully. 
 successfullyAskedForTokensMessage=Thank you! We will review your application for more tokens.
+templateRemark=You can download two templates for your protocol.<br>You are not required to use it.
 title=PPI | FSI Tübingen
 tokens=Tokens
 tokensWillBeGrantedAfterReviewOfProtocol=As soon as your protocol has been checked and accepted, you will receive your tokens.

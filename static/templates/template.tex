@@ -1,0 +1,80 @@
+% Vorlage für LaTeX-Abgaben / Gedächtnisprotokolle
+% Erstellt von Jules Kreuer (juleskreuer.eu)
+% Veröffentlicht am 24.04.2020 auf juleskreuer.eu
+% und ppi.fsi.uni-tuebingen.de
+% ---
+\documentclass[a4paper]{article}
+
+% Packages
+% ---
+\usepackage{amsmath} % Advanced Math Typesetting
+\usepackage[utf8]{inputenc} % Unicode support (Umlaute etc.)
+\usepackage[ngerman]{babel} % Change hyphenation rules
+
+\usepackage{amssymb}
+\usepackage{hyperref} % Links
+\usepackage{graphicx} % Vilder
+\usepackage{listings} % Source code highlighting
+\usepackage[inline]{enumitem}
+\usepackage{fullpage} % weniger abstand zu den seiten
+\usepackage{tabularx} % bessere Tabellen
+\usepackage{pdfpages} % pdf einbinden mit \includepdf[pages={2}]{x.pdf}
+
+%Code
+\usepackage{color}
+\usepackage{colortbl}
+\usepackage{textcomp}
+\definecolor{listinggray}{gray}{0.9}
+\definecolor{lbcolor}{rgb}{0.95,0.95,0.95}
+\lstset{
+	backgroundcolor=\color{lbcolor},
+	tabsize=4,
+	rulecolor=,
+	basicstyle=\fontsize{10}{10}, % Fontgröße erstes: Text, zweites: Zahlen
+	upquote=true,
+	aboveskip={1.5\baselineskip},
+	columns=fixed,
+	showstringspaces=false,
+	extendedchars=true,
+	breaklines=true,
+	prebreak = \raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+	frame=single,
+	showtabs=false,
+	showspaces=false,
+	showstringspaces=false,
+	identifierstyle=\ttfamily,
+	keywordstyle=\color[rgb]{0,0,1},
+	commentstyle=\color[rgb]{0.133,0.545,0.133},
+	stringstyle=\color[rgb]{0.627,0.126,0.941},
+}
+
+\begin{document}
+	% Name des Prüfenden
+	\author{bei Prof. Musterfrau\\}
+	% Name der Vorlesung
+	\title{\vspace{-2cm}Gedächtnisprotokoll\\Name der Vorlesung}
+	\date{\today{}} 
+	\maketitle{} % Generates title
+	\vspace{-1cm}
+	% Hier bitte alle vorhandenen Informationen eintragen.
+	\begin{lstlisting}
+	Klausur:       Haupt/Nachklausur, SS/WS, JAHR
+	Pruefer:       Prof. Pruefername
+	Datum:         Datum der Pruefung
+	Zeit:          Zeit zum Schreiben
+	Punkte:		   Anzahl der Punkte
+	Hilfsmittel:   Erlaubte Hilfsmittel
+	               Bsp: Taschenrechner, Cheat-Sheet
+	Sprache:	   Erlaubte Sprachen
+	Modul:		   ggf. Modulnummer bei uneindeutigen Namen
+	\end{lstlisting}
+	
+	\section{Titel erste Aufgabe - n Punkte}
+	\subsection{}
+	Lorem ipsum dolor sit amet, consetetur sadipscing elitr,sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+	At vero eos et accusam et justo duo dolores et ea rebum.
+
+	\subsection{}
+	Lorem ipsum dolor sit amet, consetetur sadipscing elitr,sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+	At vero eos et accusam et justo duo dolores et ea rebum.
+\end{document}

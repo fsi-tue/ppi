@@ -60,12 +60,12 @@ class Constants {
     const EMAIL_USER_DOMAIN = '@student.uni-tuebingen.de';
     const EMAIL_SENDER_DOMAIN = '@fsi.uni-tuebingen.de';
     const EMAIL_SENDER_NAME = 'PPI';
-    const EMAIL_SENDER_ADDRESS = 'ppi' . Constants::EMAIL_SENDER_DOMAIN;
+    const EMAIL_SENDER_ADDRESS = 'pruefungsprotokolle' . Constants::EMAIL_SENDER_DOMAIN;
     
     // admin
     const USERNAME_ADMIN = 'admin';
     const PASSWORD_ADMIN = Passwords::PASSWORD_ADMIN;
     const NUMBER_OF_ENTRIES_PER_PAGE = 50;
-    const EMAIL_ADMIN = 'ppi@fsi.uni-tuebingen.de';
+    const EMAIL_ADMIN = 'pruefungsprotokolle@fsi.uni-tuebingen.de';
 }
 ?>
