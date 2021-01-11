@@ -2,7 +2,7 @@
 class Constants {
     // debug and development options
     const VERSION = '0.0.1';
-    const ERROR_REPORTING_IN_WEBPAGE = true;
+    const ERROR_REPORTING_IN_WEBPAGE = false;
     const SHOW_PHP_INFO = false;
     const WRITE_MAILS_TO_DISK_INSTEAD_OF_SENDING = false;
     const MAIL_TO_DISK_PATH = 'debug_mail_content/mailContents.txt';
@@ -13,11 +13,11 @@ class Constants {
     const ALERT_ADMIN_FROM_LEVEL = 2;
     
     // SQL
-    const POSTGRES_HOST = 'localhost';
+    const POSTGRES_HOST = 'db';
     const POSTGRES_PORT = '5432';
-    const POSTGRES_DB_NAME = 'postgres';
-    const POSTGRES_DB_NAME_UNIT_TESTS = 'postgresunittests';
-    const POSTGRES_USER = 'postgres';
+    const POSTGRES_DB_NAME = 'ppi';
+    const POSTGRES_DB_NAME_UNIT_TESTS = 'ppi_unittests';
+    const POSTGRES_USER = 'ppi';
     const POSTGRES_PASSWORD = Passwords::POSTGRES_PASSWORD;
     
     // registration
