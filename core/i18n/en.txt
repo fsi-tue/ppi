@@ -101,6 +101,7 @@ lecturesHelpContent=Here you can see a list of all lectures for which exam proto
 lecturesList=List of Lectures
 lectureslistHelp=Help for List of Lectures (for Admins)
 lectureslistHelpContent=
+legalDisclaimer=I confirm that the uploaded protocol was created by me or that I have the rights to publish it via the PPI and hereby grant the student council the full rights of use.<br>I am aware that the protocol is published anonymously, but that in case of misuse it can be linked to my name.
 level=Level
 logEvents=Event Logs
 logeventsHelp=Help for List of Log Events (for Admins)

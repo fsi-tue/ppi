@@ -219,6 +219,10 @@
                                 <td style="width: 20%;' . $colorFile . '">' . $i18n->get('file') . ':</td>
                                 <td><input type="file" id="protocol_file" name="protocol_file" placeholder="" style="display: table-cell; width: calc(100% - 18px);' . $colorFile . '" required></td>
                             </tr>
+                            <tr>
+                                <td style="width: 20%;"><input type="checkbox" id="legal" name="legal" required></td>
+                                <td><label for="legal">' . $i18n->get('legalDisclaimer'). ' </td>
+                            </tr>
                         </table>
                         <br>
                         <input type="submit" value="' . $i18n->get('submit') . '">
