@@ -159,7 +159,7 @@
                 <h2>Templates</h2>
                 ' . $i18n->get('templateRemark'). '<br>
             <a href="static/templates/template.tex" id="styledButton">
-                img src="static/img/protocolDownload.png" alt="download protocol" style="height: 24px; vertical-align: middle;"> Latex
+                <img src="static/img/protocolDownload.png" alt="download protocol" style="height: 24px; vertical-align: middle;"> Latex
             </a>
             <a href="static/templates/template.docx" id="styledButton">
                 <img src="static/img/protocolDownload.png" alt="download protocol" style="height: 24px; vertical-align: middle;"> Word
