@@ -10,7 +10,7 @@ class Constants {
     // log levels
     const LOG_LEVELS = [0 => 'DEBUG', 1 => 'INFO', 2 => 'WARNING', 3 => 'ERROR', 4 => 'CRITICAL'];
     const LOG_TO_DATABASE_FROM_LEVEL = 0;
-    const ALERT_ADMIN_FROM_LEVEL = 2;
+    const ALERT_ADMIN_FROM_LEVEL = 4;
     
     // SQL
     const POSTGRES_HOST = 'localhost';
