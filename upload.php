@@ -229,7 +229,7 @@
                             </tr>
                             <tr>
                                 <td style="width: 20%;' . $colorLegal . '"><input type="checkbox" id="legal" name="legal" value="checkedLegal" required></td>
-                                <td><label for="legal">' . $i18n->get('legalDisclaimer'). ' </td>
+                                <td><label for="legal">' . $i18n->get('legalDisclaimer'). '</label></td>
                             </tr>
                         </table>
                         <br>
