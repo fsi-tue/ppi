@@ -101,6 +101,7 @@ lecturesHelpContent=Hier siehst du eine Liste aller Vorlesungen, zu denen Prüfu
 lecturesList=Vorlesungsliste
 lectureslistHelp=Hilfe für Vorlesungsliste (für Admins)
 lectureslistHelpContent=
+legalDisclaimer=Ich bestätige, dass das hochgeladene Protokoll von mir persönlich erstellt wurde oder ich die Rechte habe es über das PPI zu veröffentlichen und erteile der Fachschaft hiermit die vollen Nutzungsrechte.<br>Mir ist bewusst, dass das Protokoll zwar grundsätzlich anonym veröffentlicht wird, aber im Falle von Missbrauch eine Zuordnung zu meinem Namen hergestellt werden kann.
 level=Level
 logEvents=Eventlogs
 logeventsHelp=Hilfe für Liste der Logevents (für Admins)

@@ -14,7 +14,8 @@
         $examiner = filter_input(INPUT_POST, 'examiner', FILTER_SANITIZE_SPECIAL_CHARS);
         $collaborators = filter_input(INPUT_POST, 'collaborators', FILTER_SANITIZE_SPECIAL_CHARS);
         $remark = filter_input(INPUT_POST, 'remark', FILTER_SANITIZE_SPECIAL_CHARS);
-        
+        $legal = filter_input(INPUT_POST, 'legal', FILTER_SANITIZE_SPECIAL_CHARS);
+
         $status = 'CHECK_FILE';
         if ($lectureID1 == '') {
             $status = 'LECTURE_MISSING';
@@ -22,6 +23,9 @@
         } else if ($examiner == '') {
             $status = 'EXAMINER_MISSING';
             $log->warning('upload.php', 'Examiner missing for uploaded file');
+        } else if ($legal != 'checkedLegal') {
+            $status = 'LEGAL_MISSING';
+            $log->warning('upload.php', 'Legal missing for uploaded file');
         }
         
         if ($status == 'CHECK_FILE') {
@@ -123,6 +127,7 @@
     $colorSelectLecture = '';
     $colorExaminer = '';
     $colorFile = '';
+    $colorLegal = '';
     if ($status == 'LECTURE_MISSING' || $status == 'ERROR_ON_INSERTING_PROTOCOL') {
         $colorSelectLecture = ' background-color: #A11E3B;';
     }
@@ -131,6 +136,9 @@
     }
     if ($status == 'WRONG_EXTENSION' || $status == 'NO_FILE_UPLOADED_ERROR' || $status == 'ERROR_ON_INSERTING_PROTOCOL') {
         $colorFile = ' background-color: #A11E3B;';
+    }
+    if ($status == 'LEGAL_MISSING') {
+        $colorLegal = ' background-color: #A11E3B;';
     }
     
     $addLectureFieldOpen = '';
@@ -218,6 +226,10 @@
                             <tr>
                                 <td style="width: 20%;' . $colorFile . '">' . $i18n->get('file') . ':</td>
                                 <td><input type="file" id="protocol_file" name="protocol_file" placeholder="" style="display: table-cell; width: calc(100% - 18px);' . $colorFile . '" required></td>
+                            </tr>
+                            <tr>
+                                <td style="width: 20%;' . $colorLegal . '"><input type="checkbox" id="legal" name="legal" value="checkedLegal" required></td>
+                                <td><label for="legal">' . $i18n->get('legalDisclaimer'). '</label></td>
                             </tr>
                         </table>
                         <br>
