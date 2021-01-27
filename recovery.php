@@ -40,7 +40,7 @@
                     <br>
                     <div id="infoText">' . $message . '</div>
                     <form method="POST" action="">
-                        <input type="text" id="username" name="username" placeholder="' . $i18n->get('userZxShort') . '"' . $color . '>
+                        <input type="text" id="username" name="username" placeholder="' . $i18n->get('userZxShort') . '"' . $color . ' maxlength="7" required>
                         <input type="submit" id="login" value="' . $i18n->get('resetPassword') . '">
                     </form>
                     <br>

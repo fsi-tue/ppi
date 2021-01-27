@@ -53,7 +53,7 @@
                 <div id="infoText">' . $message . '</div>
                 <br>
                 <form method="POST" action="">
-                    <input type="text" id="username" name="username" placeholder="' . $i18n->get('userZxShort') . '" value="' . $username . '" required>
+                    <input type="text" id="username" name="username" placeholder="' . $i18n->get('userZxShort') . '" value="' . $username . '" maxlength="7" required>
                     <input type="password" id="password" name="password" placeholder="' . $i18n->get('password') . '" required>
                     <input type="password" id="password_repeated" name="password_repeated" placeholder="' . $i18n->get('repeatPassword') . '" required>
                     <input type="submit" id="login" value="' . $i18n->get('createAccount') . '">
