@@ -73,13 +73,17 @@ class ExamProtocolSystem {
      * Returns the just added protocol with the ID set if the operation was successful, NULL otherwise.
      */
     function addProtocol($currentUser, $collaboratorIDs, $remark, $examiner, $fileNameTmp, $fileNameExtension, $fileSize, $fileType) {
-        $filePath = $this->fileUtil->getFullPathToBaseDirectory() . Constants::UPLOADED_PROTOCOLS_DIRECTORY . '/' . $this->hashUtil->generateRandomString() . '.' . $fileNameExtension;
-        move_uploaded_file($fileNameTmp, $filePath);
-        
+        /**
+         * The full path will be generated when downloading the file. Only the filename needs to be stored in the database.
+        */
+        $fileName = $this->hashUtil->generateRandomString() . '.' . $fileNameExtension;
+        $filePath = $this->fileUtil->getFullPathToBaseDirectory() . Constants::UPLOADED_PROTOCOLS_DIRECTORY . '/' . $fileName;
+	move_uploaded_file($fileNameTmp, $filePath);
+
         $status = Constants::EXAM_PROTOCOL_STATUS['unchecked'];
         $uploadedByUserID = $currentUser->getID();
         $uploadedDate = $this->dateUtil->getDateTimeNow();
-        $examProtocol = new ExamProtocol(NULL, $status, $uploadedByUserID, $collaboratorIDs, $uploadedDate, $remark, $examiner, $filePath, $fileSize, $fileType, $fileNameExtension);
+        $examProtocol = new ExamProtocol(NULL, $status, $uploadedByUserID, $collaboratorIDs, $uploadedDate, $remark, $examiner, $fileName, $fileSize, $fileType, $fileNameExtension);
     
         $examProtocol = $this->examProtocolDao->addExamProtocol($examProtocol);
         if ($examProtocol == false) {
