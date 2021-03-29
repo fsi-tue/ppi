@@ -123,7 +123,7 @@ class LectureSystem {
         }
         $lecture = $this->getLecture($lectureID);
         if ($lecture == NULL) {
-            $this->log->error(static::class . '.php', 'Lecture to ID ' . $lectureIDs[$i] . ' not found! Can not report as outdated!');
+            $this->log->error(static::class . '.php', 'Lecture to ID ' . $lectureID . ' not found! Can not report as outdated!');
             return false;
         }
         $message = 'The user ' . $reportingUsername . ' has reported that the lecture ' . $lecture->getName() . ' with ID ' . $lectureID . ' has outdated protocols assigned. Please verify this and handle the outdated protocols (if any).';
