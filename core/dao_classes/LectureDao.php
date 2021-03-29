@@ -22,7 +22,7 @@ class LectureDao {
      * Returns all lectures from the DB.
      */
     function getAllLectures() {
-        $sql = "SELECT * FROM \"Lectures\" ORDER BY \"ID\";";
+        $sql = "SELECT * FROM \"Lectures\" ORDER BY \"name\";";
         return $this->getLecturesImpl($sql, false);
     }
     
