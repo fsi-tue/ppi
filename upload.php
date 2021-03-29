@@ -35,7 +35,7 @@
             $fileNameTmp = $file['tmp_name'];
             $fileError = $file['error'];
             $fileSizeBytes = $file['size'];
-            $fileType = $file['type'];
+            $fileType = 'application/' . $fileNameExtension;
             
             if ($fileError == UPLOAD_ERR_OK) {
                 if (in_array($fileNameExtension, Constants::ALLOWED_FILE_EXTENSION_UPLOAD)) {
@@ -173,11 +173,6 @@
                 <img src="static/img/protocolDownload.png" alt="download protocol" style="height: 24px; vertical-align: middle;"> Word
             </a>
             <br><br>
-                
-            
-
-
-
                 <details open id="uploadField">
                     <summary>'  . $i18n->get('selectLecture') . '</summary>
                     <br>
