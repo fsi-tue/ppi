@@ -29,6 +29,17 @@ class ExamProtocolDao {
     }
     
     /**
+     * Returns all exam protocols from the DB with the given status or an empty array if none were not found.
+     */
+    function getAllExamProtocolsWithStatus($status) {
+        if (!in_array($status, Constants::EXAM_PROTOCOL_STATUS)) {
+            return [];
+        }
+        $sql = "SELECT * FROM \"ExamProtocols\" WHERE \"status\"='" . $status . "';";
+        return $this->getExamProtocolsImpl($sql, 'ID');
+    }
+    
+    /**
      * Returns the number of exam protocols that are in the DB.
      */
     function getNumberOfExamProtocolsTotal($lectureID, $uploadedByUserID, $borrowedByUserID) {

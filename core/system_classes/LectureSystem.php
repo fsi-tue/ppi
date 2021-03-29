@@ -22,6 +22,13 @@ class LectureSystem {
     }
     
     /**
+     * Returns all lectures from the DB with the given status or an empty array if none were not found.
+     */
+    function getAllLecturesWithStatus($status) {
+        return $this->lectureDao->getAllLecturesWithStatus($status);
+    }
+    
+    /**
      * Returns all lectures from the DB or an empty array if none were not found.
      */
     function getAllLectures() {

@@ -19,12 +19,12 @@ class ExamProtocolSystem {
     function setLog($log) {
         $this->log = $log;
     }
-    
+
     /**
-     * Returns all exam protocols from the DB or an empty array if none were not found.
+     * Returns all exam protocols from the DB with the given status or an empty array if none were not found.
      */
-    function getAllExamProtocols($username) {
-        return $this->examProtocolDao->getAllExamProtocols($username);
+    function getAllExamProtocolsWithStatus($status) {
+        return $this->examProtocolDao->getAllExamProtocolsWithStatus($status);
     }
     
     /**
@@ -101,6 +101,20 @@ class ExamProtocolSystem {
         }
         $examProtocol->setRemark($remark);
         $examProtocol->setExaminer($examiner);
+        return $this->examProtocolDao->updateExamProtocol($examProtocol);
+    }
+    
+    /**
+     * Updates the exam protocol in the database with the given data.
+     * Returns TRUE if the operation was successful, FALSE otherwise.
+     */
+    function updateExamProtocolStatus($examProtocolID, $newStatus) {
+        $examProtocol = $this->examProtocolDao->getExamProtocol($examProtocolID);
+        if ($examProtocol == NULL) {
+            $this->log->error(static::class . '.php', 'Protocol to ID ' . $examProtocolID . ' not found!');
+            return false;
+        }
+        $examProtocol->setStatus($newStatus);
         return $this->examProtocolDao->updateExamProtocol($examProtocol);
     }
     

@@ -45,6 +45,8 @@
             $color = Constants::SUCCESS_COLOR;
         } else if ($recurringTasksData[$i][4] == 'NOT_TO_BE_RUN') {
             $color = 'rgba(0, 0, 0, 0)';
+        } else if ($recurringTasksData[$i][4] == 'NO_CHANGE') {
+            $color = Constants::SUCCESS_COLOR;
         }
         $row = array();
         $id = $recurringTasksData[$i][0];

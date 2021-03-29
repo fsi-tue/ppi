@@ -101,56 +101,122 @@ class RecurringTasksDao {
     }
     
     /**
-     * Remove all expired borrow reciórds of all users from the database.
+     * Remove all expired borrow records of all users from the database.
+     * Returns 'SUCCESS', if any rows were affected, 'NO_CHANGE' otherwise and 'ERROR' in an error case.
      */
     function removeExpiredBorrowRecords() {
-        // TODO: implement
-        return true;
+        $sql = "DELETE FROM \"BorrowRecords\" WHERE TO_TIMESTAMP(\"borrowedUntilDate\", 'YYYY-MM-DD') < now();";
+        $result = $this->dbConn->exec($sql, []);
+        $rowCount = $result['rowCount'];
+        if ($rowCount <= 0) {
+            return 'NO_CHANGE';
+        }
+        return 'SUCCESS';
     }
     
     /**
      * Remove log events so the database is not filling up endlessly.
+     * Returns 'SUCCESS', if any rows were affected, 'NO_CHANGE' otherwise and 'ERROR' in an error case.
      */
     function cleanupLogs() {
-        // TODO: implement
-        return true;
+        $countLogEventsSql = "SELECT COUNT(*) FROM \"LogEvents\";";
+        $resultCountLogEvents = $this->dbConn->query($countLogEventsSql);
+        $currentNumberOfLogEvents = $resultCountLogEvents[0]["count"];
+        
+        $numberOfLogEventsToDelete = $currentNumberOfLogEvents - Constants::CLEANUP_LOG_TO_NUMBER_OF_EVENTS + 1;
+        if ($numberOfLogEventsToDelete < 1) {
+            return 'NO_CHANGE';
+        }
+        
+        $sql = "DELETE FROM \"LogEvents\" WHERE \"ID\" IN (
+            SELECT \"ID\"
+            FROM \"LogEvents\"
+            ORDER BY \"ID\"
+            LIMIT " . $numberOfLogEventsToDelete . "
+        );";
+
+        $result = $this->dbConn->exec($sql, []);
+        $rowCount = $result['rowCount'];
+        if ($rowCount <= 0) {
+            return 'NO_CHANGE';
+        }
+        return 'SUCCESS';
     }
     
     /**
-     * Remove the exam protocols that are marked to be deleted.
+     * Remove the exam protocols that are marked to be deleted from the database.
+     * Returns 'SUCCESS', if any rows were affected, 'NO_CHANGE' otherwise and 'ERROR' in an error case.
      */
     function removeToBeDeletedProtocols() {
-        // TODO: implement
-        return true;
+        $sql = "DELETE FROM \"ExamProtocols\" WHERE \"status\"=?;";
+        $result = $this->dbConn->exec($sql, [Constants::EXAM_PROTOCOL_STATUS['toBeDeleted']]);
+        $rowCount = $result['rowCount'];
+        if ($rowCount <= 0) {
+            return 'NO_CHANGE';
+        }
+        return 'SUCCESS';
     }
     
     /**
-     * Remove the users that are marked to be deleted.
+     * Remove the exam protocol to lecture assignment for the given exam protocol ID.
+     * Returns 'SUCCESS', if any rows were affected, 'NO_CHANGE' otherwise and 'ERROR' in an error case.
+     */
+    function removeProtocolAssignmentsToLectures($examProtocolID) {
+        if (!is_numeric($examProtocolID)) {
+            return 'ERROR';
+        }
+        $sql = "DELETE FROM \"ExamProtocolAssignedToLectures\" WHERE \"examProtocolID\"=?;";
+        $result = $this->dbConn->exec($sql, [$examProtocolID]);
+        $rowCount = $result['rowCount'];
+        if ($rowCount <= 0) {
+            return 'NO_CHANGE';
+        }
+        return 'SUCCESS';
+    }
+    
+    /**
+     * Remove the users that are marked to be deleted from the database.
+     * Returns 'SUCCESS', if any rows were affected, 'NO_CHANGE' otherwise and 'ERROR' in an error case.
      */
     function removeToBeDeletedUsers() {
         $sql = "DELETE FROM \"Users\" WHERE \"role\"=?;";
         $result = $this->dbConn->exec($sql, [Constants::USER_ROLES['toBeDeleted']]);
         $rowCount = $result['rowCount'];
         if ($rowCount <= 0) {
-            return false;
+            return 'NO_CHANGE';
         }
-        return true;
+        return 'SUCCESS';
     }
     
     /**
-     * Remove the lectures that are marked to be deleted.
+     * Remove the lectures that are marked to be deleted from the database.
+     * Returns 'SUCCESS', if any rows were affected, 'NO_CHANGE' otherwise and 'ERROR' in an error case.
      */
     function removeToBeDeletedLectures() {
-        // TODO: implement
-        return true;
+        $sql = "DELETE FROM \"Lectures\" WHERE \"status\"=?;";
+        $result = $this->dbConn->exec($sql, [Constants::LECTURE_STATUS['toBeDeleted']]);
+        $rowCount = $result['rowCount'];
+        if ($rowCount <= 0) {
+            return 'NO_CHANGE';
+        }
+        return 'SUCCESS';
     }
     
     /**
-     * Adds the given number of tokens to all users.
+     * Adds the given number of tokens to all users in the database.
+     * Returns 'SUCCESS', if any rows were affected, 'NO_CHANGE' otherwise and 'ERROR' in an error case.
      */
     function addTokensToAllUsers($numberOfTokens) {
-        // TODO: implement
-        return true;
+        if (!is_numeric($numberOfTokens)) {
+            return 'ERROR';
+        }
+        $sql = "UPDATE \"Users\" SET \"tokens\"=\"tokens\"+?;";
+        $result = $this->dbConn->exec($sql, [$numberOfTokens]);
+        $rowCount = $result['rowCount'];
+        if ($rowCount <= 0) {
+            return 'NO_CHANGE';
+        }
+        return 'SUCCESS';
     }
 }
 ?>
