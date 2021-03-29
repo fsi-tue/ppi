@@ -83,7 +83,7 @@ germanVersion=Deutsche Version
 hash=Hash
 help=Help
 impressum=Imprint
-impressumContent=The PPI is a platform of the Student Union Computer Science (Fachschaft Informatik). This is part of the University of Tübingen, which is represented by the Rector. See <a href
+impressumContent=The PPI is a platform of the Student Union Computer Science (Fachschaft Informatik). This is part of the University of Tübingen, which is represented by the Rector. See the <a href="https://www.fsi.uni-tuebingen.de/kontakt"> impressum of the website of the fsi</a>.
 impressumHelp=Help for Impressum
 impressumHelpContent=There is not much to say here.
 incorrectPassword=Incorrect password

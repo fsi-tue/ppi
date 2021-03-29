@@ -83,7 +83,7 @@ germanVersion=Deutsche Version
 hash=Hash
 help=Hilfe
 impressum=Impressum
-impressumContent=Das PPI ist eine Platform der Fachschaft Informatik. Diese ist Teil der Universität Tübingen, welche durch den Rektor vertreten wird. Siehe das <a href
+impressumContent=Das PPI ist eine Plattform der Fachschaft Informatik. Diese ist Teil der Universität Tübingen, welche durch den Rektor vertreten wird. Siehe das <a href="https://www.fsi.uni-tuebingen.de/kontakt"> Impressum der Website der fsi</a>.
 impressumHelp=Hilfe für Imressum
 impressumHelpContent=Hierzu gibt es nicht besonders viel zu sagen.
 incorrectPassword=Falsches Passwort
