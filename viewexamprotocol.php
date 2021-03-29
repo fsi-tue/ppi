@@ -12,7 +12,7 @@
     
     $replies = array();
     $replies[] = $i18n->get('noReplyToUserThatUploadedExamProtocol');
-    for ($i = 1; $i <= 9; $i++) {
+    for ($i = 0; $i <= 11; $i++) {
         $replies[] = $i18n->get('uploadReply' . $i);
     }
     
@@ -42,6 +42,9 @@
             $tokensToAdd = Constants::TOKENS_ADDED_PER_UPLOAD;
             if ($action == 'accept') {
                 $status = Constants::EXAM_PROTOCOL_STATUS['accepted'];
+            } else if ($action == 'acceptDoubleTokens') {
+                $status = Constants::EXAM_PROTOCOL_STATUS['accepted'];
+                $tokensToAdd = $tokensToAdd * 2;
             } else if ($action == 'decline') {
                 $status = Constants::EXAM_PROTOCOL_STATUS['declined'];
                 $tokensToAdd = 0;
@@ -257,6 +260,8 @@
                                 <label for="accept">' . $i18n->get('acceptAndGrantTokens') . '</label><br>
                                 <input type="radio" id="decline" name="action" value="decline" style="margin: 0px 0px 10px 0px; padding: 0px;">
                                 <label for="decline">' . $i18n->get('decline') . '</label><br>
+                                <input type="radio" id="acceptDoubleTokens" name="action" value="acceptDoubleTokens" style="margin: 0px 0px 10px 0px; padding: 0px;">
+                                <label for="acceptDoubleTokens">' . $i18n->get('acceptAndGrantTokensDouble') . '</label><br>
                                 <input type="radio" id="deleteButGrantTokens" name="action" value="deleteButGrantTokens" style="margin: 0px; padding: 0px;">
                                 <label for="deleteButGrantTokens">' . $i18n->get('deleteButGrantTokens') . '</label>
                             </div>
