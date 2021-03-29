@@ -126,6 +126,26 @@ class UserSystem {
     }
     
     /**
+     * Re-sends the activation mail for a user that is already present in the system and sets the new password.
+     * Returns TRUE if the task was successful, FALSE otherwise.
+     */
+    function resendActivationMail($username, $passwordHash) {
+        $user = $this->getUserByUsername($username);
+        if ($user != NULL) {
+            if ($user->getRole() != Constants::USER_ROLES['notActivated']) {
+                $this->log->error(static::class . '.php', 'User with username ' . $username . ' who is already activated wanted to re-register.');
+                return false;
+            }
+            $user->setPasswordHash($passwordHash);
+            $this->email->send($user->getUsername() . Constants::EMAIL_USER_DOMAIN, $this->i18n->get('activationMailSubject'), $this->i18n->getWithValues('activationMailMessage', [$user->getUsername(), $this->urlUtil->getCurrentDirname() . 'activate.php?user=' . $user->getUsername() . '&key=' . $user->getStatus()]));
+            return $this->userDao->updateUser($user);
+        } else {
+            $this->log->error(static::class . '.php', 'Error on re-sending activation mail to user with username ' . $username . '!');
+        }
+        return false;
+    }
+    
+    /**
      * Changes the password hash of the currently logged in user. Returns TRUE if the task was successful, FALSE otherwise.
      */
     function changePasswordOfCurrentUser($passwordHash) {

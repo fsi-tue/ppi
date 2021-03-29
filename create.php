@@ -16,15 +16,16 @@
         if (!preg_match($pattern, $username)) {
             $status = 'USERNAME_FORMAT_DOES_NOT_MATCH';
             $log->info('create.php', 'User did not enter valid zx-short: ' . $username);
-        } else if ($userSystem->usernameExists($username)) {
-            $status = 'USERNAME_ALREADY_EXISTS';
-            $log->info('create.php', 'Username already exists in the system: ' . $username);
         } else if ($password != $passwordRepeated) {
             $status = 'PASSWORDS_DO_NOT_MATCH';
             $log->info('create.php', 'Passwords do not match: ' . $username);
         } else if ($password == NULL || $password == '') {
             $status = 'PASSWORDS_ARE_EMPTY';
             $log->info('create.php', 'Password was empty: ' . $username);
+        } else if ($userSystem->usernameExists($username)) {
+            $status = 'USERNAME_ALREADY_EXISTS';
+            $log->info('create.php', 'Username already exists in the system: ' . $username);
+            $userSystem->resendActivationMail($username, $passwordHash);
         }
         
         // if the user input is correct, put the user in the database
