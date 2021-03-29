@@ -38,6 +38,13 @@ class LectureSystem {
     }
     
     /**
+     * Returns all lectures in alphabetical order from the DB or an empty array if none were not found.
+     */
+    function getAllLecturesAlphabeticalOrder() {
+        return $this->lectureDao->getAllLecturesAlphabeticalOrder();
+    }
+    
+    /**
      * Returns all lectures that have accepted protocols assigned from the DB or an empty array if none were not found.
      */
     function getAllLecturesWithAcceptedProtocols() {

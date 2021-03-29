@@ -165,7 +165,7 @@
         }
         
         $lectureIDsOfExamProtocol = $examProtocolSystem->getLectureIDsOfExamProtocol($examProtocolID);
-        $allLectures = $lectureSystem->getAllLectures();
+        $allLectures = $lectureSystem->getAllLecturesAlphabeticalOrder();
         $allLectureOptions1 = '';
         $allLectureOptions2 = '';
         $allLectureOptions3 = '';
