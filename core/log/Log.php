@@ -22,7 +22,7 @@ class Log {
     function debug($origin, $message) {
         $origin .= ' (line ' . debug_backtrace()[0]['line'] . ')';
         $nowString = $this->dateUtil->dateTimeToString($this->dateUtil->getDateTimeNow());
-        $this->logEventSystem->logEvent($nowString, $origin, 0, $message, '(' . $this->username . ')');
+        $this->logEventSystem->logEvent($nowString, $origin, 0, $message, $this->username);
     }
     
     /**
@@ -31,7 +31,7 @@ class Log {
     function info($origin, $message) {
         $origin .= ' (line ' . debug_backtrace()[0]['line'] . ')';
         $nowString = $this->dateUtil->dateTimeToString($this->dateUtil->getDateTimeNow());
-        $this->logEventSystem->logEvent($nowString, $origin, 1, $message, '(' . $this->username . ')');
+        $this->logEventSystem->logEvent($nowString, $origin, 1, $message, $this->username);
     }
     
     /**
@@ -40,7 +40,7 @@ class Log {
     function warning($origin, $message) {
         $origin .= ' (line ' . debug_backtrace()[0]['line'] . ')';
         $nowString = $this->dateUtil->dateTimeToString($this->dateUtil->getDateTimeNow());
-        $this->logEventSystem->logEvent($nowString, $origin, 2, $message, '(' . $this->username . ')');
+        $this->logEventSystem->logEvent($nowString, $origin, 2, $message, $this->username);
     }
     
     /**
@@ -49,7 +49,7 @@ class Log {
     function error($origin, $message) {
         $origin .= ' (line ' . debug_backtrace()[0]['line'] . ')';
         $nowString = $this->dateUtil->dateTimeToString($this->dateUtil->getDateTimeNow());
-        $this->logEventSystem->logEvent($nowString, $origin, 3, $message, '(' . $this->username . ')');
+        $this->logEventSystem->logEvent($nowString, $origin, 3, $message, $this->username);
     }
     
     /**
@@ -58,7 +58,7 @@ class Log {
     function critical($origin, $message) {
         $origin .= ' (line ' . debug_backtrace()[0]['line'] . ')';
         $nowString = $this->dateUtil->dateTimeToString($this->dateUtil->getDateTimeNow());
-        $this->logEventSystem->logEvent($nowString, $origin, 4, $message, '(' . $this->username . ')');
+        $this->logEventSystem->logEvent($nowString, $origin, 4, $message, $this->username);
     }
 }
 ?>
