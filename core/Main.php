@@ -78,7 +78,7 @@
     require_once('system_classes/UserSystem.php');
     require_once('system_classes/RecurringTasksSystem.php');
     $examProtocolSystem = new ExamProtocolSystem($examProtocolDao, $dateUtil, $fileUtil, $hashUtil);
-    $lectureSystem = new LectureSystem($lectureDao);
+    $lectureSystem = new LectureSystem($lectureDao, $email);
     $logEventSystem = new LogEventSystem($logEventDao, $email, $dateUtil);
     $userSystem = new UserSystem($userDao, $email, $i18n, $hashUtil, $urlUtil, $dateUtil);
     $recurringTasksSystem = new RecurringTasksSystem($recurringTasksDao, $examProtocolSystem, $lectureSystem, $dateUtil, $fileUtil);

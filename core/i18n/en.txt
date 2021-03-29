@@ -148,6 +148,7 @@ remark=Remark
 repeatNewPassword=Repeat new Password
 repeatPassword=Repeat Password
 reply=Reply
+reportAsOutdated=Report as Outdated
 reset=Reset
 resetPassword=Reset Password
 resetPasswordMailMessagePleaseLogInAndChangePassword=Hello {0},<br><br>your password has been set to the following value:<br><br>{1}<br><br>Please log in now and change this passwort to one you have chosen.<br><br>Best<br>Your System

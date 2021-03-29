@@ -21,6 +21,17 @@
                 $log->error('lectures.php', 'Lecture ID is not numeric: ' . $borrowLectureID);
             }
         }
+        $reportLectureID = filter_input(INPUT_GET, 'report', FILTER_SANITIZE_ENCODED);
+        if (isset($_GET['report'])) {
+            if (is_numeric($reportLectureID)) {
+                $reportingResult = $lectureSystem->reportLectureHasOutdatedProtocols($reportLectureID, $currentUser->getUsername());
+                if ($reportingResult == true) {
+                    $log->info('lectures.php', 'Successfully reported the lecture as outdated.');
+                }
+            } else {
+                $log->error('lectures.php', 'Lecture ID is not numeric: ' . $borrowLectureID);
+            }
+        }
     }
 
     echo $header->getHeader($i18n->get('title'), $i18n->get('showLectures'), array('protocols.css', 'button.css', 'searchableTable.css'));
@@ -29,12 +40,12 @@
 
     echo '<div id="protocolsTable" style="padding-left: 40px; padding-bottom: 40px; padding-right: 40px; margin: 0px;">';
 
-    $headers = array($i18n->get('lectureTitle'), $i18n->get('numberOfProtocols'), $i18n->get('borrow'));
-    $widths = array(80, 10, 10);
-    $textAlignments = array('left', 'center', 'center');
+    $headers = array($i18n->get('lectureTitle'), $i18n->get('numberOfProtocols'), $i18n->get('borrow'), $i18n->get('reportAsOutdated'));
+    $widths = array(70, 10, 10, 10);
+    $textAlignments = array('left', 'center', 'center', 'center');
     
     $allLectures = $lectureSystem->getAllLecturesWithAcceptedProtocols();
-    #Sort list of lectures by name
+    // sort list of lectures by name
     usort($allLectures, function($a, $b) {
         return strcmp($a->getName(), $b->getName());
     });
@@ -63,6 +74,19 @@
             } else {
                 $row[] = '<a id="styledButtonGray" href=""><nobr><img src="static/img/protocolNotAvailable.png" style="height: 24px; vertical-align: middle;">&nbsp;&nbsp;' . $i18n->get('noProtocols') . '</nobr></a>';
             }
+        }
+        $reportingPossible = true;
+        if (isset($_GET['report'])) {
+            if (is_numeric($reportLectureID)) {
+                if ($lecture->getID() == $reportLectureID) {
+                    $reportingPossible = false;
+                }
+            }
+        }
+        if ($reportingPossible) {
+            $row[] = '<a id="styledButtonRed" href="?report=' . $lecture->getID() . '"><nobr><img src="static/img/report.png" style="height: 24px; vertical-align: middle;"></nobr></a>';
+        } else {
+            $row[] = '<a id="styledButtonGray" href=""><nobr><img src="static/img/report.png" style="height: 24px; vertical-align: middle;"></nobr></a>';
         }
         
         if ($insertBeginningOfArray) {

@@ -148,6 +148,7 @@ remark=Bemerkung
 repeatNewPassword=Neues Passwort wiederhohlen
 repeatPassword=Passwort wiederhohlen
 reply=Antworten
+reportAsOutdated=Als veralted melden
 reset=Zurücksetzen
 resetPassword=Passwort zurücksetzen
 resetPasswordMailMessagePleaseLogInAndChangePassword=Hallo {0},<br><br>dein Passwort wurde auf folgenden Wert gesetzt:<br><br>{1}<br><br>Bitte logge dich nun ein und ändere dieses Passwort auf ein von dir gewähltes.<br><br>Liebe Grüße<br>Dein PPI System
