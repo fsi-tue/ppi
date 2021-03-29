@@ -79,7 +79,7 @@
                         $result = $lectureSystem->addProtocolIDsToLecture($lectureIDs, $examProtocolID);
                         if ($result) {
                             $replyToSend = $replies[intval($reply)];
-                            if ($reply == '') {
+                            if (intval($reply) == 0) {
                                 $replyToSend = '';
                             }
                             $result = $userSystem->grantTokensAndMailToUploader($uploadedByUsername, $tokensToAdd, $replyToSend);
