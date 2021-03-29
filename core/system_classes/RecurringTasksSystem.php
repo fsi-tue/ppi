@@ -77,6 +77,7 @@ class RecurringTasksSystem {
      */
     function runTask($taskName) {
         $retVal = 'SUCCESS';
+        $result = 'SUCCESS';
         
         // run recurring tasks
         if ($taskName == Constants::RECURRING_TASKS['cleanDownloadsDirectory']) {
@@ -103,7 +104,7 @@ class RecurringTasksSystem {
         if ($taskName == Constants::RECURRING_TASKS['removeToBeDeletedProtocols']) {
             $toBeDeleted = $this->examProtocolSystem->getAllExamProtocolsWithStatus(Constants::EXAM_PROTOCOL_STATUS['toBeDeleted']);
             foreach ($toBeDeleted as $examProtocol) {
-                $file = $this->fileUtil->getFullPathToBaseDirectory() . Constants::UPLOADED_PROTOCOLS_DIRECTORY . '/' . $examProtocol->getFilePath();
+                $file = $this->fileUtil->getFullPathToBaseDirectory() . Constants::UPLOADED_PROTOCOLS_DIRECTORY . '/' . $examProtocol->getFileName();
                 if (is_file($file)) {
                     if ($this->fileUtil->strEndsWith($file, Constants::ALLOWED_FILE_EXTENSION_DOWNLOAD[0])) {
                         unlink($file);

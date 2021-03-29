@@ -97,11 +97,11 @@ class ExamProtocolDao {
         $uploadedDate = $this->dateUtil->stringToDateTime($data['uploadedDate']);
         $remark = $data['remark'];
         $examiner = $data['examiner'];
-        $filePath = $data['filePath'];
+        $fileName = $data['fileName'];
         $fileSize = $data['fileSize'];
         $fileType = $data['fileType'];
         $fileExtension = $data['fileExtension'];
-        return new ExamProtocol($ID, $status, $uploadedByUserID, $collaboratorIDs, $uploadedDate, $remark, $examiner, $filePath, $fileSize, $fileType, $fileExtension);
+        return new ExamProtocol($ID, $status, $uploadedByUserID, $collaboratorIDs, $uploadedDate, $remark, $examiner, $fileName, $fileSize, $fileType, $fileExtension);
     }
     
     /**
@@ -110,8 +110,8 @@ class ExamProtocolDao {
      * If the operation was not successful, FALSE will be returned.
      */
     function addExamProtocol($examProtocol) {
-        $sql = "INSERT INTO \"ExamProtocols\" (\"status\", \"uploadedByUserID\", \"collaboratorIDs\", \"uploadedDate\", \"remark\", \"examiner\", \"filePath\", \"fileSize\", \"fileType\", \"fileExtension\") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        $result = $this->dbConn->exec($sql, [$examProtocol->getStatus(), $examProtocol->getUploadedByUserID(), $examProtocol->getCollaboratorIDs(), $this->dateUtil->dateTimeToString($examProtocol->getUploadedDate()), $examProtocol->getRemark(), $examProtocol->getExaminer(), $examProtocol->getFilePath(), $examProtocol->getFileSize(), $examProtocol->getFileType(), $examProtocol->getFileExtension()]);
+        $sql = "INSERT INTO \"ExamProtocols\" (\"status\", \"uploadedByUserID\", \"collaboratorIDs\", \"uploadedDate\", \"remark\", \"examiner\", \"fileName\", \"fileSize\", \"fileType\", \"fileExtension\") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $result = $this->dbConn->exec($sql, [$examProtocol->getStatus(), $examProtocol->getUploadedByUserID(), $examProtocol->getCollaboratorIDs(), $this->dateUtil->dateTimeToString($examProtocol->getUploadedDate()), $examProtocol->getRemark(), $examProtocol->getExaminer(), $examProtocol->getFileName(), $examProtocol->getFileSize(), $examProtocol->getFileType(), $examProtocol->getFileExtension()]);
         $id = $result['lastInsertId'];
         if ($id < 1) {
             return false;
@@ -125,8 +125,8 @@ class ExamProtocolDao {
      * Returns TRUE if the transaction was successful, FALSE otherwise.
      */
     function updateExamProtocol($examProtocol) {
-        $sql = "UPDATE \"ExamProtocols\" SET \"status\"=?, \"uploadedByUserID\"=?, \"collaboratorIDs\"=?, \"uploadedDate\"=?, \"remark\"=?, \"examiner\"=?, \"filePath\"=?, \"fileSize\"=?, \"fileType\"=?, \"fileExtension\"=? WHERE \"ID\"=?;";
-        $result = $this->dbConn->exec($sql, [$examProtocol->getStatus(), $examProtocol->getUploadedByUserID(), $examProtocol->getCollaboratorIDs(), $this->dateUtil->dateTimeToString($examProtocol->getUploadedDate()), $examProtocol->getRemark(), $examProtocol->getExaminer(), $examProtocol->getFilePath(), $examProtocol->getFileSize(), $examProtocol->getFileType(), $examProtocol->getFileExtension(), $examProtocol->getID()]);
+        $sql = "UPDATE \"ExamProtocols\" SET \"status\"=?, \"uploadedByUserID\"=?, \"collaboratorIDs\"=?, \"uploadedDate\"=?, \"remark\"=?, \"examiner\"=?, \"fileName\"=?, \"fileSize\"=?, \"fileType\"=?, \"fileExtension\"=? WHERE \"ID\"=?;";
+        $result = $this->dbConn->exec($sql, [$examProtocol->getStatus(), $examProtocol->getUploadedByUserID(), $examProtocol->getCollaboratorIDs(), $this->dateUtil->dateTimeToString($examProtocol->getUploadedDate()), $examProtocol->getRemark(), $examProtocol->getExaminer(), $examProtocol->getFileName(), $examProtocol->getFileSize(), $examProtocol->getFileType(), $examProtocol->getFileExtension(), $examProtocol->getID()]);
         $rowCount = $result['rowCount'];
         if ($rowCount <= 0) {
             return false;

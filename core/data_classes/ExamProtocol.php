@@ -7,12 +7,12 @@ class ExamProtocol {
     private $uploadedDate;
     private $remark;
     private $examiner;
-    private $filePath;
+    private $fileName;
     private $fileSize;
     private $fileType;
     private $fileExtension;
 
-    function __construct($ID, $status, $uploadedByUserID, $collaboratorIDs, $uploadedDate, $remark, $examiner, $filePath, $fileSize, $fileType, $fileExtension) {
+    function __construct($ID, $status, $uploadedByUserID, $collaboratorIDs, $uploadedDate, $remark, $examiner, $fileName, $fileSize, $fileType, $fileExtension) {
         $this->ID = $ID;
         $this->status = $status;
         $this->uploadedByUserID = $uploadedByUserID;
@@ -20,7 +20,7 @@ class ExamProtocol {
         $this->uploadedDate = $uploadedDate;
         $this->remark = $remark;
         $this->examiner = $examiner;
-        $this->filePath = $filePath;
+        $this->fileName = $fileName;
         $this->fileSize = $fileSize;
         $this->fileType = $fileType;
         $this->fileExtension = $fileExtension;
@@ -82,12 +82,12 @@ class ExamProtocol {
         $this->examiner = $examiner;
     }
 
-    public function getFilePath(){
-        return $this->filePath;
+    public function getFileName(){
+        return $this->fileName;
     }
 
-    public function setFilePath($filePath){
-        $this->filePath = $filePath;
+    public function setFileName($fileName){
+        $this->fileName = $fileName;
     }
 
     public function getFileSize(){

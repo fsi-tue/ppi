@@ -45,15 +45,14 @@ class ExamProtocolSystem {
     }
     
     /**
-     * Returns file paths of exam protocols from given exam protocol IDs.
+     * Returns file names of exam protocols from given exam protocol IDs.
      */
-    function getFilePathsFromProtocolIDs($protocolIDs) {
-        $basePath = $this->fileUtil->getFullPathToBaseDirectory();
+    function getFileNamesFromProtocolIDs($protocolIDs) {
         $retArray = array();
         for ($i = 0; $i < count($protocolIDs); $i++) {
             $protocol = $this->examProtocolDao->getExamProtocol($protocolIDs[$i]);
             if ($protocol != NULL) {
-                $retArray[] = $basePath . 'exam_protocols/protocols/' . $protocol->getFilePath();
+                $retArray[] = $protocol->getFileName();
             } else {
                 $this->log->error(static::class . '.php', 'Protocol to ID ' . $protocolIDs[$i] . ' not found!');
             }
@@ -73,13 +72,13 @@ class ExamProtocolSystem {
      * Returns the just added protocol with the ID set if the operation was successful, NULL otherwise.
      */
     function addProtocol($currentUser, $collaboratorIDs, $remark, $examiner, $fileNameTmp, $fileNameExtension, $fileSize, $fileType) {
-        $filePath = $this->fileUtil->getFullPathToBaseDirectory() . Constants::UPLOADED_PROTOCOLS_DIRECTORY . '/' . $this->hashUtil->generateRandomString() . '.' . $fileNameExtension;
-        move_uploaded_file($fileNameTmp, $filePath);
+        $fileName = $this->hashUtil->generateRandomString() . '.' . $fileNameExtension;
+        move_uploaded_file($fileNameTmp, $this->fileUtil->getFullPathToBaseDirectory() . Constants::UPLOADED_PROTOCOLS_DIRECTORY . '/' . $fileName);
         
         $status = Constants::EXAM_PROTOCOL_STATUS['unchecked'];
         $uploadedByUserID = $currentUser->getID();
         $uploadedDate = $this->dateUtil->getDateTimeNow();
-        $examProtocol = new ExamProtocol(NULL, $status, $uploadedByUserID, $collaboratorIDs, $uploadedDate, $remark, $examiner, $filePath, $fileSize, $fileType, $fileNameExtension);
+        $examProtocol = new ExamProtocol(NULL, $status, $uploadedByUserID, $collaboratorIDs, $uploadedDate, $remark, $examiner, $fileName, $fileSize, $fileType, $fileNameExtension);
     
         $examProtocol = $this->examProtocolDao->addExamProtocol($examProtocol);
         if ($examProtocol == false) {
@@ -122,7 +121,7 @@ class ExamProtocolSystem {
      * Updates the exam protocol in the database with the given data.
      * Returns TRUE if the operation was successful, FALSE otherwise.
      */
-    function updateExamProtocolFully($examProtocolID, $collaboratorIDs, $status, $uploadedByUserID, $uploadedDate, $remark, $examiner, $filePath, $fileSize, $fileType, $fileExtension) {
+    function updateExamProtocolFully($examProtocolID, $collaboratorIDs, $status, $uploadedByUserID, $uploadedDate, $remark, $examiner, $fileName, $fileSize, $fileType, $fileExtension) {
         $examProtocol = $this->examProtocolDao->getExamProtocol($examProtocolID);
         if ($examProtocol == NULL) {
             $this->log->error(static::class . '.php', 'Protocol to ID ' . $examProtocolID . ' not found!');
@@ -134,7 +133,7 @@ class ExamProtocolSystem {
         $examProtocol->setUploadedDate($uploadedDate);
         $examProtocol->setRemark($remark);
         $examProtocol->setExaminer($examiner);
-        $examProtocol->setFilePath($filePath);
+        $examProtocol->setFileName($fileName);
         $examProtocol->setFileSize($fileSize);
         $examProtocol->setFileType($fileType);
         $examProtocol->setFileExtension($fileExtension);
