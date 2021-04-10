@@ -141,7 +141,7 @@ class ExamProtocolSystem {
     }
     
     /**
-     * Returns the number of exam protocols that are in the DB.
+     * Returns the number of exam protocols that are in the DB or NULL if something went wrong.
      */
     function getNumberOfExamProtocolsTotal($lectureID, $uploadedByUserID, $borrowedByUserID) {
         return $this->examProtocolDao->getNumberOfExamProtocolsTotal($lectureID, $uploadedByUserID, $borrowedByUserID);

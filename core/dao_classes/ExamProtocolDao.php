@@ -60,6 +60,9 @@ class ExamProtocolDao {
         $sql .= " ORDER BY \"ExamProtocols\".\"ID\" DESC";
         $sql = "SELECT COUNT(*) FROM (" . $sql . ") AS \"countingSubquery\";";
         $result = $this->dbConn->query($sql);
+        if ($result == NULL || empty($result) || empty($result[0]) || !isset($result[0]['count'])) {
+            return NULL;
+        }
         return $result[0]['count'];
     }
     
