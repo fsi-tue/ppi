@@ -43,8 +43,24 @@ class ExamProtocolDao {
      * Returns the number of exam protocols that are in the DB.
      */
     function getNumberOfExamProtocolsTotal($lectureID, $uploadedByUserID, $borrowedByUserID) {
-        // TODO get rid of this correct but inefficient solution
-        return count($this->getExamProtocols(PHP_INT_MAX, 0, $lectureID, $uploadedByUserID, $borrowedByUserID));
+        $sql = "SELECT DISTINCT ON (\"ExamProtocols\".\"ID\") * FROM \"ExamProtocols\"
+        INNER JOIN \"ExamProtocolAssignedToLectures\" ON \"ExamProtocols\".\"ID\"=\"ExamProtocolAssignedToLectures\".\"examProtocolID\"";
+        if ($lectureID != '') {
+            $sql = "SELECT * FROM \"ExamProtocols\"
+                    INNER JOIN \"ExamProtocolAssignedToLectures\" ON \"ExamProtocols\".\"ID\"=\"ExamProtocolAssignedToLectures\".\"examProtocolID\"
+                    WHERE \"lectureID\"='" . $lectureID . "'";
+        } else if ($uploadedByUserID != '') {
+            $sql = "SELECT * FROM \"ExamProtocols\" WHERE \"uploadedByUserID\"='" . $uploadedByUserID . "'";
+        } else if ($borrowedByUserID != '') {
+            $sql = "SELECT * FROM \"ExamProtocols\"
+                    INNER JOIN \"ExamProtocolAssignedToLectures\" ON \"ExamProtocols\".\"ID\"=\"ExamProtocolAssignedToLectures\".\"examProtocolID\"
+                    INNER JOIN \"BorrowRecords\" ON \"ExamProtocolAssignedToLectures\".\"lectureID\"=\"BorrowRecords\".\"lectureID\"
+                    WHERE \"borrowedByUserID\"='" . $borrowedByUserID . "'";
+        }
+        $sql .= " ORDER BY \"ExamProtocols\".\"ID\" DESC";
+        $sql = "SELECT COUNT(*) FROM (" . $sql . ") AS \"countingSubquery\";";
+        $result = $this->dbConn->query($sql);
+        return $result[0]['count'];
     }
     
     /**
