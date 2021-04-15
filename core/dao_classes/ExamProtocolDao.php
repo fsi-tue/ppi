@@ -29,11 +29,41 @@ class ExamProtocolDao {
     }
     
     /**
+     * Returns all exam protocols from the DB with the given status or an empty array if none were not found.
+     */
+    function getAllExamProtocolsWithStatus($status) {
+        if (!in_array($status, Constants::EXAM_PROTOCOL_STATUS)) {
+            return [];
+        }
+        $sql = "SELECT * FROM \"ExamProtocols\" WHERE \"status\"='" . $status . "';";
+        return $this->getExamProtocolsImpl($sql, 'ID');
+    }
+    
+    /**
      * Returns the number of exam protocols that are in the DB.
      */
     function getNumberOfExamProtocolsTotal($lectureID, $uploadedByUserID, $borrowedByUserID) {
-        // TODO get rid of this correct but inefficient solution
-        return count($this->getExamProtocols(PHP_INT_MAX, 0, $lectureID, $uploadedByUserID, $borrowedByUserID));
+        $sql = "SELECT DISTINCT ON (\"ExamProtocols\".\"ID\") * FROM \"ExamProtocols\"
+        INNER JOIN \"ExamProtocolAssignedToLectures\" ON \"ExamProtocols\".\"ID\"=\"ExamProtocolAssignedToLectures\".\"examProtocolID\"";
+        if ($lectureID != '') {
+            $sql = "SELECT * FROM \"ExamProtocols\"
+                    INNER JOIN \"ExamProtocolAssignedToLectures\" ON \"ExamProtocols\".\"ID\"=\"ExamProtocolAssignedToLectures\".\"examProtocolID\"
+                    WHERE \"lectureID\"='" . $lectureID . "'";
+        } else if ($uploadedByUserID != '') {
+            $sql = "SELECT * FROM \"ExamProtocols\" WHERE \"uploadedByUserID\"='" . $uploadedByUserID . "'";
+        } else if ($borrowedByUserID != '') {
+            $sql = "SELECT * FROM \"ExamProtocols\"
+                    INNER JOIN \"ExamProtocolAssignedToLectures\" ON \"ExamProtocols\".\"ID\"=\"ExamProtocolAssignedToLectures\".\"examProtocolID\"
+                    INNER JOIN \"BorrowRecords\" ON \"ExamProtocolAssignedToLectures\".\"lectureID\"=\"BorrowRecords\".\"lectureID\"
+                    WHERE \"borrowedByUserID\"='" . $borrowedByUserID . "'";
+        }
+        $sql .= " ORDER BY \"ExamProtocols\".\"ID\" DESC";
+        $sql = "SELECT COUNT(*) FROM (" . $sql . ") AS \"countingSubquery\";";
+        $result = $this->dbConn->query($sql);
+        if ($result == NULL || empty($result) || empty($result[0]) || !isset($result[0]['count'])) {
+            return NULL;
+        }
+        return $result[0]['count'];
     }
     
     /**
@@ -86,11 +116,11 @@ class ExamProtocolDao {
         $uploadedDate = $this->dateUtil->stringToDateTime($data['uploadedDate']);
         $remark = $data['remark'];
         $examiner = $data['examiner'];
-        $filePath = $data['filePath'];
+        $fileName = $data['fileName'];
         $fileSize = $data['fileSize'];
         $fileType = $data['fileType'];
         $fileExtension = $data['fileExtension'];
-        return new ExamProtocol($ID, $status, $uploadedByUserID, $collaboratorIDs, $uploadedDate, $remark, $examiner, $filePath, $fileSize, $fileType, $fileExtension);
+        return new ExamProtocol($ID, $status, $uploadedByUserID, $collaboratorIDs, $uploadedDate, $remark, $examiner, $fileName, $fileSize, $fileType, $fileExtension);
     }
     
     /**
@@ -99,8 +129,8 @@ class ExamProtocolDao {
      * If the operation was not successful, FALSE will be returned.
      */
     function addExamProtocol($examProtocol) {
-        $sql = "INSERT INTO \"ExamProtocols\" (\"status\", \"uploadedByUserID\", \"collaboratorIDs\", \"uploadedDate\", \"remark\", \"examiner\", \"filePath\", \"fileSize\", \"fileType\", \"fileExtension\") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        $result = $this->dbConn->exec($sql, [$examProtocol->getStatus(), $examProtocol->getUploadedByUserID(), $examProtocol->getCollaboratorIDs(), $this->dateUtil->dateTimeToString($examProtocol->getUploadedDate()), $examProtocol->getRemark(), $examProtocol->getExaminer(), $examProtocol->getFilePath(), $examProtocol->getFileSize(), $examProtocol->getFileType(), $examProtocol->getFileExtension()]);
+        $sql = "INSERT INTO \"ExamProtocols\" (\"status\", \"uploadedByUserID\", \"collaboratorIDs\", \"uploadedDate\", \"remark\", \"examiner\", \"fileName\", \"fileSize\", \"fileType\", \"fileExtension\") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $result = $this->dbConn->exec($sql, [$examProtocol->getStatus(), $examProtocol->getUploadedByUserID(), $examProtocol->getCollaboratorIDs(), $this->dateUtil->dateTimeToString($examProtocol->getUploadedDate()), $examProtocol->getRemark(), $examProtocol->getExaminer(), $examProtocol->getFileName(), $examProtocol->getFileSize(), $examProtocol->getFileType(), $examProtocol->getFileExtension()]);
         $id = $result['lastInsertId'];
         if ($id < 1) {
             return false;
@@ -114,8 +144,8 @@ class ExamProtocolDao {
      * Returns TRUE if the transaction was successful, FALSE otherwise.
      */
     function updateExamProtocol($examProtocol) {
-        $sql = "UPDATE \"ExamProtocols\" SET \"status\"=?, \"uploadedByUserID\"=?, \"collaboratorIDs\"=?, \"uploadedDate\"=?, \"remark\"=?, \"examiner\"=?, \"filePath\"=?, \"fileSize\"=?, \"fileType\"=?, \"fileExtension\"=? WHERE \"ID\"=?;";
-        $result = $this->dbConn->exec($sql, [$examProtocol->getStatus(), $examProtocol->getUploadedByUserID(), $examProtocol->getCollaboratorIDs(), $this->dateUtil->dateTimeToString($examProtocol->getUploadedDate()), $examProtocol->getRemark(), $examProtocol->getExaminer(), $examProtocol->getFilePath(), $examProtocol->getFileSize(), $examProtocol->getFileType(), $examProtocol->getFileExtension(), $examProtocol->getID()]);
+        $sql = "UPDATE \"ExamProtocols\" SET \"status\"=?, \"uploadedByUserID\"=?, \"collaboratorIDs\"=?, \"uploadedDate\"=?, \"remark\"=?, \"examiner\"=?, \"fileName\"=?, \"fileSize\"=?, \"fileType\"=?, \"fileExtension\"=? WHERE \"ID\"=?;";
+        $result = $this->dbConn->exec($sql, [$examProtocol->getStatus(), $examProtocol->getUploadedByUserID(), $examProtocol->getCollaboratorIDs(), $this->dateUtil->dateTimeToString($examProtocol->getUploadedDate()), $examProtocol->getRemark(), $examProtocol->getExaminer(), $examProtocol->getFileName(), $examProtocol->getFileSize(), $examProtocol->getFileType(), $examProtocol->getFileExtension(), $examProtocol->getID()]);
         $rowCount = $result['rowCount'];
         if ($rowCount <= 0) {
             return false;

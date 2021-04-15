@@ -27,6 +27,25 @@ class LectureDao {
     }
     
     /**
+     * Returns all lectures from the DB in alphabetical order.
+     */
+    function getAllLecturesAlphabeticalOrder() {
+        $sql = "SELECT * FROM \"Lectures\" ORDER BY \"name\";";
+        return $this->getLecturesImpl($sql, false);
+    }
+    
+    /**
+     * Returns all lectures from the DB with the given status or an empty array if none were not found.
+     */
+    function getAllLecturesWithStatus($status) {
+        if (!in_array($status, Constants::LECTURE_STATUS)) {
+            return [];
+        }
+        $sql = "SELECT * FROM \"Lectures\" WHERE \"status\"='" . $status . "';";
+        return $this->getLecturesImpl($sql, false);
+    }
+    
+    /**
      * Returns all lectures that have accepted protocols assigned from the DB or an empty array if none were not found.
      */
     function getAllLecturesWithAcceptedProtocols() {

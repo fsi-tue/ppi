@@ -3,7 +3,7 @@ class Email {
     /**
      * Send an email to the given recipient with the given subject and message content.
      * If 'Constants::WRITE_MAILS_TO_DISK_INSTEAD_OF_SENDING' is set to true,
-     * this function writes the mail content to afile on disk for debugging purposes.
+     * this function writes the mail content to a file on disk for debugging purposes.
      * Returns true if the operation was successful, false otherwise.
      */
     function send($to, $subject, $message) {

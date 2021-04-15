@@ -45,13 +45,20 @@
         $pageValue = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_ENCODED);
         $role = filter_input(INPUT_GET, 'role', FILTER_SANITIZE_ENCODED);
         $username = filter_input(INPUT_GET, 'username', FILTER_SANITIZE_ENCODED);
-        $userID = filter_input(INPUT_GET, 'userID', FILTER_SANITIZE_ENCODED);
+        $userIDValue = filter_input(INPUT_GET, 'userID', FILTER_SANITIZE_ENCODED);
         $deleteID = filter_input(INPUT_GET, 'deleteID', FILTER_SANITIZE_ENCODED);
         if (is_numeric($pageValue)) {
             $page = intval($pageValue);
         } else {
             if ($pageValue != '') {
                 $log->debug('userslist.php', 'Page value is not numeric: ' . $pageValue);
+            }
+        }
+        if (isset($_GET['userID'])) {
+            if (is_numeric($userIDValue)) {
+                $userID = intval($userIDValue);
+            } else {
+                $log->info('userslist.php', 'User ID value is not numeric: ' . $userIDValue);
             }
         }
         if (isset($_GET['role']) || isset($_GET['username']) || isset($_GET['userID'])) {

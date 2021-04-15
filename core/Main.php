@@ -12,9 +12,9 @@
     
     // util function for debug printing data
     function debugPrint($data) {
-        echo '<pre> ';
+        echo '<br><br><pre> ';
         print_r($data);
-        echo ' </pre>';
+        echo ' </pre><br><br><br><br><br><br><br><br><br><br><br><br>';
     }
     
     // start the a session (using session cookies)
@@ -78,10 +78,10 @@
     require_once('system_classes/UserSystem.php');
     require_once('system_classes/RecurringTasksSystem.php');
     $examProtocolSystem = new ExamProtocolSystem($examProtocolDao, $dateUtil, $fileUtil, $hashUtil);
-    $lectureSystem = new LectureSystem($lectureDao);
+    $lectureSystem = new LectureSystem($lectureDao, $email);
     $logEventSystem = new LogEventSystem($logEventDao, $email, $dateUtil);
     $userSystem = new UserSystem($userDao, $email, $i18n, $hashUtil, $urlUtil, $dateUtil);
-    $recurringTasksSystem = new RecurringTasksSystem($recurringTasksDao, $dateUtil, $fileUtil);
+    $recurringTasksSystem = new RecurringTasksSystem($recurringTasksDao, $examProtocolSystem, $lectureSystem, $dateUtil, $fileUtil);
 
     // include logging class
     require_once('log/Log.php');
@@ -96,9 +96,6 @@
     $logEventSystem->setLog($log);
     $userSystem->setLog($log);
     $recurringTasksSystem->setLog($log);
-    
-    // run the recurring tasks if they have been run the last time too far in the past
-    $recurringTasksSystem->runRecurringTasks();
     
     // instantiate the unit tests so they can be run from the admin page
     require_once('test/TestUtil.php');
@@ -134,6 +131,9 @@
         // set the current username to the log
         $log->setUsername($currentUser->getUsername());
     }
+    
+    // run the recurring tasks if they have been run the last time too far in the past
+    $recurringTasksSystem->runRecurringTasks();
     
     // include all needed UI classes
     require_once('ui_classes/Errors.php');

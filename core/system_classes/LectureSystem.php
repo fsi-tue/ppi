@@ -1,10 +1,12 @@
 <?php
 class LectureSystem {
     private $lectureDao = null;
+    private $email = null;
     private $log = null;
 
-    function __construct($lectureDao) {
+    function __construct($lectureDao, $email) {
         $this->lectureDao = $lectureDao;
+        $this->email = $email;
     }
 
     /**
@@ -22,10 +24,24 @@ class LectureSystem {
     }
     
     /**
+     * Returns all lectures from the DB with the given status or an empty array if none were not found.
+     */
+    function getAllLecturesWithStatus($status) {
+        return $this->lectureDao->getAllLecturesWithStatus($status);
+    }
+    
+    /**
      * Returns all lectures from the DB or an empty array if none were not found.
      */
     function getAllLectures() {
         return $this->lectureDao->getAllLectures();
+    }
+    
+    /**
+     * Returns all lectures in alphabetical order from the DB or an empty array if none were not found.
+     */
+    function getAllLecturesAlphabeticalOrder() {
+        return $this->lectureDao->getAllLecturesAlphabeticalOrder();
     }
     
     /**
@@ -101,6 +117,24 @@ class LectureSystem {
                 $this->log->error(static::class . '.php', 'Lecture to ID ' . $lectureIDs[$i] . ' not found!');
             }
         }
+        return true;
+    }
+    
+    /**
+     * Reports via mail to the admins that the lecture has outdated protocols.
+     */
+    function reportLectureHasOutdatedProtocols($lectureID, $reportingUsername) {
+        if (!is_numeric($lectureID)) {    
+            $this->log->error(static::class . '.php', 'Lecture ID is not numeric!');
+            return false;
+        }
+        $lecture = $this->getLecture($lectureID);
+        if ($lecture == NULL) {
+            $this->log->error(static::class . '.php', 'Lecture to ID ' . $lectureID . ' not found! Can not report as outdated!');
+            return false;
+        }
+        $message = 'The user ' . $reportingUsername . ' has reported that the lecture ' . $lecture->getName() . ' with ID ' . $lectureID . ' has outdated protocols assigned. Please verify this and handle the outdated protocols (if any).';
+        $this->email->send(Constants::EMAIL_ADMIN, 'Lecture reported as outdated in PPI', $message);
         return true;
     }
 }

@@ -5,7 +5,7 @@
         $log->info('download.php', 'User was not logged in');
         $redirect->redirectTo('login.php');
     }
-    
+
     if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         if (isset($_GET['lecture'])) {
             $lectureToDownloadID = filter_input(INPUT_GET, 'lecture', FILTER_SANITIZE_ENCODED);
@@ -13,8 +13,8 @@
                 if (userHasBorrowed($lectureToDownloadID, $dateUtil, $currentUser)) {
                     $basePath = $fileUtil->getFullPathToBaseDirectory();
                     $protocolFileIDs = $lectureSystem->getAllProtocolIDsOfLecture($lectureToDownloadID);
-                    $protocolFileNames = $examProtocolSystem->getFilePathsFromProtocolIDs($protocolFileIDs);
-                    $zipFilePath = $basePath . 'exam_protocols/zip_files/' . $hashUtil->generateRandomString() . '.zip';
+                    $protocolFileNames = $examProtocolSystem->getFileNamesFromProtocolIDs($protocolFileIDs);
+                    $zipFilePath = $basePath . Constants::TMP_ZIP_FILES_DIRECTORY . '/' . $hashUtil->generateRandomString() . '.zip';
                     $fileUtil->zipFiles($protocolFileNames, $zipFilePath);
                     $fileUtil->downloadZipFile($zipFilePath);
                 } else {

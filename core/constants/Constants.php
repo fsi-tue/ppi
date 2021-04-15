@@ -45,6 +45,7 @@ class Constants {
     const MAX_UPLOAD_FILE_SIZE_BYTES = 4194304; // 4MB
     const SUCCESS_COLOR = '#66FF66';
     const FAILED_COLOR = '#AA0000';
+    const CLEANUP_LOG_TO_NUMBER_OF_EVENTS = 10000;
     
     // recurring tasks
     const RECURRING_TASKS = ['cleanDownloadsDirectory' => 'CLEAN_DOWNLOADS_DIRECTORY', 'removeExpiredBorrowRecords' => 'REMOVE_EXPIRED_BORROW_RECORDS', 'cleanupLogs' => 'CLEANUP_LOGS', 'removeToBeDeletedProtocols' => 'REMOVE_TO_BE_DELETED_PROTOCOLS', 'removeToBeDeletedUsers' => 'REMOVE_TO_BE_DELETED_USERS', 'removeToBeDeletedLectures' => 'REMOVE_TO_BE_DELETED_LECTURES', 'addTokensToAllUsers' => 'ADD_TOKENS_TO_ALL_USERS'];

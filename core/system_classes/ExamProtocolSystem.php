@@ -19,12 +19,12 @@ class ExamProtocolSystem {
     function setLog($log) {
         $this->log = $log;
     }
-    
+
     /**
-     * Returns all exam protocols from the DB or an empty array if none were not found.
+     * Returns all exam protocols from the DB with the given status or an empty array if none were not found.
      */
-    function getAllExamProtocols($username) {
-        return $this->examProtocolDao->getAllExamProtocols($username);
+    function getAllExamProtocolsWithStatus($status) {
+        return $this->examProtocolDao->getAllExamProtocolsWithStatus($status);
     }
     
     /**
@@ -45,15 +45,14 @@ class ExamProtocolSystem {
     }
     
     /**
-     * Returns file paths of exam protocols from given exam protocol IDs.
+     * Returns file names of exam protocols from given exam protocol IDs.
      */
-    function getFilePathsFromProtocolIDs($protocolIDs) {
-        $basePath = $this->fileUtil->getFullPathToBaseDirectory();
+    function getFileNamesFromProtocolIDs($protocolIDs) {
         $retArray = array();
         for ($i = 0; $i < count($protocolIDs); $i++) {
             $protocol = $this->examProtocolDao->getExamProtocol($protocolIDs[$i]);
             if ($protocol != NULL) {
-                $retArray[] = $basePath . 'exam_protocols/protocols/' . $protocol->getFilePath();
+                $retArray[] = $protocol->getFileName();
             } else {
                 $this->log->error(static::class . '.php', 'Protocol to ID ' . $protocolIDs[$i] . ' not found!');
             }
@@ -73,13 +72,9 @@ class ExamProtocolSystem {
      * Returns the just added protocol with the ID set if the operation was successful, NULL otherwise.
      */
     function addProtocol($currentUser, $collaboratorIDs, $remark, $examiner, $fileNameTmp, $fileNameExtension, $fileSize, $fileType) {
-        /**
-         * The full path will be generated when downloading the file. Only the filename needs to be stored in the database.
-        */
         $fileName = $this->hashUtil->generateRandomString() . '.' . $fileNameExtension;
-        $filePath = $this->fileUtil->getFullPathToBaseDirectory() . Constants::UPLOADED_PROTOCOLS_DIRECTORY . '/' . $fileName;
-	move_uploaded_file($fileNameTmp, $filePath);
-
+        move_uploaded_file($fileNameTmp, $this->fileUtil->getFullPathToBaseDirectory() . Constants::UPLOADED_PROTOCOLS_DIRECTORY . '/' . $fileName);
+        
         $status = Constants::EXAM_PROTOCOL_STATUS['unchecked'];
         $uploadedByUserID = $currentUser->getID();
         $uploadedDate = $this->dateUtil->getDateTimeNow();
@@ -112,7 +107,21 @@ class ExamProtocolSystem {
      * Updates the exam protocol in the database with the given data.
      * Returns TRUE if the operation was successful, FALSE otherwise.
      */
-    function updateExamProtocolFully($examProtocolID, $collaboratorIDs, $status, $uploadedByUserID, $uploadedDate, $remark, $examiner, $filePath, $fileSize, $fileType, $fileExtension) {
+    function updateExamProtocolStatus($examProtocolID, $newStatus) {
+        $examProtocol = $this->examProtocolDao->getExamProtocol($examProtocolID);
+        if ($examProtocol == NULL) {
+            $this->log->error(static::class . '.php', 'Protocol to ID ' . $examProtocolID . ' not found!');
+            return false;
+        }
+        $examProtocol->setStatus($newStatus);
+        return $this->examProtocolDao->updateExamProtocol($examProtocol);
+    }
+    
+    /**
+     * Updates the exam protocol in the database with the given data.
+     * Returns TRUE if the operation was successful, FALSE otherwise.
+     */
+    function updateExamProtocolFully($examProtocolID, $collaboratorIDs, $status, $uploadedByUserID, $uploadedDate, $remark, $examiner, $fileName, $fileSize, $fileType, $fileExtension) {
         $examProtocol = $this->examProtocolDao->getExamProtocol($examProtocolID);
         if ($examProtocol == NULL) {
             $this->log->error(static::class . '.php', 'Protocol to ID ' . $examProtocolID . ' not found!');
@@ -124,7 +133,7 @@ class ExamProtocolSystem {
         $examProtocol->setUploadedDate($uploadedDate);
         $examProtocol->setRemark($remark);
         $examProtocol->setExaminer($examiner);
-        $examProtocol->setFilePath($filePath);
+        $examProtocol->setFileName($fileName);
         $examProtocol->setFileSize($fileSize);
         $examProtocol->setFileType($fileType);
         $examProtocol->setFileExtension($fileExtension);
@@ -132,7 +141,7 @@ class ExamProtocolSystem {
     }
     
     /**
-     * Returns the number of exam protocols that are in the DB.
+     * Returns the number of exam protocols that are in the DB or NULL if something went wrong.
      */
     function getNumberOfExamProtocolsTotal($lectureID, $uploadedByUserID, $borrowedByUserID) {
         return $this->examProtocolDao->getNumberOfExamProtocolsTotal($lectureID, $uploadedByUserID, $borrowedByUserID);

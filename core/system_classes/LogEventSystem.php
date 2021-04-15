@@ -27,7 +27,7 @@ class LogEventSystem {
      * If the given level is greater than some thresholds, display the log message to the user and/or send an email to the admins.
      */
     function logEvent($datetimeString, $origin, $level, $message, $username) {
-        $logMessage = $datetimeString . ' ' . $origin . ' ' . Constants::LOG_LEVELS[$level] . ' ' . $message . ' ' . $username;
+        $logMessage = $datetimeString . ' ' . $origin . ' ' . Constants::LOG_LEVELS[$level] . ' ' . $message . ' (' . $username . ')';
         if ($level < 2) {
             $this->lastDebugMessages[] = $logMessage;
         } else if ($level == 2) {

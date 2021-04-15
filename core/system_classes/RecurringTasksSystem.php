@@ -1,13 +1,17 @@
 <?php
 class RecurringTasksSystem {
     private $recurringTasksDao = null;
+    private $examProtocolSystem = null;
+    private $lectureSystem = null;
     private $dateUtil = null;
     private $fileUtil = null;
     private $log = null;
     private $lastResults = [];
 
-    function __construct($recurringTasksDao, $dateUtil, $fileUtil) {
+    function __construct($recurringTasksDao, $examProtocolSystem, $lectureSystem, $dateUtil, $fileUtil) {
         $this->recurringTasksDao = $recurringTasksDao;
+        $this->examProtocolSystem = $examProtocolSystem;
+        $this->lectureSystem = $lectureSystem;
         $this->dateUtil = $dateUtil;
         $this->fileUtil = $fileUtil;
     }
@@ -35,7 +39,7 @@ class RecurringTasksSystem {
             $status = 'NOT_TO_BE_RUN';
             if ($this->dateUtil->isSmallerThan($nextRunDate, $now)) {
                 $status = $this->runTask($recurringTask->getName());
-                if ($status == 'SUCCESS') {
+                if ($status == 'SUCCESS' || $status == 'NO_CHANGE') {
                     $recurringTask->setLastRunDate($now);
                     $result = $this->recurringTasksDao->updateRecurringTask($recurringTask);
                     if ($result == false) {
@@ -72,10 +76,10 @@ class RecurringTasksSystem {
      * Run a recurring task.
      */
     function runTask($taskName) {
-        // TODO clean up old log files, other recurring tasks...
-        // TODO <br><br>max 100000 log entries, cleanup<br><br><br>delete outdated borrow records<br><br><br>delete protocols that are marked for deletion regularly<br><br><br>clean up the zip files folder<br><br><br>what else are recurring tasks?<br><br><br>
-
         $retVal = 'SUCCESS';
+        $result = 'SUCCESS';
+        
+        // run recurring tasks
         if ($taskName == Constants::RECURRING_TASKS['cleanDownloadsDirectory']) {
             $ppiRootDirectory = $this->fileUtil->getFullPathToBaseDirectory();
             $files = glob($ppiRootDirectory . Constants::TMP_ZIP_FILES_DIRECTORY . '/*');
@@ -86,55 +90,72 @@ class RecurringTasksSystem {
                     } else {
                         $retVal = 'WRONG_FILE_EXTENSION';
                         $this->log->error(static::class . '.php', 'Recurring task did not run successfully! Can not delete file that is not a zip file: ' . $file);
+                        return $retVal;
                     }
                 }
             }
         }
         if ($taskName == Constants::RECURRING_TASKS['removeExpiredBorrowRecords']) {
             $result = $this->recurringTasksDao->removeExpiredBorrowRecords();
-            if (!$result) {
-                $retVal = 'FAILED';
-                $this->log->error(static::class . '.php', 'Recurring task did not run successfully! Can not remove expired borrow records!');
-            }
         }
         if ($taskName == Constants::RECURRING_TASKS['cleanupLogs']) {
             $result = $this->recurringTasksDao->cleanupLogs();
-            if (!$result) {
-                $retVal = 'FAILED';
-                $this->log->error(static::class . '.php', 'Recurring task did not run successfully! Can not clean up logs!');
-            }
         }
         if ($taskName == Constants::RECURRING_TASKS['removeToBeDeletedProtocols']) {
-            // TODO get these protocols first to delete the pdf/txt files
-            // also delete assignments to lectures of a protocol
-            $result = $this->recurringTasksDao->removeToBeDeletedProtocols();
-            if (!$result) {
-                $retVal = 'FAILED';
-                $this->log->error(static::class . '.php', 'Recurring task did not run successfully! Can not remove to be deleted protocols!');
+            $toBeDeleted = $this->examProtocolSystem->getAllExamProtocolsWithStatus(Constants::EXAM_PROTOCOL_STATUS['toBeDeleted']);
+            foreach ($toBeDeleted as $examProtocol) {
+                $file = $this->fileUtil->getFullPathToBaseDirectory() . Constants::UPLOADED_PROTOCOLS_DIRECTORY . '/' . $examProtocol->getFileName();
+                if (is_file($file)) {
+                    if ($this->fileUtil->strEndsWith($file, Constants::ALLOWED_FILE_EXTENSION_DOWNLOAD[0])) {
+                        unlink($file);
+                    } else {
+                        $retVal = 'WRONG_FILE_EXTENSION';
+                        $this->log->error(static::class . '.php', 'Recurring task did not run successfully! Can not delete file that is not a pdf or txt file: ' . $file);
+                        return $retVal;
+                    }
+                }
+                $result = $this->recurringTasksDao->removeProtocolAssignmentsToLectures($examProtocol->getID());
+                if ($result == 'ERROR') {
+                    $this->log->error(static::class . '.php', 'Error while running recurring task: ' . $taskName);
+                    $retVal = 'ERROR';
+                    return $retVal;
+                }
             }
+            $result = $this->recurringTasksDao->removeToBeDeletedProtocols();
         }
         if ($taskName == Constants::RECURRING_TASKS['removeToBeDeletedUsers']) {
             $result = $this->recurringTasksDao->removeToBeDeletedUsers();
-            if (!$result) {
-                $retVal = 'FAILED';
-                $this->log->error(static::class . '.php', 'Recurring task did not run successfully! Can not remove to be deleted users!');
-            }
         }
         if ($taskName == Constants::RECURRING_TASKS['removeToBeDeletedLectures']) {
-            // TODO remove the lecture completely and all protocols that are only assigned to this very lecture
-            $result = $this->recurringTasksDao->removeToBeDeletedLectures();
-            if (!$result) {
-                $retVal = 'FAILED';
-                $this->log->error(static::class . '.php', 'Recurring task did not run successfully! Can not remove to be deleted lectures!');
+            // mark the protocols that were only assigned to this very lecture as 'to be deleted'
+            $toBeDeletedLectures = $this->lectureSystem->getAllLecturesWithStatus(Constants::LECTURE_STATUS['toBeDeleted']);
+            foreach ($toBeDeletedLectures as $lecture) {
+                foreach ($lecture->getAssignedExamProtocols() as $examProtocolAssignedToLecture) {
+                    $examProtocolID = $examProtocolAssignedToLecture->getExamProtocolID();
+                    $lectureIDsOfExamProtocol = $this->examProtocolSystem->getLectureIDsOfExamProtocol($examProtocolID);
+                    if(count($lectureIDsOfExamProtocol) == 1) {
+                        $this->examProtocolSystem->updateExamProtocolStatus($examProtocolID, Constants::EXAM_PROTOCOL_STATUS['toBeDeleted']);
+                    }
+                }
             }
+            // then remove the lecture
+            $result = $this->recurringTasksDao->removeToBeDeletedLectures();
         }
         if ($taskName == Constants::RECURRING_TASKS['addTokensToAllUsers']) {
-            // TODO fix this
             $result = $this->recurringTasksDao->addTokensToAllUsers(Constants::NUMBER_OF_TOKENS_TO_ADD_TO_ALL_PER_SEMESTER);
-            if (!$result) {
-                $retVal = 'FAILED';
-                $this->log->error(static::class . '.php', 'Recurring task did not run successfully! Can not add tokens to all users!');
-            }
+        }
+        
+        // handle results of recurring task run
+        if ($result == 'SUCCESS') {
+            $this->log->debug(static::class . '.php', 'Recurring task was successful: ' . $taskName);
+        }
+        if ($result == 'NO_CHANGE') {
+            $this->log->debug(static::class . '.php', 'Nothing was to be done by recurring task: ' . $taskName);
+            $retVal = 'NO_CHANGE';
+        }
+        if ($result == 'ERROR') {
+            $this->log->error(static::class . '.php', 'Error while running recurring task: ' . $taskName);
+            $retVal = 'ERROR';
         }
         return $retVal;
     }

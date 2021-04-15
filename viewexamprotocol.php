@@ -12,7 +12,7 @@
     
     $replies = array();
     $replies[] = $i18n->get('noReplyToUserThatUploadedExamProtocol');
-    for ($i = 1; $i <= 9; $i++) {
+    for ($i = 0; $i <= 11; $i++) {
         $replies[] = $i18n->get('uploadReply' . $i);
     }
     
@@ -28,7 +28,7 @@
         $uploadedDate = $dateUtil->stringToDateTime($uploadedDateString);
         $remark = filter_input(INPUT_POST, 'remark', FILTER_SANITIZE_SPECIAL_CHARS);
         $examiner = filter_input(INPUT_POST, 'examiner', FILTER_SANITIZE_SPECIAL_CHARS);
-        $filePath = filter_input(INPUT_POST, 'filePath', FILTER_SANITIZE_SPECIAL_CHARS);
+        $fileName = filter_input(INPUT_POST, 'fileName', FILTER_SANITIZE_SPECIAL_CHARS);
         $fileSize = filter_input(INPUT_POST, 'fileSize', FILTER_SANITIZE_ENCODED);
         $fileType = filter_input(INPUT_POST, 'fileType', FILTER_SANITIZE_SPECIAL_CHARS);
         $fileExtension = filter_input(INPUT_POST, 'fileExtension', FILTER_SANITIZE_ENCODED);
@@ -38,10 +38,13 @@
         $action = filter_input(INPUT_POST, 'action', FILTER_SANITIZE_ENCODED);
         $reply = filter_input(INPUT_POST, 'reply', FILTER_SANITIZE_ENCODED);
         
-        if ($lectureID1 != '0' && $uploadedByUserID != '' && $uploadedDate != NULL && $examiner != '' && $filePath != '' && $fileSize != '' && $fileType != '' && $fileExtension != '' && is_numeric($examProtocolID)) {
+        if ($lectureID1 != '0' && $uploadedByUserID != '' && $uploadedDate != NULL && $examiner != '' && $fileName != '' && $fileSize != '' && $fileType != '' && $fileExtension != '' && is_numeric($examProtocolID)) {
             $tokensToAdd = Constants::TOKENS_ADDED_PER_UPLOAD;
             if ($action == 'accept') {
                 $status = Constants::EXAM_PROTOCOL_STATUS['accepted'];
+            } else if ($action == 'acceptDoubleTokens') {
+                $status = Constants::EXAM_PROTOCOL_STATUS['accepted'];
+                $tokensToAdd = $tokensToAdd * 2;
             } else if ($action == 'decline') {
                 $status = Constants::EXAM_PROTOCOL_STATUS['declined'];
                 $tokensToAdd = 0;
@@ -61,7 +64,7 @@
                 }
             }
             
-            $result = $examProtocolSystem->updateExamProtocolFully($examProtocolID, $collaboratorIDs, $status, $uploadedByUserID, $uploadedDate, $remark, $examiner, $filePath, $fileSize, $fileType, $fileExtension);
+            $result = $examProtocolSystem->updateExamProtocolFully($examProtocolID, $collaboratorIDs, $status, $uploadedByUserID, $uploadedDate, $remark, $examiner, $fileName, $fileSize, $fileType, $fileExtension);
             if ($result) {
                 $lectureIDs = array($lectureID1);
                 if ($lectureID2 != '0' && $lectureID1 != $lectureID2) {
@@ -76,7 +79,7 @@
                         $result = $lectureSystem->addProtocolIDsToLecture($lectureIDs, $examProtocolID);
                         if ($result) {
                             $replyToSend = $replies[intval($reply)];
-                            if ($reply == '') {
+                            if (intval($reply) == 0) {
                                 $replyToSend = '';
                             }
                             $result = $userSystem->grantTokensAndMailToUploader($uploadedByUsername, $tokensToAdd, $replyToSend);
@@ -162,7 +165,7 @@
         }
         
         $lectureIDsOfExamProtocol = $examProtocolSystem->getLectureIDsOfExamProtocol($examProtocolID);
-        $allLectures = $lectureSystem->getAllLectures();
+        $allLectures = $lectureSystem->getAllLecturesAlphabeticalOrder();
         $allLectureOptions1 = '';
         $allLectureOptions2 = '';
         $allLectureOptions3 = '';
@@ -217,8 +220,8 @@
                             <div style="width: 20%; display: inline-block;">' . $i18n->get('examiners') . '</div>
                             <div style="width: 79%; display: inline-block; padding-bottom: 10px;">' . '<input type="text" name="examiner" value="' . $examProtocol->getExaminer() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>
                             
-                            <div style="width: 20%; display: inline-block;">' . $i18n->get('filePath') . '</div>
-                            <div style="width: 79%; display: inline-block; padding-bottom: 10px;">' . '<input type="text" name="filePath" value="' . $examProtocol->getFilePath() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>
+                            <div style="width: 20%; display: inline-block;">' . $i18n->get('fileName') . '</div>
+                            <div style="width: 79%; display: inline-block; padding-bottom: 10px;">' . '<input type="text" name="fileName" value="' . $examProtocol->getFileName() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>
                             
                             <div style="width: 20%; display: inline-block;">' . $i18n->get('fileSize') . '</div>
                             <div style="width: 79%; display: inline-block; padding-bottom: 10px;">' . '<input type="text" name="fileSize" value="' . $examProtocol->getFileSize() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>
@@ -257,6 +260,8 @@
                                 <label for="accept">' . $i18n->get('acceptAndGrantTokens') . '</label><br>
                                 <input type="radio" id="decline" name="action" value="decline" style="margin: 0px 0px 10px 0px; padding: 0px;">
                                 <label for="decline">' . $i18n->get('decline') . '</label><br>
+                                <input type="radio" id="acceptDoubleTokens" name="action" value="acceptDoubleTokens" style="margin: 0px 0px 10px 0px; padding: 0px;">
+                                <label for="acceptDoubleTokens">' . $i18n->get('acceptAndGrantTokensDouble') . '</label><br>
                                 <input type="radio" id="deleteButGrantTokens" name="action" value="deleteButGrantTokens" style="margin: 0px; padding: 0px;">
                                 <label for="deleteButGrantTokens">' . $i18n->get('deleteButGrantTokens') . '</label>
                             </div>

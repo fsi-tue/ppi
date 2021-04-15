@@ -81,7 +81,7 @@ class PostgresDBConnDatabaseUtility {
 "uploadedDate"      TEXT NOT NULL,
 "remark"            TEXT NOT NULL,
 "examiner"          TEXT NOT NULL,
-"filePath"          TEXT NOT NULL,
+"fileName"          TEXT NOT NULL,
 "fileSize"          TEXT NOT NULL,
 "fileType"          TEXT NOT NULL,
 "fileExtension"     TEXT NOT NULL

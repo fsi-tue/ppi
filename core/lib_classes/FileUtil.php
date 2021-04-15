@@ -10,17 +10,18 @@ class FileUtil {
     }
     
     /**
-     * Compress the files given as list of file paths and store them in a newly created zip archive given by the archive path.
+     * Compress the protocol files given as list of file names and store them in a newly created zip archive.
      */
-    function zipFiles($listOfFiles, $outputZipFile) {
+    function zipFiles($listOfProtocolFileNames, $outputZipFile) {
         $zip = new ZipArchive();
         $zip->open($outputZipFile, ZipArchive::CREATE);
         
-        foreach ($listOfFiles as $file) {
-            if (file_exists($file)) {
-                $zip->addFromString(basename($file), file_get_contents($file));  
+        foreach ($listOfProtocolFileNames as $fileName) {
+            $fullPath = $this->getFullPathToBaseDirectory() . Constants::UPLOADED_PROTOCOLS_DIRECTORY . '/' . $fileName;
+            if (file_exists($fullPath)) {
+                $zip->addFromString(basename($fullPath), file_get_contents($fullPath));  
             } else {
-                $this->log->warning(static::class . '.php', 'Can not add file to zip archive! File to add not found: ' . $file . '!');
+                $this->log->warning(static::class . '.php', 'Can not add file to zip archive! File to add not found: ' . $fullPath . '!');
             }
         }
         $zip->close();
@@ -34,7 +35,7 @@ class FileUtil {
     }
     
     /**
-     * Lets the user download a file with the given filepath. The file is of the given content type.
+     * Lets the user download a file with the given filepath. The file has to be of the given content type.
      */
     function downloadFile($file, $contentType) {
         $pathInfo = pathinfo($file);

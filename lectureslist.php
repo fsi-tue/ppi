@@ -12,7 +12,7 @@
     
     $status = NULL;
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_ENCODED);
+        $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS);
         $status = filter_input(INPUT_POST, 'status', FILTER_SANITIZE_ENCODED);
         $lectureID = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_ENCODED);
         
