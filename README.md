@@ -1,4 +1,10 @@
-# ppi
+# PPI
+Prüfungsprotokolle Interface of Fachschaft Informatik Tübingen.
+
+## Installation with Docker
+For deploying PPI with Docker, PHP, Postgres and nginx, configuration files can be found [here](https://github.com/fsi-tue/docker/tree/master/ppi).
+At the moment only Postgres is supported.
+
 
 ## PostgreSQL Database
 
