@@ -106,7 +106,7 @@ class RecurringTasksSystem {
             foreach ($toBeDeleted as $examProtocol) {
                 $file = $this->fileUtil->getFullPathToBaseDirectory() . Constants::UPLOADED_PROTOCOLS_DIRECTORY . '/' . $examProtocol->getFileName();
                 if (is_file($file)) {
-                    if ($this->fileUtil->strEndsWith($file, Constants::ALLOWED_FILE_EXTENSION_DOWNLOAD[0])) {
+                    if ($this->fileUtil->strEndsWith($file, Constants::ALLOWED_FILE_EXTENSION_DOWNLOAD)) {
                         unlink($file);
                     } else {
                         $retVal = 'WRONG_FILE_EXTENSION';
