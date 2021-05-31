@@ -223,7 +223,7 @@
                             </tr>
                             <tr>
                                 <td style="width: 20%;' . $colorFile . '">' . $i18n->get('file') . ':</td>
-                                <td><input type="file" id="protocol_file" name="protocol_file" placeholder="" style="display: table-cell; width: calc(100% - 18px);' . $colorFile . '" required></td>
+                                <td><input type="file" id="protocol_file" name="protocol_file" placeholder="" style="display: table-cell; width: calc(100% - 18px);' . $colorFile . '" required accept=".pdf,.txt"></td>
                             </tr>
                             <tr>
                                 <td style="width: 20%;' . $colorLegal . '"><input type="checkbox" id="legal" name="legal" value="checkedLegal" required></td>
