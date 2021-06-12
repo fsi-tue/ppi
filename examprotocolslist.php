@@ -82,6 +82,24 @@
         }
     }
     
+    function getLecturesOfProtocolAsString($examProtocolID, $examProtocolSystem, $allLectures) {
+        $lectureIDsOfExamProtocol = $examProtocolSystem->getLectureIDsOfExamProtocol($examProtocolID);
+        $retVal = '';
+        for ($i = 0; $i < count($allLectures); $i++) {
+            $lecture = $allLectures[$i];
+            if (count($lectureIDsOfExamProtocol) > 0 && $lecture->getID() == $lectureIDsOfExamProtocol[0]) {
+                $retVal .= $lecture->getName();
+            }
+            if (count($lectureIDsOfExamProtocol) > 1 && $lecture->getID() == $lectureIDsOfExamProtocol[1]) {
+                $retVal .= ', ' . $lecture->getName();
+            }
+            if (count($lectureIDsOfExamProtocol) > 2 && $lecture->getID() == $lectureIDsOfExamProtocol[2]) {
+                $retVal .= ', ' . $lecture->getName();
+            }
+        }
+        return $retVal;
+    }
+    
     echo $header->getHeader($i18n->get('title'), $i18n->get('allExamProtocols'), array('protocols.css', 'button.css'));
     
     echo $mainMenu->getMainMenu($i18n, $currentUser);
@@ -131,12 +149,13 @@
          '<div style="width: 5%; display: inline-block;">' . $i18n->get('fileName') . '</div>' .
          '<div style="width: 5%; display: inline-block;">' . $i18n->get('fileSize') . '</div>' .
          '<div style="width: 10%; display: inline-block;">' . $i18n->get('fileType') . '</div>' .
-         '<div style="width: 10%; display: inline-block;">' . $i18n->get('fileExtension') . '</div>' .
+         '<div style="width: 10%; display: inline-block;">' . $i18n->get('lecture') . '</div>' .
          '<div style="width: 6%; display: inline-block; text-align: center;">' . $i18n->get('download') . '</div>' .
          '<div style="width: 6%; display: inline-block; text-align: center;">' . $i18n->get('details') . '</div>' .
          '<div style="width: 6%; display: inline-block; text-align: center;">' . $i18n->get('save') . '</div>';
     
     $allProtocols = $examProtocolSystem->getExamProtocols(Constants::NUMBER_OF_ENTRIES_PER_PAGE, $page, $lectureID, $uploadedByUserID, $borrowedByUserID);
+    $allLectures = $lectureSystem->getAllLecturesAlphabeticalOrder();
     
     foreach ($allProtocols as &$protocol) {
         $color = '';
@@ -159,7 +178,7 @@
              '<div style="width: 5%; display: inline-block;">' . '<input type="text" readonly name="fileName" value="' . $protocol->getFileName() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>' .
              '<div style="width: 5%; display: inline-block;">' . '<input type="text" readonly name="fileSize" value="' . $protocol->getFileSize() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>' .
              '<div style="width: 10%; display: inline-block;">' . '<input type="text" readonly name="fileType" value="' . $protocol->getFileType() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>' .
-             '<div style="width: 10%; display: inline-block;">' . '<input type="text" readonly name="fileExtension" value="' . $protocol->getFileExtension() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>' .
+             '<div style="width: 10%; display: inline-block;">' . '<input type="text" readonly name="lectures" value="' . getLecturesOfProtocolAsString($protocol->getID(), $examProtocolSystem, $allLectures) . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>' .
              '<div style="width: 6%; display: inline-block; text-align: center;">
                     <a href="?download=' . $protocol->getID() . '" id="styledButton">
                         <img src="static/img/protocolDownload.png" alt="download protocol" style="height: 24px; vertical-align: middle;">
