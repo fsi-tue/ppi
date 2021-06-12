@@ -1,0 +1,17 @@
+Gedächtnisprotokoll
+-------------------
+Vorlesung: [VorlesungsNAME]
+Prüfer: [Name des Profs]
+Datum/Semester: [DD.MM.YYYY , {WS, SS} YY]
+Zeit: [Zeit für die Klausur]
+Hilfsmittel: [CheatSheet, etc]
+Anmerkungen: [...]
+--------------------
+
+Frage 1:
+  - A ...
+  - B ...
+
+
+
+

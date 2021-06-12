@@ -172,6 +172,9 @@
             <a href="static/templates/template.docx" id="styledButton">
                 <img src="static/img/protocolDownload.png" alt="download protocol" style="height: 24px; vertical-align: middle;"> Word
             </a>
+            <a href="static/templates/template.txt" id="styledButton">
+                <img src="static/img/protocolDownload.png" alt="download protocol" style="height: 24px; vertical-align: middle;"> Txt
+            </a>
             <br><br>
                 <details open id="uploadField">
                     <summary>'  . $i18n->get('selectLecture') . '</summary>
