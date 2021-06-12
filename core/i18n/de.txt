@@ -161,6 +161,7 @@ save=Speichern
 saveChanges=Änderungen speichern
 search=Suchen
 selectLecture=Vorlesung auswählen
+showLecture=Vorlesung anzeigen
 showLectures=Vorlesungen anzeigen
 status=Status
 studentUnionTuebingen=Fachschaft Informatik Tübingen
