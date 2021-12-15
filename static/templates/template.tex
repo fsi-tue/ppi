@@ -1,8 +1,9 @@
 % Vorlage für LaTeX-Abgaben / Gedächtnisprotokolle
-% Erstellt von Jules Kreuer (juleskreuer.eu)
-% Veröffentlicht am 24.04.2020 auf juleskreuer.eu
-% und ppi.fsi.uni-tuebingen.de
+% Erstellt von Jules Kreuer / not_a_feature
+% Veröffentlicht am 15.12.2021 auf  ppi.fsi.uni-tuebingen.de
 % ---
+% !TeX TXS-program:compile = txs:///pdflatex/[--shell-escape]
+
 \documentclass[a4paper]{article}
 
 % Packages
@@ -14,7 +15,7 @@
 \usepackage{amssymb}
 \usepackage{hyperref} % Links
 \usepackage{graphicx} % Vilder
-\usepackage{listings} % Source code highlighting
+\usepackage{minted} % Source code highlighting
 \usepackage[inline]{enumitem}
 \usepackage{fullpage} % weniger abstand zu den seiten
 \usepackage{tabularx} % bessere Tabellen
@@ -24,29 +25,7 @@
 \usepackage{color}
 \usepackage{colortbl}
 \usepackage{textcomp}
-\definecolor{listinggray}{gray}{0.9}
-\definecolor{lbcolor}{rgb}{0.95,0.95,0.95}
-\lstset{
-	backgroundcolor=\color{lbcolor},
-	tabsize=4,
-	rulecolor=,
-	basicstyle=\fontsize{10}{10}, % Fontgröße erstes: Text, zweites: Zahlen
-	upquote=true,
-	aboveskip={1.5\baselineskip},
-	columns=fixed,
-	showstringspaces=false,
-	extendedchars=true,
-	breaklines=true,
-	prebreak = \raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
-	frame=single,
-	showtabs=false,
-	showspaces=false,
-	showstringspaces=false,
-	identifierstyle=\ttfamily,
-	keywordstyle=\color[rgb]{0,0,1},
-	commentstyle=\color[rgb]{0.133,0.545,0.133},
-	stringstyle=\color[rgb]{0.627,0.126,0.941},
-}
+
 
 \begin{document}
 	% Name des Prüfenden
@@ -57,17 +36,17 @@
 	\maketitle{} % Generates title
 	\vspace{-1cm}
 	% Hier bitte alle vorhandenen Informationen eintragen.
-	\begin{lstlisting}
+	\begin{minted}{text}
 	Klausur:       Haupt/Nachklausur, SS/WS, JAHR
 	Pruefer:       Prof. Pruefername
 	Datum:         Datum der Pruefung
 	Zeit:          Zeit zum Schreiben
-	Punkte:		   Anzahl der Punkte
+	Punkte:	Anzahl der Punkte
 	Hilfsmittel:   Erlaubte Hilfsmittel
-	               Bsp: Taschenrechner, Cheat-Sheet
-	Sprache:	   Erlaubte Sprachen
-	Modul:		   ggf. Modulnummer bei uneindeutigen Namen
-	\end{lstlisting}
+		       Bsp: Taschenrechner, Cheat-Sheet
+	Sprache:       Erlaubte Sprachen
+	Modul:	 ggf. Modulnummer bei uneindeutigen Namen
+	\end{minted}
 	
 	\section{Titel erste Aufgabe - n Punkte}
 	\subsection{}
@@ -77,4 +56,9 @@
 	\subsection{}
 	Lorem ipsum dolor sit amet, consetetur sadipscing elitr,sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
 	At vero eos et accusam et justo duo dolores et ea rebum.
+	\subsection{}
+	\begin{minted}{python}
+for i in range(0,10,2)
+	print(i)
+	\end{minted}
 \end{document}
