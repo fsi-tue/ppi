@@ -31,7 +31,7 @@
     
     echo $mainMenu->getMainMenu($i18n, $currentUser);
     
-    echo '<div id="protocolsTable" style="padding-left: 40px; padding-bottom: 40px; padding-right: 40px; margin: 0px;">';
+    echo '<div id="recurringTasksTable" style="padding-left: 40px; padding-bottom: 40px; padding-right: 40px; margin: 0px;">';
     
     $recurringTasksData = $recurringTasksSystem->getLastResults();
 
