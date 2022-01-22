@@ -21,6 +21,7 @@
 	margin-bottom: 0px;
 	margin-left: 10px;
 	text-decoration: none;
+	white-space: nowrap;
 }
 
 #styledButton:hover {

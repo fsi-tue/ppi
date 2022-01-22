@@ -16,13 +16,13 @@ class TestUtil {
         
         $this->objectsToTestNames[] = 'Static Code Analysis with PHPStan';
         
-        require_once(__DIR__ . '/ExamProtocolDaoTest.php');
+        /*require_once(__DIR__ . '/ExamProtocolDaoTest.php');
         $this->objectsToTest[] = new ExamProtocolDaoTest(new ExamProtocolDao($this->dbConn, $this->dateUtil));
         $this->objectsToTestNames[] = 'ExamProtocolDaoTest';
         
         require_once(__DIR__ . '/LectureDaoTest.php');
         $this->objectsToTest[] = new LectureDaoTest(new LectureDao($this->dbConn));
-        $this->objectsToTestNames[] = 'LectureDaoTest';
+        $this->objectsToTestNames[] = 'LectureDaoTest';*/
     }
     
     function getTestNames() {

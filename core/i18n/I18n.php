@@ -29,7 +29,7 @@
         }
         
         /**
-         * Get the internationalizon string corresponding to the given key.
+         * Get the internationalization string corresponding to the given key.
          */
         function get($key) {
             $s = $this->getString($key);
@@ -40,7 +40,7 @@
         }
         
         /**
-         * Get the internationalizon string corresponding to the given key with replacement of placeholders.
+         * Get the internationalization string corresponding to the given key with replacement of placeholders.
          */
         function getWithValues($key, $values) {
             $s = $this->getString($key);
@@ -54,7 +54,7 @@
         }
         
         /**
-         * Get the internationalizon string corresponding to the given key.
+         * Get the internationalization string corresponding to the given key.
          * This function shall not be called from outside this class.
          */
         function getString($key) {
@@ -69,7 +69,7 @@
         }
         
         /**
-         * Parse an internationalizon file.
+         * Parse an internationalization file.
          * Split each line at the first '='.
          * The left part is the key, the right part the internationalized string.
          */
