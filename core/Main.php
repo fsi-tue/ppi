@@ -25,7 +25,8 @@
 
     // include the database connection class
     require_once('lib_classes/PostgresDBConn.php');
-    $postgresDbConn = new PostgresDBConn(Constants::POSTGRES_HOST, Constants::POSTGRES_PORT, Constants::POSTGRES_DB_NAME, Constants::POSTGRES_USER, Constants::POSTGRES_PASSWORD, 'COLUMN_NAMES');
+    //require_once('lib_classes/SQLiteDBConn.php');
+    $dbConn = new PostgresDBConn(Constants::POSTGRES_HOST, Constants::POSTGRES_PORT, Constants::POSTGRES_DB_NAME, Constants::POSTGRES_USER, Constants::POSTGRES_PASSWORD, 'COLUMN_NAMES');
     
     // internationalization
     include_once 'i18n/I18n.php';
@@ -47,7 +48,8 @@
     
     // include the database untility class
     require_once('lib_classes/PostgresDBConnDatabaseUtility.php');
-    $databaseUtility = new PostgresDBConnDatabaseUtility($postgresDbConn, $dateUtil);
+    //require_once('lib_classes/SQLiteDBConnDatabaseUtility.php');
+    $databaseUtility = new PostgresDBConnDatabaseUtility($dbConn, $dateUtil);
     //$databaseUtility->recreateDatabase();
 
     // include all data classes
@@ -65,11 +67,11 @@
     require_once('dao_classes/LogEventDao.php');
     require_once('dao_classes/UserDao.php');
     require_once('dao_classes/RecurringTasksDao.php');
-    $examProtocolDao = new ExamProtocolDao($postgresDbConn, $dateUtil);
-    $lectureDao = new LectureDao($postgresDbConn);
-    $logEventDao = new LogEventDao($postgresDbConn, $dateUtil);
-    $userDao = new UserDao($postgresDbConn, $dateUtil);
-    $recurringTasksDao = new RecurringTasksDao($postgresDbConn, $dateUtil);
+    $examProtocolDao = new ExamProtocolDao($dbConn, $dateUtil);
+    $lectureDao = new LectureDao($dbConn);
+    $logEventDao = new LogEventDao($dbConn, $dateUtil);
+    $userDao = new UserDao($dbConn, $dateUtil);
+    $recurringTasksDao = new RecurringTasksDao($dbConn, $dateUtil);
 
     // include all system classes
     require_once('system_classes/ExamProtocolSystem.php');
@@ -88,7 +90,7 @@
     $log = new Log($logEventSystem, $dateUtil);
     
     // set log object reference to all classes where logging shall happen
-    $postgresDbConn->setLog($log);
+    $dbConn->setLog($log);
     $fileUtil->setLog($log);
     $i18n->setLog($log);
     $examProtocolSystem->setLog($log);
@@ -99,8 +101,8 @@
     
     // instantiate the unit tests so they can be run from the admin page
     require_once('test/TestUtil.php');
-    $postgresDbConnTests = new PostgresDBConn(Constants::POSTGRES_HOST, Constants::POSTGRES_PORT, Constants::POSTGRES_DB_NAME_UNIT_TESTS, Constants::POSTGRES_USER, Constants::POSTGRES_PASSWORD, 'COLUMN_NAMES');
-    $testUtil = new TestUtil($log, $postgresDbConnTests, $dateUtil, $fileUtil);
+    $dbConnTests = new PostgresDBConn(Constants::POSTGRES_HOST, Constants::POSTGRES_PORT, Constants::POSTGRES_DB_NAME_UNIT_TESTS, Constants::POSTGRES_USER, Constants::POSTGRES_PASSWORD, 'COLUMN_NAMES');
+    $testUtil = new TestUtil($log, $dbConnTests, $dateUtil, $fileUtil);
     
     // show phpinfo on top of page if wanted
     if (Constants::SHOW_PHP_INFO) {

@@ -4,7 +4,10 @@ class HashUtil {
      * Generates a random string of length 64. Possible characters are [0-9] and [a-f].
      */
     function generateRandomString() {
-        return hash('sha256', openssl_random_pseudo_bytes(100));
+        if (function_exists('openssl_random_pseudo_bytes')) {
+            return hash('sha256', openssl_random_pseudo_bytes(100));
+        }
+        return hash('sha256', md5(rand()));
     }
     
     /**

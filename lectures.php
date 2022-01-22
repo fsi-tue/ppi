@@ -65,14 +65,14 @@
         $insertBeginningOfArray = false;
         if (in_array($lecture->getID(), $currentlyBorrowedLectureIds)) {
             $insertBeginningOfArray = true;
-            $row[] = '<a id="styledButtonGreen" href="download.php"><nobr><img src="static/img/protocolCheckmark.png" style="height: 24px; vertical-align: middle;">&nbsp;&nbsp;' . $i18n->get('borrowed') . '</nobr></a>';
+            $row[] = '<a id="styledButtonGreen" href="download.php"><img src="static/img/protocolCheckmark.png" style="height: 24px; vertical-align: middle;">&nbsp;&nbsp;' . $i18n->get('borrowed') . '</a>';
         } else {
             if ($currentUser->getTokens() <= 0) {
-                $row[] = '<a id="styledButtonRed" href="?borrow=' . $lecture->getID() . '"><nobr><img src="static/img/protocol.png" style="height: 24px; vertical-align: middle;">&nbsp;&nbsp;' . $i18n->get('noTokens') . '</nobr></a>';
+                $row[] = '<a id="styledButtonRed" href="?borrow=' . $lecture->getID() . '"><img src="static/img/protocol.png" style="height: 24px; vertical-align: middle;">&nbsp;&nbsp;' . $i18n->get('noTokens') . '</a>';
             } else if (count($lecture->getAssignedExamProtocols()) > 0) {
-                $row[] = '<a id="styledButton" href="?borrow=' . $lecture->getID() . '"><nobr><img src="static/img/protocol.png" style="height: 24px; vertical-align: middle;">&nbsp;&nbsp;' . $i18n->get('borrow') . '</nobr></a>';
+                $row[] = '<a id="styledButton" href="?borrow=' . $lecture->getID() . '"><img src="static/img/protocol.png" style="height: 24px; vertical-align: middle;">&nbsp;&nbsp;' . $i18n->get('borrow') . '</a>';
             } else {
-                $row[] = '<a id="styledButtonGray" href=""><nobr><img src="static/img/protocolNotAvailable.png" style="height: 24px; vertical-align: middle;">&nbsp;&nbsp;' . $i18n->get('noProtocols') . '</nobr></a>';
+                $row[] = '<a id="styledButtonGray" href=""><img src="static/img/protocolNotAvailable.png" style="height: 24px; vertical-align: middle;">&nbsp;&nbsp;' . $i18n->get('noProtocols') . '</a>';
             }
         }
         $reportingPossible = true;
@@ -84,9 +84,9 @@
             }
         }
         if ($reportingPossible) {
-            $row[] = '<a id="styledButtonRed" href="?report=' . $lecture->getID() . '"><nobr><img src="static/img/report.png" style="height: 24px; vertical-align: middle;"></nobr></a>';
+            $row[] = '<a id="styledButtonRed" href="?report=' . $lecture->getID() . '"><img src="static/img/report.png" style="height: 24px; vertical-align: middle;"></a>';
         } else {
-            $row[] = '<a id="styledButtonGray" href=""><nobr><img src="static/img/report.png" style="height: 24px; vertical-align: middle;"></nobr></a>';
+            $row[] = '<a id="styledButtonGray" href=""><img src="static/img/report.png" style="height: 24px; vertical-align: middle;"></a>';
         }
         
         if ($insertBeginningOfArray) {

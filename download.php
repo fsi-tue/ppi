@@ -72,11 +72,11 @@
         if (in_array($lecture->getID(), $currentlyBorrowedLectureIds)) {
             $row = array();
             $row[] = $lecture->getName();
-            $row[] = '<nobr>' . getBorrowedUntilFromLectureId($borrowRecords, $lecture->getID(), $dateUtil, $currentUser, $log) . '</nobr>';
+            $row[] = getBorrowedUntilFromLectureId($borrowRecords, $lecture->getID(), $dateUtil, $currentUser, $log);
             if (userHasBorrowed($lecture->getID(), $dateUtil, $currentUser)) {
-                $row[] = '<a id="styledButtonGreen" href="?lecture=' . $lecture->getID() . '"><nobr><img src="static/img/protocolDownload.png" style="height: 24px; vertical-align: middle;">&nbsp;&nbsp;' . $i18n->get('download') . '</nobr></a>';
+                $row[] = '<a id="styledButtonGreen" href="?lecture=' . $lecture->getID() . '"><img src="static/img/protocolDownload.png" style="height: 24px; vertical-align: middle;">&nbsp;&nbsp;' . $i18n->get('download') . '</a>';
             } else {
-                $row[] = '<a id="styledButtonRed"><nobr><img src="static/img/protocolNotAvailable.png" style="height: 24px; vertical-align: middle;">&nbsp;&nbsp;' . $i18n->get('invalid') . '</nobr></a>';
+                $row[] = '<a id="styledButtonRed"><img src="static/img/protocolNotAvailable.png" style="height: 24px; vertical-align: middle;">&nbsp;&nbsp;' . $i18n->get('invalid') . '</a>';
             }
             $data[] = $row;
         }
