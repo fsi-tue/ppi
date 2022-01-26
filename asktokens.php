@@ -27,14 +27,14 @@
                 $result = $userSystem->addTokensToUser($username, Constants::TOKENS_ADDED_PER_UPLOAD);
                 if ($result) {
                     $status = 'ADDED_TOKENS_TO_USER';
-                    $log->debug('asktokens.php', 'Successfully added tokens to user: ' . $currentUser->getUsername());
+                    $log->debug('asktokens.php', 'Successfully added tokens to user: ' . $username);
                 } else {
                     $status = 'FAILED_ADDING_TOKENS_TO_USER';
-                    $log->error('asktokens.php', 'Failed adding tokens to user: ' . $currentUser->getUsername());
+                    $log->error('asktokens.php', 'Failed adding tokens to user: ' . $username);
                 }
             } else {
                 $status = 'CAN_NOT_ADD_TOKENS_NO_ADMIN';
-                $log->error('asktokens.php', 'User who is not admin tried to add tokens: ' . $currentUser->getUsername());
+                $log->error('asktokens.php', 'User who is not admin tried to add tokens to user: ' . $username);
             }
         }
     }
