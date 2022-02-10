@@ -90,6 +90,14 @@ html, body {
     display: block;
 }
 
+.info {
+    text-align: center;
+    margin: 10px 40px 10px 40px;
+    border-radius: 4px;
+    border: #000080 solid;
+    padding: 4px;
+    font-size: 17px;
+}
 #content {
     padding-bottom: 40px;
 }

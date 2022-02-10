@@ -37,6 +37,9 @@
     echo $header->getHeader($i18n->get('title'), $i18n->get('showLectures'), array('protocols.css', 'button.css', 'searchableTable.css'));
     
     echo $mainMenu->getMainMenu($i18n, $currentUser);
+    echo '<div class="info">';
+    echo $i18n->get('infoOnMainPage');
+    echo '</div>';
 
     echo '<div id="protocolsTable" style="padding-left: 40px; padding-bottom: 40px; padding-right: 40px; margin: 0px;">';
 

@@ -162,10 +162,8 @@
     } else {
         echo '<div style="margin-left: 20%; width: 60%;">
                 ' . $lectureAddedSuccessfullyMessage . '
-                <p>' . $i18n->get('uploadExplanation') . '</p>
-
-                <h2>Templates</h2>
-                ' . $i18n->get('templateRemark'). '<br>
+                <div class="info">' . $i18n->get('uploadExplanation') . '
+                <br><br>' . $i18n->get('templateRemark'). '</div>
             <a href="static/templates/template.tex" id="styledButton">
                 <img src="static/img/protocolDownload.png" alt="download protocol" style="height: 24px; vertical-align: middle;"> Latex
             </a>

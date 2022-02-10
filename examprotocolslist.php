@@ -39,7 +39,7 @@
     $borrowedByUsername = '';
     if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $pageValue = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_ENCODED);
-        $lectureID = filter_input(INPUT_GET, 'lectureID', FILTER_SANITIZE_ENCODED);
+        $lectureID = filter_input(INPUT_GET, 'lectureID', FILTER_SANITIZE_NUMBER_INT);
         $uploadedByUsername = filter_input(INPUT_GET, 'uploadedByUsername', FILTER_SANITIZE_ENCODED);
         $borrowedByUsername = filter_input(INPUT_GET, 'borrowedByUsername', FILTER_SANITIZE_ENCODED);
         if (is_numeric($pageValue)) {
