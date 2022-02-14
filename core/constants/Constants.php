@@ -31,7 +31,7 @@ class Constants {
     
     // user settings
     const DEFAULT_LANGUAGE = 'de';
-    const START_BALANCE = 6;
+    const START_BALANCE = 3;
     const TOKENS_ADDED_PER_UPLOAD = 3;
     const NUMBER_OF_TOKENS_TO_ADD_TO_ALL_PER_SEMESTER = 1;
     const EXAM_PROTOCOL_BORROWED_TIMEFRAME = 4;
