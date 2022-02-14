@@ -1,13 +1,16 @@
 <?php
 class HashUtil {
     /**
-     * Generates a random string of length 64. Possible characters are [0-9] and [a-f].
+     * Generates a random string of variable length (default and max 64). Possible characters are [0-9] and [a-f].
      */
-    function generateRandomString() {
+    function generateRandomString($length = 64) {
         if (function_exists('openssl_random_pseudo_bytes')) {
-            return hash('sha256', openssl_random_pseudo_bytes(100));
+            $randString = hash('sha256', openssl_random_pseudo_bytes(100));
         }
-        return hash('sha256', md5(rand()));
+        else {
+            $randString = hash('sha256', md5(rand()));
+        }
+        return substr($randString, 0, $length);
     }
     
     /**
