@@ -8,7 +8,7 @@ class HashUtil {
             $randString = hash('sha256', openssl_random_pseudo_bytes(100));
         }
         else {
-            $randString = hash('sha256', md5(rand()));
+            $randString = hash('sha256', rand());
         }
         return substr($randString, 0, $length);
     }
