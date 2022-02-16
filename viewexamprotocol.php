@@ -126,7 +126,7 @@
     echo $mainMenu->getMainMenu($i18n, $currentUser);
     
     echo '<div style="width: 99%; display: inline-block; margin: 20px 0px 20px 0px; text-align: center;">
-                <a href="examprotocolslist.php" id="styledButton" style="margin: 0px;">
+                <a id="styledButton" onclick="history.go(-1)" style="margin: 0px;">
                     <span style="font-size: 20px">&laquo;</span>&nbsp;' .  $i18n->get('back') . '
                 </a>
             </div>';

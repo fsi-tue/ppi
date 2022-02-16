@@ -14,7 +14,16 @@
                     $basePath = $fileUtil->getFullPathToBaseDirectory();
                     $protocolFileIDs = $lectureSystem->getAllProtocolIDsOfLecture($lectureToDownloadID);
                     $protocolFileNames = $examProtocolSystem->getFileNamesFromProtocolIDs($protocolFileIDs);
-                    $zipFilePath = $basePath . Constants::TMP_ZIP_FILES_DIRECTORY . '/' . $hashUtil->generateRandomString() . '.zip';
+
+                    # Path for zip file
+                    $zipFilePath = $basePath . Constants::TMP_ZIP_FILES_DIRECTORY . '/';
+                    # Unsafe Lecture name
+                    $lectureName = $lectureSystem->getLecture($lectureToDownloadID)->getName();
+                    # Safe Lecture name
+                    $lectureName = preg_replace( '/[^a-z0-9]/i', '', $lectureName);
+                    
+                    # Complete Path
+                    $zipFilePath = $zipFilePath .  $lectureName . "-" . $hashUtil->generateRandomString(8) . '.zip';
                     $fileUtil->zipFiles($protocolFileNames, $zipFilePath);
                     $fileUtil->downloadZipFile($zipFilePath);
                 } else {
