@@ -24,8 +24,8 @@
                     # See http://web.archive.org/web/20220105010647/https://www.lima-city.de/thread/umlaute-mit-str_replace-umwandeln, answer first answer from staymyfriend
                     # Decode possible encodings from database
                     $lectureName = html_entity_decode($lectureName);
-                    $searchUmlaute = array("Ä", "Ö", "Ü", "ä", "ö", "ü", "ß", ".", "(", ")", "[", "]", " ");
-                    $replaceUmlaute = array("Ae", "Oe", "Ue", "ae", "oe", "ue", "ss", "", "__", "__", "__", "__", "_");
+                    $searchUmlaute = array("Ä", "Ö", "Ü", "ä", "ö", "ü", "ß", ".", "/", "(", ")", "[", "]", " ");
+                    $replaceUmlaute = array("Ae", "Oe", "Ue", "ae", "oe", "ue", "ss", "", "_", "__", "__", "__", "__", "_");
                     $lectureName = str_replace($searchUmlaute, $replaceUmlaute, $lectureName);
 
                     # Complete Path
