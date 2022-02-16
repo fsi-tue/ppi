@@ -37,19 +37,19 @@
     echo $header->getHeader($i18n->get('title'), $i18n->get('activateAccount'), array('login.css', 'activate.css', 'button.css'));
 
     function getActivationField($message, $success, $i18n) {
-        $image = 'ppiLogo.png';
+        $image = 'ppiLogo.png' . $GLOBALS["VERSION_STRING"];
         $goToLogin = '';
         if ($success == 'SUCCESS') {
-            $image = 'activation_successful.png';
+            $image = 'activation_successful.png' . $GLOBALS["VERSION_STRING"];
             $goToLogin = '<center><a href="login.php" id="styledButton">' . $i18n->get('backToLogin') . '</a></center><br><br>';
         } else if ($success == 'NO_SUCCESS') {
-            $image = 'activation_unsuccessful.png';
+            $image = 'activation_unsuccessful.png' . $GLOBALS["VERSION_STRING"];
         }
         return '<div id="loginField">
                 <br>
                 <center>
                     <div id="ppiLogo">
-                        <img src="static/img/' . $image . '" style="height: 55px;" alt="ppi logo">
+                        <img src="static/img/' . $image . $GLOBALS["VERSION_STRING"] . '" style="height: 55px;" alt="ppi logo">
                     </div>
                 </center>
                 <br>

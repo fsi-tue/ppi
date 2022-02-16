@@ -35,7 +35,7 @@
         }
         return '<div id="loginField">
                     <br>
-                    <img src="static/img/ppiLogo.png" id="ppiLogo" alt="ppi logo">
+                    <img src="static/img/ppiLogo.png' . $GLOBALS["VERSION_STRING"] . '" id="ppiLogo" alt="ppi logo">
                     <br>
                     <br>
                     <div id="infoText">' . $message . '</div>

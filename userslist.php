@@ -166,22 +166,22 @@
         echo '<div style="width: 10%; display: inline-block; text-align: center;">' . count($user->getBorrowRecords()) . '</div>';
         echo '<div style="width: 7%; display: inline-block; text-align: center;">
                     <a href="examprotocolslist.php?borrowedByUsername=' . $user->getUsername() . '" id="styledButton">
-                        <img src="static/img/viewBorrowed.png" alt="view protocol" style="height: 24px; vertical-align: middle;">
+                        <img src="static/img/viewBorrowed.png' . $GLOBALS["VERSION_STRING"] . '" alt="view protocol" style="height: 24px; vertical-align: middle;">
                     </a>
                 </div>';
         echo '<div style="width: 7%; display: inline-block; text-align: center;">
                     <a href="examprotocolslist.php?uploadedByUsername=' . $user->getUsername() . '" id="styledButton">
-                        <img src="static/img/viewUploaded.png" alt="view protocol" style="height: 24px; vertical-align: middle;">
+                        <img src="static/img/viewUploaded.png' . $GLOBALS["VERSION_STRING"] . '" alt="view protocol" style="height: 24px; vertical-align: middle;">
                     </a>
                 </div>';
         echo '<div style="width: 8%; display: inline-block; text-align: center;">
                     <a href="?deleteID=' . $user->getID() . '" id="styledButtonRed">
-                        <img src="static/img/delete.png" alt="view protocol" style="height: 24px; vertical-align: middle;">
+                        <img src="static/img/delete.png' . $GLOBALS["VERSION_STRING"] . '" alt="view protocol" style="height: 24px; vertical-align: middle;">
                     </a>
                 </div>';
         echo '<div style="width: 8%; display: inline-block; text-align: center;">' . 
                     '<button type="submit" id="styledButton" name="id" value="' . $user->getID() . '" style="padding: 3px; width: 40px; height: 40px; vertical-align: middle;">
-                        <img src="static/img/save.png" alt="submit" style="height: 24px;">
+                        <img src="static/img/save.png' . $GLOBALS["VERSION_STRING"] . '" alt="submit" style="height: 24px;">
                     </button>' .
                 '</div>';
         echo '</form>';

@@ -13,9 +13,9 @@ class Footer {
                         <div id="footer">
                             <a href="https://www.fsi.uni-tuebingen.de/" style="color: white;">© ' . date("Y") . ' ' . $this->i18n->get('studentUnionTuebingen') . '</a>
                             <div> | </div>
-                            <div>' . $this->i18n->get('questionsPleaseTo') . ': pruefungsprotokolle<img src="static/img/atSymbol.png" alt="at symbol" style="vertical-align: middle;">fsi.uni-tuebingen.de</div>
+                            <div>' . $this->i18n->get('questionsPleaseTo') . ': pruefungsprotokolle<img src="static/img/atSymbol.png' . $GLOBALS["VERSION_STRING"] . '" alt="at symbol" style="vertical-align: middle;">fsi.uni-tuebingen.de</div>
                             <div> | </div>
-                            <div>' . $this->i18n->get('madeWith') . '&nbsp;<img src="static/img/love.png" alt="love" style="vertical-align: middle;">&nbsp;' . $this->i18n->get('byFsi') . '</div>
+                            <div>' . $this->i18n->get('madeWith') . '&nbsp;<img src="static/img/love.png' . $GLOBALS["VERSION_STRING"] . '" alt="love" style="vertical-align: middle;">&nbsp;' . $this->i18n->get('byFsi') . '</div>
                         </div>
                     </div>
                 </body>

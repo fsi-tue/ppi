@@ -195,10 +195,10 @@
                             <div style="width: 79%; display: inline-block; margin: 0px 0px 40px 0px;">
 
                                 <a href="examprotocolslist.php?download=' . $examProtocol->getID() . '" id="styledButton" style="margin: 0px;">
-                                    <img src="static/img/protocolDownload.png" alt="download protocol" style="height: 24px; vertical-align: middle;">&nbsp;&nbsp;' . $i18n->get('downloadExamProtocol') . '
+                                    <img src="static/img/protocolDownload.png' . $GLOBALS["VERSION_STRING"] . '" alt="download protocol" style="height: 24px; vertical-align: middle;">&nbsp;&nbsp;' . $i18n->get('downloadExamProtocol') . '
                                 </a>
                                 <a href="examprotocolslist.php?lectureID=' . $lectureIDsOfExamProtocol[0] . '" id="styledButton" style="margin: 0 0 0 18px;">
-                                    <img src="static/img/run.png" alt="Show lecture" style="height: 24px; vertical-align: middle;">&nbsp;&nbsp;' . $i18n->get('showLecture') . '
+                                    <img src="static/img/run.png' . $GLOBALS["VERSION_STRING"] . '" alt="Show lecture" style="height: 24px; vertical-align: middle;">&nbsp;&nbsp;' . $i18n->get('showLecture') . '
                                 </a>
 
                             </div>
@@ -287,7 +287,7 @@
                             
                             <div style="width: 100%; display: inline-block; text-align: center;">
                                 <button type="submit" id="styledButton" name="id" value="' . $examProtocol->getID() . '" style="margin: 0px 0px 10px 0px; padding: 3px;">
-                                    <img src="static/img/save.png" alt="submit" style="height: 24px; vertical-align: middle;">&nbsp;&nbsp;' . $i18n->get('saveChanges') . '
+                                    <img src="static/img/save.png' . $GLOBALS["VERSION_STRING"] . '" alt="submit" style="height: 24px; vertical-align: middle;">&nbsp;&nbsp;' . $i18n->get('saveChanges') . '
                                 </button>
                             </div>
                         </div>

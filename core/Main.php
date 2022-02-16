@@ -2,7 +2,10 @@
     // include all constants
     require_once('constants/Passwords.php');
     require_once('constants/Constants.php');
-    
+
+    // auto-generate version string from git commit hash of the PPI repository
+    $GLOBALS["VERSION_STRING"] = "?v=" . file_get_contents(dirname(__DIR__, 1) .  "/.git/refs/heads/main", NULL, NULL, 0, 40);
+
     // enable html error reporting
     if (Constants::ERROR_REPORTING_IN_WEBPAGE) {
         ini_set('display_errors', 1);

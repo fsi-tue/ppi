@@ -165,13 +165,13 @@
                 <div class="info">' . $i18n->get('uploadExplanation') . '
                 <br><br>' . $i18n->get('templateRemark'). '</div>
             <a href="static/templates/template.tex" id="styledButton">
-                <img src="static/img/protocolDownload.png" alt="download protocol" style="height: 24px; vertical-align: middle;"> Latex
+                <img src="static/img/protocolDownload.png' . $GLOBALS["VERSION_STRING"] . '" alt="download protocol" style="height: 24px; vertical-align: middle;"> Latex
             </a>
             <a href="static/templates/template.docx" id="styledButton">
-                <img src="static/img/protocolDownload.png" alt="download protocol" style="height: 24px; vertical-align: middle;"> Word
+                <img src="static/img/protocolDownload.png' . $GLOBALS["VERSION_STRING"] . '" alt="download protocol" style="height: 24px; vertical-align: middle;"> Word
             </a>
             <a href="static/templates/template.txt" id="styledButton">
-                <img src="static/img/protocolDownload.png" alt="download protocol" style="height: 24px; vertical-align: middle;"> Txt
+                <img src="static/img/protocolDownload.png' . $GLOBALS["VERSION_STRING"] . '" alt="download protocol" style="height: 24px; vertical-align: middle;"> Txt
             </a>
             <br><br>
                 <details open id="uploadField">
