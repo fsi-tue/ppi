@@ -112,7 +112,7 @@ login=Login
 loginHelp=Help for Login
 loginHelpContent=You can log in to the PPI (exam protocols interface, Prüfungsprotokolle Interface) of the students council computer science. For this, you need to create an account beforehand. Your username is your ZDV-username (e.g. zxaaa11 oder zxabc12). You have chosen your password on account creation.
 logout=Logout
-madeWith=made with
+madeWith=<a href="https://github.com/fsi-tue/ppi">made</a> with
 markForDeletion=Mark for Deletion
 needsJavaScript=needs Javascript
 newPassword=New Password

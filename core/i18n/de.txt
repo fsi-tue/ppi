@@ -112,7 +112,7 @@ login=Login
 loginHelp=Hilfe zu Login
 loginHelpContent=Hier kannst du dich in das PPI (Prüfungsprotokolle Interface) der Fachschaft Informatik einloggen. Dazu musst du zuvor einen Account angelegt haben, dein Nutzername ist dein ZDV-Nutzername (z. B. zxaaa11 oder zxabc12). Dein Passwort hast du beim Erstellen deines Accounts gewählt.
 logout=Ausloggen
-madeWith=made with
+madeWith=<a href="https://github.com/fsi-tue/ppi">made</a> with
 markForDeletion=Markieren zum Löschen
 needsJavaScript=Benötigt Javascript
 newPassword=Neues Passwort
