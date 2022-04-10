@@ -3,7 +3,7 @@ class UrlUtil {
     private $slashAtEnd = '';
 
     function getCurrentPageUrlInfo() {
-        $protocol = strpos(strtolower($_SERVER['SERVER_PROTOCOL']), 'https') === FALSE ? 'http' : 'https';
+        $protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') === FALSE ? 'http' : 'https';
         $host = $_SERVER['HTTP_HOST'];
         if ($host == 'localhost') {
             $this->slashAtEnd = '/';
