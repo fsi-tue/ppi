@@ -25,14 +25,14 @@
             $result = $userSystem->updateUser($userID, $passwordHash, $role, $status, $tokens, $lastLoggedIn, $language, $comment);
             if ($result) {
                 $postStatus = 'UPDATED_USER_DATA';
-                $log->debug('userslist.php', 'Successfully updated user data');
+                $log->debug('userslist.php', 'Successfully updated data of user ' . $userID);
             } else {
                 $postStatus = 'ERROR_ON_UPDATING_USER_DATA';
-                $log->debug('userslist.php', 'Error on updating user data');
+                $log->debug('userslist.php', 'Error on updating data of user ' . $userID);
             }
         } else {
             $postStatus = 'ERROR_ON_UPDATING_USER_DATA';
-            $log->debug('userslist.php', 'Missing on updating user data');
+            $log->debug('userslist.php', 'Missing on updating data of user ' . $userID);
         }
     }
     
