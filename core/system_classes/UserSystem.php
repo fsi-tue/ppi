@@ -133,7 +133,7 @@ class UserSystem {
         $user = $this->getUserByUsername($username);
         if ($user != NULL) {
             if ($user->getRole() != Constants::USER_ROLES['notActivated']) {
-                $this->log->error(static::class . '.php', 'User with username ' . $username . ' who is already activated wanted to re-register.');
+                $this->log->warning(static::class . '.php', 'User with username ' . $username . ' who is already activated wanted to re-register.');
                 return false;
             }
             $user->setPasswordHash($passwordHash);
