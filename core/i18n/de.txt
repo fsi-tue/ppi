@@ -164,6 +164,7 @@ search=Suchen
 selectLecture=Vorlesung auswählen
 showLecture=Vorlesung anzeigen
 showLectures=Vorlesungen anzeigen
+showUser=Nutzer anzeigen
 status=Status
 studentUnionTuebingen=Fachschaft Informatik Tübingen
 submit=Absenden

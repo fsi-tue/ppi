@@ -164,6 +164,7 @@ search=Search
 selectLecture=Select lecture
 showLecture= Show lecture
 showLectures=Show lectures
+showUser=Show user
 status=Status
 studentUnionTuebingen=Student Council Computer Science Tübingen
 submit=Submit

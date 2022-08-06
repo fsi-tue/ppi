@@ -200,6 +200,9 @@
                                 <a href="examprotocolslist.php?lectureID=' . $lectureIDsOfExamProtocol[0] . '" id="styledButton" style="margin: 0 0 0 18px;">
                                     <img src="static/img/run.png' . $GLOBALS["VERSION_STRING"] . '" alt="Show lecture" style="height: 24px; vertical-align: middle;">&nbsp;&nbsp;' . $i18n->get('showLecture') . '
                                 </a>
+                                <a href="userslist.php?username=' . $uploadedByUsername . '" id="styledButton" style="margin: 0 0 0 18px;">
+                                    <img src="static/img/run.png' . $GLOBALS["VERSION_STRING"] . '" alt="Show User" style="height: 24px; vertical-align: middle;">&nbsp;&nbsp;' . $i18n->get('showUser') . '
+                                </a>
 
                             </div>
                             
