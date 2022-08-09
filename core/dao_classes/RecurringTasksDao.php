@@ -105,7 +105,7 @@ class RecurringTasksDao {
      * Returns 'SUCCESS', if any rows were affected, 'NO_CHANGE' otherwise and 'ERROR' in an error case.
      */
     function removeExpiredBorrowRecords() {
-        $sql = "DELETE FROM \"BorrowRecords\" WHERE TO_TIMESTAMP(\"borrowedUntilDate\", 'YYYY-MM-DD') < now();";
+        $sql = "DELETE FROM \"BorrowRecords\" WHERE UNIX_TIMESTAMP(STR_TO_DATE(\"borrowedUntilDate\", '%Y-%m-%d')) < now();";
         $result = $this->dbConn->exec($sql, []);
         $rowCount = $result['rowCount'];
         if ($rowCount <= 0) {

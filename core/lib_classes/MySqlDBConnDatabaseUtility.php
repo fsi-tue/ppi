@@ -1,5 +1,5 @@
 <?php
-class PostgresDBConnDatabaseUtility {
+class DBConnDatabaseUtility {
     private $dbConn = null;
     private $dateUtil = null;
 
@@ -12,10 +12,8 @@ class PostgresDBConnDatabaseUtility {
      * Get all the table names from the database.
      */
     function getAllDatabaseTableNames() {
-        $sql = "SELECT table_name
-                FROM information_schema.tables
-                WHERE table_schema='public'
-                AND table_type='BASE TABLE';";
+		$dbName = $this->dbConn->getDbName();
+		$sql = "SELECT table_name FROM information_schema.tables WHERE table_schema = '$dbName';";
         return $this->dbConn->query($sql);
     }
 

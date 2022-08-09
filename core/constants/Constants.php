@@ -13,12 +13,12 @@ class Constants {
     const ALERT_ADMIN_FROM_LEVEL = 4;
     
     // SQL
-    const POSTGRES_HOST = 'db';
-    const POSTGRES_PORT = '5432';
-    const POSTGRES_DB_NAME = 'ppi';
-    const POSTGRES_DB_NAME_UNIT_TESTS = 'ppi_unittests';
-    const POSTGRES_USER = 'ppi';
-    const POSTGRES_PASSWORD = Passwords::POSTGRES_PASSWORD;
+    const DATABASE_HOST = 'localhost';
+    const DATABASE_PORT = '3306';
+    const DATABASE_DB_NAME = 'ppi';
+    const DATABASE_DB_NAME_UNIT_TESTS = 'ppi_unittests';
+    const DATABASE_USER = 'ppi_database_user';
+    const DATABASE_PASSWORD = Passwords::DATABASE_PASSWORD;
     
     // registration
     const PASSWORD_COST = 10;

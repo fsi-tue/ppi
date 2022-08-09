@@ -27,9 +27,8 @@
     date_default_timezone_set(Constants::DEFAULT_TIMEZONE);
 
     // include the database connection class
-    require_once('lib_classes/PostgresDBConn.php');
-    //require_once('lib_classes/SQLiteDBConn.php');
-    $dbConn = new PostgresDBConn(Constants::POSTGRES_HOST, Constants::POSTGRES_PORT, Constants::POSTGRES_DB_NAME, Constants::POSTGRES_USER, Constants::POSTGRES_PASSWORD, 'COLUMN_NAMES');
+    require_once('lib_classes/MySqlDBConn.php');
+    $dbConn = new DBConn(Constants::DATABASE_HOST, Constants::DATABASE_PORT, Constants::DATABASE_DB_NAME, Constants::DATABASE_USER, Constants::DATABASE_PASSWORD, 'COLUMN_NAMES');
     
     // internationalization
     include_once 'i18n/I18n.php';
@@ -50,9 +49,8 @@
     $fileUtil = new FileUtil();
     
     // include the database untility class
-    require_once('lib_classes/PostgresDBConnDatabaseUtility.php');
-    //require_once('lib_classes/SQLiteDBConnDatabaseUtility.php');
-    $databaseUtility = new PostgresDBConnDatabaseUtility($dbConn, $dateUtil);
+    require_once('lib_classes/MySqlDBConnDatabaseUtility.php');
+    $databaseUtility = new DBConnDatabaseUtility($dbConn, $dateUtil);
     //$databaseUtility->recreateDatabase();
 
     // include all data classes
@@ -104,7 +102,7 @@
     
     // instantiate the unit tests so they can be run from the admin page
     require_once('test/TestUtil.php');
-    $dbConnTests = new PostgresDBConn(Constants::POSTGRES_HOST, Constants::POSTGRES_PORT, Constants::POSTGRES_DB_NAME_UNIT_TESTS, Constants::POSTGRES_USER, Constants::POSTGRES_PASSWORD, 'COLUMN_NAMES');
+    $dbConnTests = new DBConn(Constants::DATABASE_HOST, Constants::DATABASE_PORT, Constants::DATABASE_DB_NAME_UNIT_TESTS, Constants::DATABASE_USER, Constants::DATABASE_PASSWORD, 'COLUMN_NAMES');
     $testUtil = new TestUtil($log, $dbConnTests, $dateUtil, $fileUtil);
     
     // show phpinfo on top of page if wanted
