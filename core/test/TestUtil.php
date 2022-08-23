@@ -30,7 +30,7 @@ class TestUtil {
     }
     
     function runAllTests() {
-        $this->databaseUtility = new PostgresDBConnDatabaseUtility($this->dbConn, $this->dateUtil);
+        $this->databaseUtility = new DBConnDatabaseUtility($this->dbConn, $this->dateUtil);
         $this->databaseUtility->recreateDatabase();
         
         $retArray = array();

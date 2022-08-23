@@ -112,7 +112,7 @@ login=Login
 loginHelp=Help for Login
 loginHelpContent=You can log in to the PPI (exam protocols interface, Prüfungsprotokolle Interface) of the students council computer science. For this, you need to create an account beforehand. Your username is your ZDV-username (e.g. zxaaa11 oder zxabc12). You have chosen your password on account creation.
 logout=Logout
-madeWith=<a href="https://github.com/fsi-tue/ppi">made</a> with
+madeWith=made with
 markForDeletion=Mark for Deletion
 needsJavaScript=needs Javascript
 newPassword=New Password
@@ -178,7 +178,7 @@ unitTests=Unit Tests
 updatedExamProtocolDataSuccessfully=Successfully updated exam protocol data.
 updatedLectureDataSuccessfully=Successfully updated lecture data.
 updatedUserDataSuccessfully=Successfully updated user data.
-uploadExplanation=For every protocol you upload you get 3 tokens.
+uploadExplanation=You get 3 tokens for every protocol you upload.
 uploadFeedbackMailMessage=Hello {0},<br><br>your protocol has been assessed with the following result:<br>{1}<br><br>Best<br>Your PPI System
 uploadHelp=Help for Upload
 uploadHelpContent=Here you can upload your exam protocols. Never upload any material of which you are not the author! Your protocoll will then be checked by the student council computer science. If your protocol gets acceppte, you will be granted tokens.

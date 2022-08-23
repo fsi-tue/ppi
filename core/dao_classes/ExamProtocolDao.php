@@ -43,7 +43,7 @@ class ExamProtocolDao {
      * Returns the number of exam protocols that are in the DB.
      */
     function getNumberOfExamProtocolsTotal($lectureID, $uploadedByUserID, $borrowedByUserID) {
-        $sql = "SELECT DISTINCT ON (\"ExamProtocols\".\"ID\") * FROM \"ExamProtocols\"
+        $sql = "SELECT DISTINCT \"ExamProtocols\".\"ID\" FROM \"ExamProtocols\"
         INNER JOIN \"ExamProtocolAssignedToLectures\" ON \"ExamProtocols\".\"ID\"=\"ExamProtocolAssignedToLectures\".\"examProtocolID\"";
         if ($lectureID != '') {
             $sql = "SELECT * FROM \"ExamProtocols\"
@@ -71,7 +71,7 @@ class ExamProtocolDao {
      */
     function getExamProtocols($numberOfResultsWanted, $page, $lectureID, $uploadedByUserID, $borrowedByUserID) {
         $offset = $numberOfResultsWanted * $page;
-        $sql = "SELECT DISTINCT ON (\"ExamProtocols\".\"ID\") * FROM \"ExamProtocols\"
+        $sql = "SELECT DISTINCT * FROM \"ExamProtocols\"
         INNER JOIN \"ExamProtocolAssignedToLectures\" ON \"ExamProtocols\".\"ID\"=\"ExamProtocolAssignedToLectures\".\"examProtocolID\"";
         if ($lectureID != '') {
             $sql = "SELECT * FROM \"ExamProtocols\"
