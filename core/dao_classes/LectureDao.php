@@ -93,7 +93,7 @@ class LectureDao {
      * Constructs an exam protocol assigned to lecture object from the given data array.
      */
     function createExamProtocolAssignedToLectureFromData($data) {
-        $ID = $data['ID'];
+        $ID = $data['ExamProtocolAssignedToLectures_ID'];
         $lectureID = $data['lectureID'];
         $examProtocolID = $data['examProtocolID'];
         return new ExamProtocolAssignedToLecture($ID, $lectureID, $examProtocolID);

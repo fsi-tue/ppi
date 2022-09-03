@@ -46,13 +46,13 @@ class ExamProtocolDao {
         $sql = "SELECT DISTINCT \"ExamProtocols\".\"ID\" FROM \"ExamProtocols\"
         INNER JOIN \"ExamProtocolAssignedToLectures\" ON \"ExamProtocols\".\"ID\"=\"ExamProtocolAssignedToLectures\".\"examProtocolID\"";
         if ($lectureID != '') {
-            $sql = "SELECT * FROM \"ExamProtocols\"
+            $sql = "SELECT ExamProtocolAssignedToLectures.lectureID as ExamProtocolAssignedToLectures_lectureID , ExamProtocols.* FROM \"ExamProtocols\"
                     INNER JOIN \"ExamProtocolAssignedToLectures\" ON \"ExamProtocols\".\"ID\"=\"ExamProtocolAssignedToLectures\".\"examProtocolID\"
                     WHERE \"lectureID\"='" . $lectureID . "'";
         } else if ($uploadedByUserID != '') {
             $sql = "SELECT * FROM \"ExamProtocols\" WHERE \"uploadedByUserID\"='" . $uploadedByUserID . "'";
         } else if ($borrowedByUserID != '') {
-            $sql = "SELECT * FROM \"ExamProtocols\"
+            $sql = "SELECT ExamProtocolAssignedToLectures.lectureID as ExamProtocolAssignedToLectures_lectureID , ExamProtocols.* FROM \"ExamProtocols\"
                     INNER JOIN \"ExamProtocolAssignedToLectures\" ON \"ExamProtocols\".\"ID\"=\"ExamProtocolAssignedToLectures\".\"examProtocolID\"
                     INNER JOIN \"BorrowRecords\" ON \"ExamProtocolAssignedToLectures\".\"lectureID\"=\"BorrowRecords\".\"lectureID\"
                     WHERE \"borrowedByUserID\"='" . $borrowedByUserID . "'";

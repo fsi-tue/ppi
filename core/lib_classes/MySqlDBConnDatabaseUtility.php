@@ -119,7 +119,7 @@ class DBConnDatabaseUtility {
      */
     function setUpEmptyBorrowRecordsTable() {
         $sql = 'CREATE TABLE "BorrowRecords" (
-"ID"                SERIAL PRIMARY KEY UNIQUE,
+"BorrowRecords_ID"  SERIAL PRIMARY KEY UNIQUE,
 "lectureID"         INT NOT NULL,
 "borrowedByUserID"  INT NOT NULL,
 "borrowedUntilDate" TEXT NOT NULL
@@ -132,9 +132,9 @@ class DBConnDatabaseUtility {
      */
     function setUpEmptyExamProtocolAssignedToLecturesTable() {
         $sql = 'CREATE TABLE "ExamProtocolAssignedToLectures" (
-"ID"                SERIAL PRIMARY KEY UNIQUE,
-"lectureID"         INT NOT NULL,
-"examProtocolID"    INT NOT NULL
+"ExamProtocolAssignedToLectures_ID" SERIAL PRIMARY KEY UNIQUE,
+"lectureID"                         INT NOT NULL,
+"examProtocolID"                    INT NOT NULL
 );';
         $this->dbConn->exec($sql, array());
     }

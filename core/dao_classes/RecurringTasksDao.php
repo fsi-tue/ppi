@@ -127,13 +127,8 @@ class RecurringTasksDao {
         if ($numberOfLogEventsToDelete < 1) {
             return 'NO_CHANGE';
         }
-        
-        $sql = "DELETE FROM \"LogEvents\" WHERE \"ID\" IN (
-            SELECT \"ID\"
-            FROM \"LogEvents\"
-            ORDER BY \"ID\"
-            LIMIT " . $numberOfLogEventsToDelete . "
-        );";
+
+        $sql = "DELETE FROM LogEvents ORDER BY ID LIMIT " . $numberOfLogEventsToDelete . ";";
 
         $result = $this->dbConn->exec($sql, []);
         $rowCount = $result['rowCount'];

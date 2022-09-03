@@ -113,7 +113,7 @@ class UserDao {
      * Constructs a borrow record object from the given data array.
      */
     function createBorrowRecordFromData($data) {
-        $ID = $data['ID'];
+        $ID = $data['BorrowRecords_ID'];
         $lectureID = $data['lectureID'];
         $borrowedByUserID = $data['borrowedByUserID'];
         $borrowedUntilDate = $this->dateUtil->stringToDateTime($data['borrowedUntilDate']);
