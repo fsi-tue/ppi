@@ -7,7 +7,7 @@ class RecurringTasksDao {
         $this->dbConn = $dbConn;
         $this->dateUtil = $dateUtil;
     }
-    
+
     /**
      * Returns the recurring task from the DB according to the given unique recurring task ID or NULL if the recurring task was not found.
      */
@@ -19,7 +19,7 @@ class RecurringTasksDao {
         }
         return NULL;
     }
-    
+
     /**
      * Returns all recurring tasks from the DB.
      */
@@ -27,7 +27,7 @@ class RecurringTasksDao {
         $sql = "SELECT * FROM \"RecurringTasks\" ORDER BY \"ID\";";
         return $this->getRecurringTasksImpl($sql, 'ID');
     }
-    
+
     /**
      * Executes the query to get recurring tasks from the DB.
      */
@@ -43,7 +43,7 @@ class RecurringTasksDao {
         }
         return $retList;
     }
-    
+
     /**
      * Constructs a recurring task object from the given data array.
      */
@@ -55,7 +55,7 @@ class RecurringTasksDao {
         $periodUnit = $data['periodUnit'];
         return new RecurringTask($ID, $name, $lastRunDate, $periodTimeframe, $periodUnit);
     }
-    
+
     /**
      * Inserts the new recurring task into the DB.
      * Returns the given recurring task with also the ID set.
@@ -71,7 +71,7 @@ class RecurringTasksDao {
         $recurringTask->setID($id);
         return $recurringTask;
     }
-    
+
     /**
      * Updates the recurring task data in the DB.
      * Returns TRUE if the transaction was successful, FALSE otherwise.
@@ -85,7 +85,7 @@ class RecurringTasksDao {
         }
         return true;
     }
-    
+
     /**
      * Deletes the recurring task from the DB according to the given unique recurring task ID.
      * Returns TRUE if the transaction was successful, FALSE otherwise.
@@ -99,13 +99,13 @@ class RecurringTasksDao {
         }
         return true;
     }
-    
+
     /**
      * Remove all expired borrow records of all users from the database.
      * Returns 'SUCCESS', if any rows were affected, 'NO_CHANGE' otherwise and 'ERROR' in an error case.
      */
     function removeExpiredBorrowRecords() {
-        $sql = "DELETE FROM \"BorrowRecords\" WHERE UNIX_TIMESTAMP(STR_TO_DATE(\"borrowedUntilDate\", '%Y-%m-%d')) < now();";
+        $sql = "DELETE FROM \"BorrowRecords\" WHERE UNIX_TIMESTAMP(STR_TO_DATE(\"borrowedUntilDate\", '%Y-%m-%d')) < UNIX_TIMESTAMP(now());";
         $result = $this->dbConn->exec($sql, []);
         $rowCount = $result['rowCount'];
         if ($rowCount <= 0) {
@@ -113,7 +113,7 @@ class RecurringTasksDao {
         }
         return 'SUCCESS';
     }
-    
+
     /**
      * Remove log events so the database is not filling up endlessly.
      * Returns 'SUCCESS', if any rows were affected, 'NO_CHANGE' otherwise and 'ERROR' in an error case.
@@ -122,7 +122,7 @@ class RecurringTasksDao {
         $countLogEventsSql = "SELECT COUNT(*) FROM \"LogEvents\";";
         $resultCountLogEvents = $this->dbConn->query($countLogEventsSql);
         $currentNumberOfLogEvents = $resultCountLogEvents[0]["count"];
-        
+
         $numberOfLogEventsToDelete = $currentNumberOfLogEvents - Constants::CLEANUP_LOG_TO_NUMBER_OF_EVENTS + 1;
         if ($numberOfLogEventsToDelete < 1) {
             return 'NO_CHANGE';
@@ -137,7 +137,7 @@ class RecurringTasksDao {
         }
         return 'SUCCESS';
     }
-    
+
     /**
      * Remove the exam protocols that are marked to be deleted from the database.
      * Returns 'SUCCESS', if any rows were affected, 'NO_CHANGE' otherwise and 'ERROR' in an error case.
@@ -151,7 +151,7 @@ class RecurringTasksDao {
         }
         return 'SUCCESS';
     }
-    
+
     /**
      * Remove the exam protocol to lecture assignment for the given exam protocol ID.
      * Returns 'SUCCESS', if any rows were affected, 'NO_CHANGE' otherwise and 'ERROR' in an error case.
@@ -168,7 +168,7 @@ class RecurringTasksDao {
         }
         return 'SUCCESS';
     }
-    
+
     /**
      * Remove the users that are marked to be deleted from the database.
      * Returns 'SUCCESS', if any rows were affected, 'NO_CHANGE' otherwise and 'ERROR' in an error case.
@@ -182,7 +182,7 @@ class RecurringTasksDao {
         }
         return 'SUCCESS';
     }
-    
+
     /**
      * Remove the lectures that are marked to be deleted from the database.
      * Returns 'SUCCESS', if any rows were affected, 'NO_CHANGE' otherwise and 'ERROR' in an error case.
@@ -196,7 +196,7 @@ class RecurringTasksDao {
         }
         return 'SUCCESS';
     }
-    
+
     /**
      * Adds the given number of tokens to all users in the database.
      * Returns 'SUCCESS', if any rows were affected, 'NO_CHANGE' otherwise and 'ERROR' in an error case.
