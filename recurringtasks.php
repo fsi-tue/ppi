@@ -55,7 +55,7 @@
         $row[] = $dateUtil->dateTimeToStringForDisplaying($recurringTasksData[$i][2], $currentUser->getLanguage());
         $row[] = $dateUtil->dateTimeToStringForDisplaying($recurringTasksData[$i][3], $currentUser->getLanguage());
         $row[] = '<div style="background-color: ' . $color . ';">' . $recurringTasksData[$i][4] . '</div>';
-        $row[] = '<a id="styledButton" href="?run=' . $id . '"><img src="static/img/run.png' . $GLOBALS["VERSION_STRING"] . '" style="height: 24px; vertical-align: middle;">&nbsp;&nbsp;' . $i18n->get('runNow') . '</a>';
+        $row[] = '<a class="styledButton" href="?run=' . $id . '"><img src="static/img/run.png' . $GLOBALS["VERSION_STRING"] . '" style="height: 24px; vertical-align: middle;">&nbsp;&nbsp;' . $i18n->get('runNow') . '</a>';
         $data[] = $row;
     }
     

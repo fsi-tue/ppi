@@ -32,7 +32,7 @@
     
     echo '<center>
                 <details open>
-                    <summary id="styledButton" style="line-height: 10px; margin: 5px;">' . $i18n->get('filter') . '</summary>
+                    <summary class="styledButton" style="line-height: 10px; margin: 5px;">' . $i18n->get('filter') . '</summary>
                     <div style="width: 50%; display: inline-block; text-align: center; margin: 0px;">
                         <form action="logevents.php" method="GET">
                             <input type="text" name="username" value="' . $username . '" placeholder="' . $i18n->get('username') . '">
@@ -40,12 +40,12 @@
                         </form>
                     </div>
                     <div style="width: 49%; display: inline-block; text-align: center; margin: 0px;">
-                        <a href="?level=" id="styledButtonGreen" style="margin: 0px;">' . $i18n->get('reset') . '</a>
-                        <a href="?level=' . Constants::LOG_LEVELS[0] . '" id="styledButtonGreen" style="margin: 0px;">' . Constants::LOG_LEVELS[0] . '</a>
-                        <a href="?level=' . Constants::LOG_LEVELS[1] . '" id="styledButtonGreen" style="margin: 0px;">' . Constants::LOG_LEVELS[1] . '</a>
-                        <a href="?level=' . Constants::LOG_LEVELS[2] . '" id="styledButtonGreen" style="margin: 0px;">' . Constants::LOG_LEVELS[2] . '</a>
-                        <a href="?level=' . Constants::LOG_LEVELS[3] . '" id="styledButtonGreen" style="margin: 0px;">' . Constants::LOG_LEVELS[3] . '</a>
-                        <a href="?level=' . Constants::LOG_LEVELS[4] . '" id="styledButtonGreen" style="margin: 0px;">' . Constants::LOG_LEVELS[4] . '</a>
+                        <a href="?level=" class="styledButtonGreen" style="margin: 0px;">' . $i18n->get('reset') . '</a>
+                        <a href="?level=' . Constants::LOG_LEVELS[0] . '" class="styledButtonGreen" style="margin: 0px;">' . Constants::LOG_LEVELS[0] . '</a>
+                        <a href="?level=' . Constants::LOG_LEVELS[1] . '" class="styledButtonGreen" style="margin: 0px;">' . Constants::LOG_LEVELS[1] . '</a>
+                        <a href="?level=' . Constants::LOG_LEVELS[2] . '" class="styledButtonGreen" style="margin: 0px;">' . Constants::LOG_LEVELS[2] . '</a>
+                        <a href="?level=' . Constants::LOG_LEVELS[3] . '" class="styledButtonGreen" style="margin: 0px;">' . Constants::LOG_LEVELS[3] . '</a>
+                        <a href="?level=' . Constants::LOG_LEVELS[4] . '" class="styledButtonGreen" style="margin: 0px;">' . Constants::LOG_LEVELS[4] . '</a>
                     </div>
                 </details>
             </center>';

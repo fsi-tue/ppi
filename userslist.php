@@ -97,7 +97,7 @@
     
     echo '<center>
                 <details' . $open . '>
-                    <summary id="styledButton" style="line-height: 10px; margin: 5px;">' . $i18n->get('filter') . '</summary>
+                    <summary class="styledButton" style="line-height: 10px; margin: 5px;">' . $i18n->get('filter') . '</summary>
                     <div style="width: 15%; display: inline-block; text-align: left; margin: 0px;">
                         <form action="userslist.php" method="GET">
                             <input type="text" size="8" name="username" placeholder="' . $i18n->get('username') . '">
@@ -112,11 +112,11 @@
                     </div>
                     <div style="width: 6%; display: inline-block; text-align: center; margin: 0px;">' . $i18n->get('or') . '</div>
                     <div style="left: 0%; width: 60%; display: inline-block; text-align: right; margin: 0px;">
-                        <a href="?role=' . Constants::USER_ROLES['user'] . '" id="styledButtonGreen" style="margin: 0px;">' . Constants::USER_ROLES['user'] . 's</a>
-                        <a href="?role=' . Constants::USER_ROLES['admin'] . '" id="styledButtonGreen" style="margin: 0px;">' . Constants::USER_ROLES['admin'] . 's</a>
-                        <a href="?role=' . Constants::USER_ROLES['notActivated'] . '" id="styledButtonGreen" style="margin: 0px;">' . Constants::USER_ROLES['notActivated'] . '_USERs</a>
-                        <a href="?role=' . Constants::USER_ROLES['blocked'] . '" id="styledButtonGreen" style="margin: 0px;">' . Constants::USER_ROLES['blocked'] . '_USERs</a>
-                        <a href="?role=' . Constants::USER_ROLES['toBeDeleted'] . '" id="styledButtonGreen" style="margin: 0px;">' . Constants::USER_ROLES['toBeDeleted'] . '_USERs</a>
+                        <a href="?role=' . Constants::USER_ROLES['user'] . '" class="styledButtonGreen" style="margin: 0px;">' . Constants::USER_ROLES['user'] . 's</a>
+                        <a href="?role=' . Constants::USER_ROLES['admin'] . '" class="styledButtonGreen" style="margin: 0px;">' . Constants::USER_ROLES['admin'] . 's</a>
+                        <a href="?role=' . Constants::USER_ROLES['notActivated'] . '" class="styledButtonGreen" style="margin: 0px;">' . Constants::USER_ROLES['notActivated'] . '_USERs</a>
+                        <a href="?role=' . Constants::USER_ROLES['blocked'] . '" class="styledButtonGreen" style="margin: 0px;">' . Constants::USER_ROLES['blocked'] . '_USERs</a>
+                        <a href="?role=' . Constants::USER_ROLES['toBeDeleted'] . '" class="styledButtonGreen" style="margin: 0px;">' . Constants::USER_ROLES['toBeDeleted'] . '_USERs</a>
                     </div>
                     <div style="left: 0%; width: 100%; display: inline-block; margin: 0px;">
                         <br><center>' . $i18n->get('passwordExample') . ': ' . $passwordExample . ', ' . $i18n->get('hash') . ': ' . $hashUtil->hashPasswordWithSaltIncluded($passwordExample) . '</center><br>
@@ -165,22 +165,22 @@
         echo '<div style="width: 10%; display: inline-block;">' . '<input type="text" name="comment" value="' . $user->getComment() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>';
         echo '<div style="width: 10%; display: inline-block; text-align: center;">' . count($user->getBorrowRecords()) . '</div>';
         echo '<div style="width: 7%; display: inline-block; text-align: center;">
-                    <a href="examprotocolslist.php?borrowedByUsername=' . $user->getUsername() . '" id="styledButton">
+                    <a href="examprotocolslist.php?borrowedByUsername=' . $user->getUsername() . '" class="styledButton">
                         <img src="static/img/viewBorrowed.png' . $GLOBALS["VERSION_STRING"] . '" alt="view protocol" style="height: 24px; vertical-align: middle;">
                     </a>
                 </div>';
         echo '<div style="width: 7%; display: inline-block; text-align: center;">
-                    <a href="examprotocolslist.php?uploadedByUsername=' . $user->getUsername() . '" id="styledButton">
+                    <a href="examprotocolslist.php?uploadedByUsername=' . $user->getUsername() . '" class="styledButton">
                         <img src="static/img/viewUploaded.png' . $GLOBALS["VERSION_STRING"] . '" alt="view protocol" style="height: 24px; vertical-align: middle;">
                     </a>
                 </div>';
         echo '<div style="width: 8%; display: inline-block; text-align: center;">
-                    <a href="?deleteID=' . $user->getID() . '" id="styledButtonRed">
+                    <a href="?deleteID=' . $user->getID() . '" class="styledButtonRed">
                         <img src="static/img/delete.png' . $GLOBALS["VERSION_STRING"] . '" alt="view protocol" style="height: 24px; vertical-align: middle;">
                     </a>
                 </div>';
         echo '<div style="width: 8%; display: inline-block; text-align: center;">' . 
-                    '<button type="submit" id="styledButton" name="id" value="' . $user->getID() . '" style="padding: 3px; width: 40px; height: 40px; vertical-align: middle;">
+                    '<button type="submit" class="styledButton" name="id" value="' . $user->getID() . '" style="padding: 3px; width: 40px; height: 40px; vertical-align: middle;">
                         <img src="static/img/save.png' . $GLOBALS["VERSION_STRING"] . '" alt="submit" style="height: 24px;">
                     </button>' .
                 '</div>';

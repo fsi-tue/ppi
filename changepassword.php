@@ -57,7 +57,7 @@
         if ($changed) {
             $typePassword = 'hidden';
             $typeSubmit = 'hidden';
-            $backButton = '<center><a href="lectures.php" id="styledButton">' .  $i18n->get('back') . '</a></center>';
+            $backButton = '<center><a href="lectures.php" class="styledButton">' .  $i18n->get('back') . '</a></center>';
         }
         return '<div id="loginField">
                     <center><div id="ppiLogo"><img src="static/img/ppiLogo.png' . $GLOBALS["VERSION_STRING"] . '" style="height: 55px;" alt="ppi logo"></div></center>
