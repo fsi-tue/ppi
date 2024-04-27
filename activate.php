@@ -41,7 +41,7 @@
         $goToLogin = '';
         if ($success == 'SUCCESS') {
             $image = 'activation_successful.png' . $GLOBALS["VERSION_STRING"];
-            $goToLogin = '<center><a href="login.php" id="styledButton">' . $i18n->get('backToLogin') . '</a></center><br><br>';
+            $goToLogin = '<center><a href="login.php" class="styledButton">' . $i18n->get('backToLogin') . '</a></center><br><br>';
         } else if ($success == 'NO_SUCCESS') {
             $image = 'activation_unsuccessful.png' . $GLOBALS["VERSION_STRING"];
         }

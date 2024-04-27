@@ -10,13 +10,13 @@ class PagedContentUtil {
         $firstVisibleElement = min($currentPage * $elementsPerPage + 1, $totalElements);
         $lastVisibleElement = min($firstVisibleElement + $elementsPerPage - 1, $totalElements);
         $maxPage = intval(ceil($totalElements / $elementsPerPage));
-        $hrefPrevious = 'href="?page=' . ($currentPage - 1) . '" id="styledButton"';
-        $hrefNext = 'href="?page=' . ($currentPage + 1) . '" id="styledButton"';
+        $hrefPrevious = 'href="?page=' . ($currentPage - 1) . '" class="styledButton"';
+        $hrefNext = 'href="?page=' . ($currentPage + 1) . '" class="styledButton"';
         if ($currentPage <= 0) {
-            $hrefPrevious = 'id="styledButtonGray"';
+            $hrefPrevious = 'class="styledButtonGray"';
         }
         if ($currentPage + 1 >= $maxPage) {
-            $hrefNext = 'id="styledButtonGray"';
+            $hrefNext = 'class="styledButtonGray"';
         }
         $retStr = '<div style="width: 45%; display: inline-block; text-align: right;">
                         <a ' . $hrefPrevious . '><span style="font-size: 20px">&laquo;</span>&nbsp;' . $this->i18n->get('previousPage') . '</a>

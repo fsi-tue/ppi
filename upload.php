@@ -156,7 +156,7 @@
     }
     
     if ($status == 'PROTOCOL_UPLOADED_SUCCESSFULLY') {
-        echo '<center><br><a id="styledButton" href="lectures.php"><span style="font-size: 20px">&laquo;</span>&nbsp;' .  $i18n->get('back') . '</a><br><br>';
+        echo '<center><br><a class="styledButton" href="lectures.php"><span style="font-size: 20px">&laquo;</span>&nbsp;' .  $i18n->get('back') . '</a><br><br>';
         echo '<p>' . $i18n->get('uploadedSuccessfullyMessage') . '</p>
               <p>' . $i18n->get('tokensWillBeGrantedAfterReviewOfProtocol') . '</p>';
     } else {
@@ -164,13 +164,13 @@
                 ' . $lectureAddedSuccessfullyMessage . '
                 <div class="info">' . $i18n->get('uploadExplanation') . '
                 <br><br>' . $i18n->get('templateRemark'). '</div>
-            <a href="static/templates/template.tex" id="styledButton">
+            <a href="static/templates/template.tex" class="styledButton">
                 <img src="static/img/protocolDownload.png' . $GLOBALS["VERSION_STRING"] . '" alt="download protocol" style="height: 24px; vertical-align: middle;"> Latex
             </a>
-            <a href="static/templates/template.docx" id="styledButton">
+            <a href="static/templates/template.docx" class="styledButton">
                 <img src="static/img/protocolDownload.png' . $GLOBALS["VERSION_STRING"] . '" alt="download protocol" style="height: 24px; vertical-align: middle;"> Word
             </a>
-            <a href="static/templates/template.txt" id="styledButton">
+            <a href="static/templates/template.txt" class="styledButton">
                 <img src="static/img/protocolDownload.png' . $GLOBALS["VERSION_STRING"] . '" alt="download protocol" style="height: 24px; vertical-align: middle;"> Txt
             </a>
             <br><br>

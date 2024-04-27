@@ -78,17 +78,17 @@
         echo '<div style="width: 10%; display: inline-block;">' . '<input type="text" name="status" value="' . $lecture->getStatus() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>';
         echo '<div style="width: 20%; display: inline-block; text-align: center;">' . count($lecture->getAssignedExamProtocols()) . '</div>';
         echo '<div style="width: 20%; display: inline-block; text-align: center;">
-                    <a href="examprotocolslist.php?lectureID=' . $lecture->getID() . '" id="styledButton">
+                    <a href="examprotocolslist.php?lectureID=' . $lecture->getID() . '" class="styledButton">
                         <img src="static/img/viewProtocol.png' . $GLOBALS["VERSION_STRING"] . '" alt="view protocol" style="height: 24px; vertical-align: middle;">
                     </a>
                 </div>';
         echo '<div style="width: 10%; display: inline-block; text-align: center;">
-                    <a href="?deleteID=' . $lecture->getID() . '" id="styledButtonRed">
+                    <a href="?deleteID=' . $lecture->getID() . '" class="styledButtonRed">
                         <img src="static/img/delete.png' . $GLOBALS["VERSION_STRING"] . '" alt="view protocol" style="height: 24px; vertical-align: middle;">
                     </a>
                 </div>';
         echo '<div style="width: 10%; display: inline-block; text-align: center;">' . 
-                    '<button type="submit" id="styledButton" name="id" value="' . $lecture->getID() . '" style="padding: 3px; width: 40px; height: 40px; vertical-align: middle;">
+                    '<button type="submit" class="styledButton" name="id" value="' . $lecture->getID() . '" style="padding: 3px; width: 40px; height: 40px; vertical-align: middle;">
                         <img src="static/img/save.png' . $GLOBALS["VERSION_STRING"] . '" alt="submit" style="height: 24px;">
                     </button>' .
                 '</div>';

@@ -106,7 +106,7 @@
     
     echo '<center>
                 <details open>
-                    <summary id="styledButton" style="line-height: 10px; margin: 5px;">' . $i18n->get('filter') . '</summary>
+                    <summary class="styledButton" style="line-height: 10px; margin: 5px;">' . $i18n->get('filter') . '</summary>
                     <div style="width: 33%; display: inline-block; text-align: right; margin: 0px;">
                         <form action="examprotocolslist.php" method="GET">
                             <input type="text" name="lectureID" value="' . $lectureID . '" placeholder="' . $i18n->get('lectureID') . '">
@@ -180,17 +180,17 @@
              '<div style="width: 10%; display: inline-block;">' . '<input type="text" readonly name="fileType" value="' . $protocol->getFileType() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>' .
              '<div style="width: 10%; display: inline-block;">' . '<input type="text" readonly name="lectures" value="' . getLecturesOfProtocolAsString($protocol->getID(), $examProtocolSystem, $allLectures) . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>' .
              '<div style="width: 6%; display: inline-block; text-align: center;">
-                    <a href="?download=' . $protocol->getID() . '" id="styledButton">
+                    <a href="?download=' . $protocol->getID() . '" class="styledButton">
                         <img src="static/img/protocolDownload.png' . $GLOBALS["VERSION_STRING"] . '" alt="download protocol" style="height: 24px; vertical-align: middle;">
                     </a>
                 </div>' .
              '<div style="width: 6%; display: inline-block; text-align: center;">
-                    <a href="viewexamprotocol.php?id=' . $protocol->getID() . '" id="styledButton">
+                    <a href="viewexamprotocol.php?id=' . $protocol->getID() . '" class="styledButton">
                         <img src="static/img/viewProtocol.png' . $GLOBALS["VERSION_STRING"] . '" alt="reply to protocol" style="height: 24px; vertical-align: middle;">
                     </a>
                 </div>' .
              '<div style="width: 6%; display: inline-block; text-align: center;">' . 
-                    '<button type="submit" id="styledButton" name="id" value="' . $protocol->getID() . '" style="padding: 3px; width: 40px; height: 40px; vertical-align: middle;">
+                    '<button type="submit" class="styledButton" name="id" value="' . $protocol->getID() . '" style="padding: 3px; width: 40px; height: 40px; vertical-align: middle;">
                         <img src="static/img/save.png' . $GLOBALS["VERSION_STRING"] . '" alt="submit" style="height: 24px;">
                     </button>' .
                 '</div>' .

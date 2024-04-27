@@ -1,6 +1,9 @@
-#styledButton, #styledButtonGreen, #styledButtonRed, #styledButtonGray {
+.styledButton,
+.styledButtonGreen,
+.styledButtonRed,
+.styledButtonGray {
 	background-color: #000080;
-    font-family: Arial;
+	font-family: Arial;
 	border-radius: 5px;
 	box-shadow: 0px 0px 1px 1px #999;
 	width: 320px;
@@ -24,40 +27,41 @@
 	white-space: nowrap;
 }
 
-#styledButton:hover {
+.styledButton:hover {
 	background-color: #2929a9;
 }
 
-#styledButtonGreen {
+.styledButtonGreen {
 	background-color: #008000;
 }
 
-#styledButtonGreen:hover {
+.styledButtonGreen:hover {
 	background-color: #29a929;
 }
 
-#styledButtonRed {
+.styledButtonRed {
 	background-color: #800000;
 }
 
-#styledButtonRed:hover {
+.styledButtonRed:hover {
 	background-color: #a92929;
 }
 
-#styledButtonGray {
+.styledButtonGray {
 	background-color: #cccccc;
 	color: black;
 	box-shadow: 0px 0px 1px 1px #ccc;
 	cursor: default;
 }
 
-#styledButtonGray:hover {
-}
-
-#styledButtonTransparent {
+.styledButtonTransparent {
 	background-color: rgba(0, 0, 0, 0.0);
 	cursor: default;
 }
 
-#styledButtonTransparent:hover {
+.menuButton {
+	width: auto;
+	flex: 1;
+	padding-top: 0;
+	padding-bottom: 0;
 }
