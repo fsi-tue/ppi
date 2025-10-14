@@ -32,9 +32,6 @@ class FileUtil {
                     $fileContents = $this->applyWatermarkToContent($fileContents, pathinfo($fullPath, PATHINFO_EXTENSION), $watermarkText);
                 }
                 $zip->addFromString($entryName, $fileContents);
-                if ($watermarkText !== null) {
-                    $zip->setCommentName($entryName, $watermarkText);
-                }
             } else {
                 $this->log->warning(static::class . '.php', 'Can not add file to zip archive! File to add not found: ' . $fullPath . '!');
             }
