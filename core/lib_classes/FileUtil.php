@@ -32,6 +32,9 @@ class FileUtil {
                     $fileContents = $this->applyWatermarkToContent($fileContents, pathinfo($fullPath, PATHINFO_EXTENSION), $watermarkText);
                 }
                 $zip->addFromString($entryName, $fileContents);
+                if ($watermarkText !== null) {
+                    $zip->setCommentName($entryName, $watermarkText);
+                }
             } else {
                 $this->log->warning(static::class . '.php', 'Can not add file to zip archive! File to add not found: ' . $fullPath . '!');
             }
@@ -47,6 +50,17 @@ class FileUtil {
         if ($extension === 'txt') {
             $trimmed = rtrim($fileContents, "\r\n");
             return $trimmed . "\n\n" . $watermarkText . "\n";
+        }
+        if ($extension === 'pdf') {
+            $commentLine = "% " . $watermarkText . "\n";
+            $headerEndPos = strpos($fileContents, "\n");
+            if ($headerEndPos !== false && $headerEndPos <= 100) {
+                // insert comment right after the PDF header so readers ignore it while keeping offsets valid
+                $before = substr($fileContents, 0, $headerEndPos + 1);
+                $after = substr($fileContents, $headerEndPos + 1);
+                return $before . $commentLine . $after;
+            }
+            return $fileContents . "\n" . $commentLine;
         }
         return $fileContents;
     }
