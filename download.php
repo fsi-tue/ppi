@@ -13,7 +13,7 @@
                 if (userHasBorrowed($lectureToDownloadID, $dateUtil, $currentUser)) {
                     $basePath = $fileUtil->getFullPathToBaseDirectory();
                     $protocolFileIDs = $lectureSystem->getAllProtocolIDsOfLecture($lectureToDownloadID);
-                    $protocolFileNames = $examProtocolSystem->getFileNamesFromProtocolIDs($protocolFileIDs);
+                    $protocols = $examProtocolSystem->getExamProtocolsFromIDs($protocolFileIDs);
 
                     # Path for zip file
                     $zipFilePath = $basePath . Constants::TMP_ZIP_FILES_DIRECTORY . '/';
@@ -31,7 +31,35 @@
                     # Complete Path
                     $zipFilePath = $zipFilePath .  $lectureName . "-" . $hashUtil->generateRandomString(8) . '.zip';
                     $watermarkText = 'Downloaded from ppi.fsi.uni-tuebingen.de. Do not redistribute! uid: ' . $currentUser->getID();
-                    $fileUtil->zipFiles($protocolFileNames, $zipFilePath, $watermarkText);
+                    $escapeForTable = static function ($value) {
+                        $sanitized = str_replace(array("\r\n", "\r", "\n"), ' ', strval($value));
+                        return str_replace('|', '\\|', $sanitized);
+                    };
+                    $protocolFileNames = array();
+                    $readmeLines = array('# Exam Protocols ' . $lectureName, '', '| File | Uploaded | Examiner |', '| --- | --- | --- |');
+                    for ($i = 0; $i < count($protocols); $i++) {
+                        $protocol = $protocols[$i];
+                        $protocolFileNames[] = $protocol->getFileName();
+                        $uploadedDate = $protocol->getUploadedDate();
+                        if ($uploadedDate instanceof DateTime) {
+                            $uploadedDateString = $dateUtil->dateTimeToStringForDisplaying($uploadedDate, $currentUser->getLanguage());
+                        } else {
+                            $uploadedDateString = strval($uploadedDate);
+                        }
+                        $examiner = trim(strval($protocol->getExaminer()));
+                        if ($examiner === '') {
+                            $examiner = '-';
+                        }
+                        $readmeLines[] = '| ' . $escapeForTable($protocol->getFileName()) . ' | ' . $escapeForTable($uploadedDateString) . ' | ' . $escapeForTable($examiner) . ' |';
+                    }
+                    if (count($protocols) === 0) {
+                        $readmeLines[] = '| - | - | - |';
+                    }
+                    $readmeLines[] = '';
+                    $readmeLines[] = $watermarkText;
+                    $readmeContent = implode("\n", $readmeLines) . "\n";
+
+                    $fileUtil->zipFiles($protocolFileNames, $zipFilePath, $watermarkText, $readmeContent);
                     $fileUtil->downloadZipFile($zipFilePath);
                 } else {
                     $log->warning('download.php', 'User tried to download protocols of a lecture that he or she has not borrowed: ' . $lectureToDownloadID);

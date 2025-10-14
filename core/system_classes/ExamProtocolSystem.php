@@ -48,11 +48,23 @@ class ExamProtocolSystem {
      * Returns file names of exam protocols from given exam protocol IDs.
      */
     function getFileNamesFromProtocolIDs($protocolIDs) {
+        $protocols = $this->getExamProtocolsFromIDs($protocolIDs);
+        $retArray = array();
+        for ($i = 0; $i < count($protocols); $i++) {
+            $retArray[] = $protocols[$i]->getFileName();
+        }
+        return $retArray;
+    }
+
+    /**
+     * Returns exam protocol objects for the given IDs.
+     */
+    function getExamProtocolsFromIDs($protocolIDs) {
         $retArray = array();
         for ($i = 0; $i < count($protocolIDs); $i++) {
             $protocol = $this->examProtocolDao->getExamProtocol($protocolIDs[$i]);
             if ($protocol != NULL) {
-                $retArray[] = $protocol->getFileName();
+                $retArray[] = $protocol;
             } else {
                 $this->log->error(static::class . '.php', 'Protocol to ID ' . $protocolIDs[$i] . ' not found!');
             }
