@@ -11,9 +11,9 @@ class FileUtil {
     
     /**
      * Compress the protocol files given as list of file names and store them in a newly created zip archive.
-     * Optionally adds a watermark message to the stored content and the zip comments.
+     * Optionally adds a watermark message to the stored content and the zip comments and an additional readme file.
      */
-    function zipFiles($listOfProtocolFileNames, $outputZipFile, $watermarkText = null) {
+    function zipFiles($listOfProtocolFileNames, $outputZipFile, $watermarkText = null, $readmeContent = null) {
         $zip = new ZipArchive();
         $zipOpened = $zip->open($outputZipFile, ZipArchive::CREATE | ZipArchive::OVERWRITE);
         if ($zipOpened !== true) {
@@ -41,6 +41,12 @@ class FileUtil {
         }
         if ($watermarkText !== null) {
             $zip->setArchiveComment($watermarkText);
+        }
+        if ($readmeContent !== null) {
+            $zip->addFromString('README.md', $readmeContent);
+            if ($watermarkText !== null) {
+                $zip->setCommentName('README.md', $watermarkText);
+            }
         }
         $zip->close();
     }
