@@ -30,7 +30,8 @@
 
                     # Complete Path
                     $zipFilePath = $zipFilePath .  $lectureName . "-" . $hashUtil->generateRandomString(8) . '.zip';
-                    $fileUtil->zipFiles($protocolFileNames, $zipFilePath);
+                    $watermarkText = 'Downloaded from ppi.fsi.uni-tuebingen.de. Do not redistribute! uid: ' . $currentUser->getID();
+                    $fileUtil->zipFiles($protocolFileNames, $zipFilePath, $watermarkText);
                     $fileUtil->downloadZipFile($zipFilePath);
                 } else {
                     $log->warning('download.php', 'User tried to download protocols of a lecture that he or she has not borrowed: ' . $lectureToDownloadID);

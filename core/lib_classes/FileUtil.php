@@ -11,20 +11,47 @@ class FileUtil {
     
     /**
      * Compress the protocol files given as list of file names and store them in a newly created zip archive.
+     * Optionally adds a watermark message to the stored content and the zip comments.
      */
-    function zipFiles($listOfProtocolFileNames, $outputZipFile) {
+    function zipFiles($listOfProtocolFileNames, $outputZipFile, $watermarkText = null) {
         $zip = new ZipArchive();
-        $zip->open($outputZipFile, ZipArchive::CREATE);
+        $zipOpened = $zip->open($outputZipFile, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+        if ($zipOpened !== true) {
+            if ($this->log !== null) {
+                $this->log->error(static::class . '.php', 'Failed to create zip archive at: ' . $outputZipFile . ' (ZipArchive::open returned ' . $zipOpened . ')');
+            }
+            return;
+        }
         
         foreach ($listOfProtocolFileNames as $fileName) {
             $fullPath = $this->getFullPathToBaseDirectory() . Constants::UPLOADED_PROTOCOLS_DIRECTORY . '/' . $fileName;
             if (file_exists($fullPath)) {
-                $zip->addFromString(basename($fullPath), file_get_contents($fullPath));  
+                $entryName = basename($fullPath);
+                $fileContents = file_get_contents($fullPath);
+                if ($watermarkText !== null) {
+                    $fileContents = $this->applyWatermarkToContent($fileContents, pathinfo($fullPath, PATHINFO_EXTENSION), $watermarkText);
+                }
+                $zip->addFromString($entryName, $fileContents);
+                if ($watermarkText !== null) {
+                    $zip->setCommentName($entryName, $watermarkText);
+                }
             } else {
                 $this->log->warning(static::class . '.php', 'Can not add file to zip archive! File to add not found: ' . $fullPath . '!');
             }
         }
+        if ($watermarkText !== null) {
+            $zip->setArchiveComment($watermarkText);
+        }
         $zip->close();
+    }
+
+    private function applyWatermarkToContent($fileContents, $fileExtension, $watermarkText) {
+        $extension = strtolower(strval($fileExtension));
+        if ($extension === 'txt') {
+            $trimmed = rtrim($fileContents, "\r\n");
+            return $trimmed . "\n\n" . $watermarkText . "\n";
+        }
+        return $fileContents;
     }
     
     /**
