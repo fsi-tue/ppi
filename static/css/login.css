@@ -3,27 +3,30 @@
 	border-radius: 5px;
 	display: block;
 	box-shadow: 0px 0px 1px 1px #999;
-	width: 340px;
+	width: 90%;
+	max-width: 400px;
 	height: auto;
 	margin: 50px auto 0 auto;
-	padding: 30px;
+	padding: 20px;
 }
 
 #ppiLogo {
 	margin: 0 auto;
 	display: block;
 	height: 55px;
+	max-width: 100%;
 }
 
 input, #infoText {
 	font-family: Arial;
 	border-radius: 5px;
-	width: 320px;
+	width: 100%;
+	max-width: 320px;
 	font-weight: bold;
 	text-align: center;
 	font-size: 15px;
 	color: #222;
-	padding: 0;
+	padding: 0 10px;
 	display: block;
 	margin: 10px auto;
 }
@@ -47,10 +50,25 @@ input[type=text], input[type=password] {
 #leftLink {
 	float: left;
 	color: black;
+	margin-bottom: 10px;
 }
 
 #rightLink {
 	float: right;
 	color: black;
+	margin-bottom: 10px;
+}
+
+@media (max-width: 400px) {
+	#loginField {
+		padding: 15px;
+		margin-top: 20px;
+	}
+	#leftLink, #rightLink {
+		float: none;
+		display: block;
+		text-align: center;
+		margin: 5px 0;
+	}
 }
 

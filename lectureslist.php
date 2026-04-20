@@ -62,38 +62,46 @@
         echo '<br><center>' . $i18n->get('errorOnUpdatingLectureData') . '</center><br>';
     }
     
-    echo '<div style="width: 5%; display: inline-block; text-align: center;">' . $i18n->get('ID') . '</div>';
-    echo '<div style="width: 25%; display: inline-block;">' . $i18n->get('lectureTitle') . '</div>';
-    echo '<div style="width: 10%; display: inline-block;">' . $i18n->get('status') . '</div>';
-    echo '<div style="width: 20%; display: inline-block; text-align: center;">' . $i18n->get('numberOfProtocols') . '</div>';
-    echo '<div style="width: 20%; display: inline-block; text-align: center;">' . $i18n->get('viewProtocols') . '</div>';
-    echo '<div style="width: 10%; display: inline-block; text-align: center;">' . $i18n->get('markForDeletion') . '</div>';
-    echo '<div style="width: 10%; display: inline-block; text-align: center;">' . $i18n->get('save') . '</div>';
+    echo '<div class="table-container">';
+    echo '<div class="table-responsive">';
+    echo '<table class="gridtable" width="100%">';
+    echo '<tr>';
+    echo '<th width="5%">' . $i18n->get('ID') . '</th>';
+    echo '<th width="25%">' . $i18n->get('lectureTitle') . '</th>';
+    echo '<th width="10%">' . $i18n->get('status') . '</th>';
+    echo '<th width="20%">' . $i18n->get('numberOfProtocols') . '</th>';
+    echo '<th width="20%">' . $i18n->get('viewProtocols') . '</th>';
+    echo '<th width="10%">' . $i18n->get('markForDeletion') . '</th>';
+    echo '<th width="10%">' . $i18n->get('save') . '</th>';
+    echo '</tr>';
         
     $allLectures = $lectureSystem->getAllLectures();
     foreach ($allLectures as &$lecture) {
-        echo '<form method="POST" action="lectureslist.php">';
-        echo '<div style="width: 5%; display: inline-block; text-align: center;">' . $lecture->getID() . '</div>';
-        echo '<div style="width: 25%; display: inline-block;">' . '<input type="text" name="name" value="' . $lecture->getName() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>';
-        echo '<div style="width: 10%; display: inline-block;">' . '<input type="text" name="status" value="' . $lecture->getStatus() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>';
-        echo '<div style="width: 20%; display: inline-block; text-align: center;">' . count($lecture->getAssignedExamProtocols()) . '</div>';
-        echo '<div style="width: 20%; display: inline-block; text-align: center;">
-                    <a href="examprotocolslist.php?lectureID=' . $lecture->getID() . '" class="styledButton">
+        echo '<form method="POST" action="lectureslist.php" style="display: table-row;">';
+        echo '<td style="text-align: center;">' . $lecture->getID() . '</td>';
+        echo '<td>' . '<input type="text" name="name" value="' . $lecture->getName() . '" style="width: 100%;">' . '</td>';
+        echo '<td>' . '<input type="text" name="status" value="' . $lecture->getStatus() . '" style="width: 100%;">' . '</td>';
+        echo '<td style="text-align: center;">' . count($lecture->getAssignedExamProtocols()) . '</td>';
+        echo '<td style="text-align: center;">
+                    <a href="examprotocolslist.php?lectureID=' . $lecture->getID() . '" class="styledButton" style="width: auto; padding: 5px;">
                         <img src="static/img/viewProtocol.png' . $GLOBALS["VERSION_STRING"] . '" alt="view protocol" style="height: 24px; vertical-align: middle;">
                     </a>
-                </div>';
-        echo '<div style="width: 10%; display: inline-block; text-align: center;">
-                    <a href="?deleteID=' . $lecture->getID() . '" class="styledButtonRed">
+                </td>';
+        echo '<td style="text-align: center;">
+                    <a href="?deleteID=' . $lecture->getID() . '" class="styledButtonRed" style="width: auto; padding: 5px;">
                         <img src="static/img/delete.png' . $GLOBALS["VERSION_STRING"] . '" alt="view protocol" style="height: 24px; vertical-align: middle;">
                     </a>
-                </div>';
-        echo '<div style="width: 10%; display: inline-block; text-align: center;">' . 
+                </td>';
+        echo '<td style="text-align: center;">' . 
                     '<button type="submit" class="styledButton" name="id" value="' . $lecture->getID() . '" style="padding: 3px; width: 40px; height: 40px; vertical-align: middle;">
                         <img src="static/img/save.png' . $GLOBALS["VERSION_STRING"] . '" alt="submit" style="height: 24px;">
                     </button>' .
-                '</div>';
+                '</td>';
         echo '</form>';
     }
+    echo '</table>';
+    echo '</div>';
+    echo '</div>';
     
     echo $footer->getFooter();
 ?>

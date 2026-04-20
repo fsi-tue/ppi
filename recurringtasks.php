@@ -30,11 +30,10 @@
     echo $header->getHeader($i18n->get('title'), $i18n->get('recurringTasks'), array('protocols.css', 'button.css', 'searchableTable.css'));
     
     echo $mainMenu->getMainMenu($i18n, $currentUser);
-    
-    echo '<div id="recurringTasksTable" style="padding-left: 40px; padding-bottom: 40px; padding-right: 40px; margin: 0px;">';
-    
-    $recurringTasksData = $recurringTasksSystem->getLastResults();
 
+    echo '<div id="recurringTasksTable" class="table-container">';
+
+    $recurringTasksData = $recurringTasksSystem->getLastResults();
     $headers = array($i18n->get('ID'), $i18n->get('recurringTaskName'), $i18n->get('lastSuccessfulRun'), $i18n->get('nextRun'), $i18n->get('status'), $i18n->get('runNow'));
     $widths = array(10, 40, 10, 10, 10, 10);
     $textAlignments = array('left', 'left', 'left', 'left', 'center', 'center');

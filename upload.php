@@ -160,76 +160,80 @@
         echo '<p>' . $i18n->get('uploadedSuccessfullyMessage') . '</p>
               <p>' . $i18n->get('tokensWillBeGrantedAfterReviewOfProtocol') . '</p>';
     } else {
-        echo '<div style="margin-left: 20%; width: 60%;">
+        echo '<div class="table-container" style="max-width: 800px;">
                 ' . $lectureAddedSuccessfullyMessage . '
                 <div class="info">' . $i18n->get('uploadExplanation') . '
                 <br><br>' . $i18n->get('templateRemark'). '</div>
-            <a href="static/templates/template.tex" class="styledButton">
-                <img src="static/img/protocolDownload.png' . $GLOBALS["VERSION_STRING"] . '" alt="download protocol" style="height: 24px; vertical-align: middle;"> Latex
-            </a>
-            <a href="static/templates/template.docx" class="styledButton">
-                <img src="static/img/protocolDownload.png' . $GLOBALS["VERSION_STRING"] . '" alt="download protocol" style="height: 24px; vertical-align: middle;"> Word
-            </a>
-            <a href="static/templates/template.txt" class="styledButton">
-                <img src="static/img/protocolDownload.png' . $GLOBALS["VERSION_STRING"] . '" alt="download protocol" style="height: 24px; vertical-align: middle;"> Txt
-            </a>
-            <br><br>
+            <div class="main-menu-container">
+                <a href="static/templates/template.tex" class="styledButton" style="width: auto; margin: 5px;">
+                    <img src="static/img/protocolDownload.png' . $GLOBALS["VERSION_STRING"] . '" alt="download protocol" style="height: 24px; vertical-align: middle;"> Latex
+                </a>
+                <a href="static/templates/template.docx" class="styledButton" style="width: auto; margin: 5px;">
+                    <img src="static/img/protocolDownload.png' . $GLOBALS["VERSION_STRING"] . '" alt="download protocol" style="height: 24px; vertical-align: middle;"> Word
+                </a>
+                <a href="static/templates/template.txt" class="styledButton" style="width: auto; margin: 5px;">
+                    <img src="static/img/protocolDownload.png' . $GLOBALS["VERSION_STRING"] . '" alt="download protocol" style="height: 24px; vertical-align: middle;"> Txt
+                </a>
+            </div>
+            <br>
                 <details open id="uploadField">
                     <summary>'  . $i18n->get('selectLecture') . '</summary>
                     <br>
                     <form enctype="multipart/form-data" action="upload.php" method="POST" onsubmit="checkUploadFileSize();">
                         <input type="hidden" name="MAX_FILE_SIZE" value="' . Constants::MAX_UPLOAD_FILE_SIZE_BYTES . '" />
-                        <table style="width: 100%;">
-                            <tr>
-                                <td style="width: 20%;' . $colorSelectLecture . '">' . $i18n->get('lecture') . ' 1:</td>
-                                <td>
-                                    <select name="lectureSelection1" style="width: 100%;' . $colorSelectLecture . '" required>
-                                        <option value="">'  . $i18n->get('pleaseSelect') . '</option>
-                                        ' . $allLectureOptions . '
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="width: 20%;">' . $i18n->get('lecture') . ' 2:</td>
-                                <td>
-                                    <select name="lectureSelection2" style="width: 100%;">
-                                        <option value="">'  . $i18n->get('notMandatory') . '</option>
-                                        ' . $allLectureOptions . '
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="width: 20%;">' . $i18n->get('lecture') . ' 3:</td>
-                                <td>
-                                    <select name="lectureSelection3" style="width: 100%;">
-                                        <option value="">'  . $i18n->get('notMandatory') . '</option>
-                                        ' . $allLectureOptions . '
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="width: 20%;' . $colorExaminer . '">' . $i18n->get('examiners') . ':</td>
-                                <td><input type="text" name="examiner" placeholder="' . $i18n->get('lecturersAndAssessors') . '" style="display: table-cell; width: calc(100% - 18px);' . $colorExaminer . '" required></td>
-                            </tr>
-                            <tr>
-                                <td style="width: 20%;">' . $i18n->get('collaborators') . ':</td>
-                                <td><input type="text" name="collaborators" placeholder="' . $i18n->get('zxShortsOfPeopleThatHelpedAndAlsoShallGetTokens') . ' (' . $i18n->get('optional') . ')" style="display: table-cell; width: calc(100% - 18px);"></td>
-                            </tr>
-                            <tr>
-                                <td style="width: 20%;">' . $i18n->get('remark') . ':</td>
-                                <td><input type="text" name="remark" placeholder="' . $i18n->get('remark') . ' (' . $i18n->get('optional') . ')" style="display: table-cell; width: calc(100% - 18px);"></td>
-                            </tr>
-                            <tr>
-                                <td style="width: 20%;' . $colorFile . '">' . $i18n->get('file') . ':</td>
-                                <td><input type="file" id="protocol_file" name="protocol_file" placeholder="" style="display: table-cell; width: calc(100% - 18px);' . $colorFile . '" required accept=".pdf,.txt"></td>
-                            </tr>
-                            <tr>
-                                <td style="width: 20%;' . $colorLegal . '"><input type="checkbox" id="legal" name="legal" value="checkedLegal" required></td>
-                                <td><label for="legal">' . $i18n->get('legalDisclaimer'). '</label></td>
-                            </tr>
-                        </table>
+                        <div class="table-responsive">
+                            <table style="width: 100%;">
+                                <tr>
+                                    <td style="width: 30%;' . $colorSelectLecture . '">' . $i18n->get('lecture') . ' 1:</td>
+                                    <td>
+                                        <select name="lectureSelection1" style="width: 100%;' . $colorSelectLecture . '" required>
+                                            <option value="">'  . $i18n->get('pleaseSelect') . '</option>
+                                            ' . $allLectureOptions . '
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 30%;">' . $i18n->get('lecture') . ' 2:</td>
+                                    <td>
+                                        <select name="lectureSelection2" style="width: 100%;">
+                                            <option value="">'  . $i18n->get('notMandatory') . '</option>
+                                            ' . $allLectureOptions . '
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 30%;">' . $i18n->get('lecture') . ' 3:</td>
+                                    <td>
+                                        <select name="lectureSelection3" style="width: 100%;">
+                                            <option value="">'  . $i18n->get('notMandatory') . '</option>
+                                            ' . $allLectureOptions . '
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 30%;' . $colorExaminer . '">' . $i18n->get('examiners') . ':</td>
+                                    <td><input type="text" name="examiner" placeholder="' . $i18n->get('lecturersAndAssessors') . '" style="width: 100%;' . $colorExaminer . '" required></td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 30%;">' . $i18n->get('collaborators') . ':</td>
+                                    <td><input type="text" name="collaborators" placeholder="' . $i18n->get('zxShortsOfPeopleThatHelpedAndAlsoShallGetTokens') . ' (' . $i18n->get('optional') . ')" style="width: 100%;"></td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 30%;">' . $i18n->get('remark') . ':</td>
+                                    <td><input type="text" name="remark" placeholder="' . $i18n->get('remark') . ' (' . $i18n->get('optional') . ')" style="width: 100%;"></td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 30%;' . $colorFile . '">' . $i18n->get('file') . ':</td>
+                                    <td><input type="file" id="protocol_file" name="protocol_file" placeholder="" style="width: 100%;' . $colorFile . '" required accept=".pdf,.txt"></td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 30%;' . $colorLegal . '"><input type="checkbox" id="legal" name="legal" value="checkedLegal" required></td>
+                                    <td><label for="legal">' . $i18n->get('legalDisclaimer'). '</label></td>
+                                </tr>
+                            </table>
+                        </div>
                         <br>
-                        <input type="submit" value="' . $i18n->get('submit') . '">
+                        <center><input type="submit" value="' . $i18n->get('submit') . '" style="width: auto; padding: 10px 40px;"></center>
                     </form>
                 </details>
                 <details ' . $addLectureFieldOpen . 'id="uploadField">
@@ -239,14 +243,16 @@
                     <br>
                     <br>
                     <form action="upload.php" method="GET">
-                        <table style="width: 100%;">
-                            <tr>
-                                <td style="width: 20%;' . $colorName . '">' . $i18n->get('lectureTitle') . ':</td>
-                                <td><input type="text" name="name" placeholder="" style="display: table-cell; width: calc(100% - 18px);' . $colorName . '" required></td>
-                            </tr>
-                        </table>
+                        <div class="table-responsive">
+                            <table style="width: 100%;">
+                                <tr>
+                                    <td style="width: 30%;' . $colorName . '">' . $i18n->get('lectureTitle') . ':</td>
+                                    <td><input type="text" name="name" placeholder="" style="width: 100%;' . $colorName . '" required></td>
+                                </tr>
+                            </table>
+                        </div>
                         <br>
-                        <input type="submit" value="' . $i18n->get('submit') . '">
+                        <center><input type="submit" value="' . $i18n->get('submit') . '" style="width: auto; padding: 10px 40px;"></center>
                     </form>
                 </details>
             </div>';

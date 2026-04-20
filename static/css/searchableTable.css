@@ -1,3 +1,10 @@
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 1rem;
+}
+
 table.gridtable {
     font-size: 15px;
     color: #333333;
@@ -5,11 +12,19 @@ table.gridtable {
     border-color: #666666;
     border-collapse: collapse;
     line-height: 25px;
+    min-width: 600px; /* Ensure table doesn't get too squished */
+}
+
+@media (max-width: 600px) {
+    table.gridtable {
+        font-size: 13px;
+        line-height: 20px;
+    }
 }
 
 table.gridtable th {
     border-width: 1px;
-    padding: 8px;
+    padding: 10px 5px;
     border-style: solid;
     border-color: #666666;
     background-color: #000080;
@@ -19,7 +34,7 @@ table.gridtable th {
 
 table.gridtable td {
     border-width: 1px;
-    padding: 5px;
+    padding: 8px 5px;
     margin: 0px;
     border-style: solid;
     border-color: #666666;
@@ -27,6 +42,8 @@ table.gridtable td {
 }
 
 #search {
-    height: 30px;
-    width: calc(100% - 18px);
+    height: 40px;
+    width: 100%;
+    margin-bottom: 10px;
+    font-size: 16px; /* Prevent zoom on iOS */
 }

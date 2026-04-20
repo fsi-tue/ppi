@@ -74,7 +74,7 @@
     
     echo $mainMenu->getMainMenu($i18n, $currentUser);
 
-    echo '<div id="protocolsTable" style="padding-left: 40px; padding-bottom: 40px; padding-right: 40px; margin: 0px;">';
+    echo '<div id="protocolsTable" class="table-container">';
 
     $headers = array($i18n->get('lectureTitle'), $i18n->get('borrowedUntil'), $i18n->get('download'));
     $widths = array(60, 20, 20);

@@ -6,25 +6,22 @@
 	font-family: Arial;
 	border-radius: 5px;
 	box-shadow: 0px 0px 1px 1px #999;
-	width: 320px;
+	width: 100%;
+	max-width: 320px;
 	font-weight: bold;
 	text-align: center;
 	font-size: 15px;
 	color: white;
 	vertical-align: middle;
-	line-height: 50px;
+	line-height: 1.5;
 	cursor: pointer;
 	border-width: 0px;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
-	margin-top: 0px;
-	margin-right: 10px;
-	margin-bottom: 0px;
-	margin-left: 10px;
+	padding: 15px 10px;
+	margin: 10px;
+	display: inline-block;
 	text-decoration: none;
-	white-space: nowrap;
+	white-space: normal;
+	word-wrap: break-word;
 }
 
 .styledButton:hover {
@@ -62,6 +59,16 @@
 .menuButton {
 	width: auto;
 	flex: 1;
-	padding-top: 0;
-	padding-bottom: 0;
+	padding: 10px;
+	margin: 5px;
+}
+
+@media (max-width: 400px) {
+	.styledButton,
+	.styledButtonGreen,
+	.styledButtonRed,
+	.styledButtonGray {
+		width: calc(100% - 20px);
+		margin: 10px;
+	}
 }

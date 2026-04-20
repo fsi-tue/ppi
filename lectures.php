@@ -40,7 +40,7 @@
     echo $i18n->get('infoOnMainPage');
     echo '</div>';
 
-    echo '<div id="protocolsTable" style="padding-left: 40px; padding-bottom: 40px; padding-right: 40px; margin: 0px;">';
+    echo '<div id="protocolsTable" class="table-container">';
 
     $headers = array($i18n->get('lectureTitle'), $i18n->get('numberOfProtocols'), $i18n->get('borrow'), $i18n->get('reportAsOutdated'));
     $widths = array(70, 10, 10, 10);

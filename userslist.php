@@ -97,29 +97,26 @@
     
     echo '<center>
                 <details' . $open . '>
-                    <summary class="styledButton" style="line-height: 10px; margin: 5px;">' . $i18n->get('filter') . '</summary>
-                    <div style="width: 15%; display: inline-block; text-align: left; margin: 0px;">
-                        <form action="userslist.php" method="GET">
-                            <input type="text" size="8" name="username" placeholder="' . $i18n->get('username') . '">
-                            <input type="submit" value="' . $i18n->get('ok') . '">
+                    <summary class="styledButton" style="line-height: 1.5; margin: 5px; width: auto; padding: 10px 20px;">' . $i18n->get('filter') . '</summary>
+                    <div class="main-menu-container" style="padding: 10px; border-bottom: 1px solid #ddd; margin-bottom: 10px;">
+                        <form action="userslist.php" method="GET" style="display: inline-block; margin: 5px;">
+                            <input type="text" name="username" placeholder="' . $i18n->get('username') . '" style="width: 150px; display: inline-block;">
+                            <input type="submit" value="' . $i18n->get('ok') . '" style="width: auto; height: auto; padding: 10px;">
+                        </form>
+                        <form action="userslist.php" method="GET" style="display: inline-block; margin: 5px;">
+                            <input type="text" name="userID" placeholder="' . $i18n->get('user') . ' ' . $i18n->get('ID') . '" style="width: 150px; display: inline-block;">
+                            <input type="submit" value="' . $i18n->get('ok') . '" style="width: auto; height: auto; padding: 10px;">
                         </form>
                     </div>
-                    <div style="width: 15%; display: inline-block; text-align: left; margin: 0px;">
-                        <form action="userslist.php" method="GET">
-                            <input type="text" size="8" name="userID" placeholder="' . $i18n->get('user') . ' ' . $i18n->get('ID') . '">
-                            <input type="submit" value="' . $i18n->get('ok') . '">
-                        </form>
+                    <div class="main-menu-container" style="padding: 10px;">
+                        <a href="?role=' . Constants::USER_ROLES['user'] . '" class="styledButtonGreen" style="margin: 5px; width: auto;">' . Constants::USER_ROLES['user'] . 's</a>
+                        <a href="?role=' . Constants::USER_ROLES['admin'] . '" class="styledButtonGreen" style="margin: 5px; width: auto;">' . Constants::USER_ROLES['admin'] . 's</a>
+                        <a href="?role=' . Constants::USER_ROLES['notActivated'] . '" class="styledButtonGreen" style="margin: 5px; width: auto;">' . Constants::USER_ROLES['notActivated'] . '_USERs</a>
+                        <a href="?role=' . Constants::USER_ROLES['blocked'] . '" class="styledButtonGreen" style="margin: 5px; width: auto;">' . Constants::USER_ROLES['blocked'] . '_USERs</a>
+                        <a href="?role=' . Constants::USER_ROLES['toBeDeleted'] . '" class="styledButtonGreen" style="margin: 5px; width: auto;">' . Constants::USER_ROLES['toBeDeleted'] . '_USERs</a>
                     </div>
-                    <div style="width: 6%; display: inline-block; text-align: center; margin: 0px;">' . $i18n->get('or') . '</div>
-                    <div style="left: 0%; width: 60%; display: inline-block; text-align: right; margin: 0px;">
-                        <a href="?role=' . Constants::USER_ROLES['user'] . '" class="styledButtonGreen" style="margin: 0px;">' . Constants::USER_ROLES['user'] . 's</a>
-                        <a href="?role=' . Constants::USER_ROLES['admin'] . '" class="styledButtonGreen" style="margin: 0px;">' . Constants::USER_ROLES['admin'] . 's</a>
-                        <a href="?role=' . Constants::USER_ROLES['notActivated'] . '" class="styledButtonGreen" style="margin: 0px;">' . Constants::USER_ROLES['notActivated'] . '_USERs</a>
-                        <a href="?role=' . Constants::USER_ROLES['blocked'] . '" class="styledButtonGreen" style="margin: 0px;">' . Constants::USER_ROLES['blocked'] . '_USERs</a>
-                        <a href="?role=' . Constants::USER_ROLES['toBeDeleted'] . '" class="styledButtonGreen" style="margin: 0px;">' . Constants::USER_ROLES['toBeDeleted'] . '_USERs</a>
-                    </div>
-                    <div style="left: 0%; width: 100%; display: inline-block; margin: 0px;">
-                        <br><center>' . $i18n->get('passwordExample') . ': ' . $passwordExample . ', ' . $i18n->get('hash') . ': ' . $hashUtil->hashPasswordWithSaltIncluded($passwordExample) . '</center><br>
+                    <div style="width: 100%; padding: 10px;">
+                        ' . $i18n->get('passwordExample') . ': ' . $passwordExample . ', ' . $i18n->get('hash') . ': ' . $hashUtil->hashPasswordWithSaltIncluded($passwordExample) . '
                     </div>
                 </details>
             </center>';
@@ -136,56 +133,64 @@
     
     echo '<br><br>';
     
-    echo '<div style="width: 5%; display: inline-block; text-align: center;">' . $i18n->get('ID') . '</div>';
-    echo '<div style="width: 5%; display: inline-block;">' . $i18n->get('user') . '</div>';
-    echo '<div style="width: 10%; display: inline-block;">' . $i18n->get('passwordHash') . '</div>';
-    echo '<div style="width: 5%; display: inline-block;">' . $i18n->get('role') . '</div>';
-    echo '<div style="width: 5%; display: inline-block;">' . $i18n->get('status') . '</div>';
-    echo '<div style="width: 5%; display: inline-block;">' . $i18n->get('tokens') . '</div>';
-    echo '<div style="width: 10%; display: inline-block;">' . $i18n->get('lastLoggedIn') . '</div>';
-    echo '<div style="width: 5%; display: inline-block;">' . $i18n->get('language') . '</div>';
-    echo '<div style="width: 10%; display: inline-block;">' . $i18n->get('comment') . '</div>';
-    echo '<div style="width: 10%; display: inline-block; text-align: center;">' . $i18n->get('numberOfBorrowedLectures') . '</div>';
-    echo '<div style="width: 7%; display: inline-block; text-align: center;">' . $i18n->get('viewBorrowedLectures') . '</div>';
-    echo '<div style="width: 7%; display: inline-block; text-align: center;">' . $i18n->get('viewUploadedLectures') . '</div>';
-    echo '<div style="width: 8%; display: inline-block; text-align: center;">' . $i18n->get('markForDeletion') . '</div>';
-    echo '<div style="width: 8%; display: inline-block; text-align: center;">' . $i18n->get('save') . '</div>';
+    echo '<div class="table-container">';
+    echo '<div class="table-responsive">';
+    echo '<table class="gridtable" width="100%">';
+    echo '<tr>';
+    echo '<th>' . $i18n->get('ID') . '</th>';
+    echo '<th>' . $i18n->get('user') . '</th>';
+    echo '<th>' . $i18n->get('passwordHash') . '</th>';
+    echo '<th>' . $i18n->get('role') . '</th>';
+    echo '<th>' . $i18n->get('status') . '</th>';
+    echo '<th>' . $i18n->get('tokens') . '</th>';
+    echo '<th>' . $i18n->get('lastLoggedIn') . '</th>';
+    echo '<th>' . $i18n->get('language') . '</th>';
+    echo '<th>' . $i18n->get('comment') . '</th>';
+    echo '<th>' . $i18n->get('numberOfBorrowedLectures') . '</th>';
+    echo '<th>' . $i18n->get('viewBorrowedLectures') . '</th>';
+    echo '<th>' . $i18n->get('viewUploadedLectures') . '</th>';
+    echo '<th>' . $i18n->get('markForDeletion') . '</th>';
+    echo '<th>' . $i18n->get('save') . '</th>';
+    echo '</tr>';
     
     $allUsers = $userSystem->getUsers(Constants::NUMBER_OF_ENTRIES_PER_PAGE, $page, $role, $username, $userID);
     foreach ($allUsers as &$user) {
-        echo '<form method="POST" action="userslist.php">';
-        echo '<div style="width: 5%; display: inline-block; text-align: center;">' . $user->getID() . '</div>';
-        echo '<div style="width: 5%; display: inline-block;">' . '<input type="text" readonly name="username" value="' . $user->getUsername() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>';
-        echo '<div style="width: 10%; display: inline-block;">' . '<input type="text" name="passwordHash" value="' . $user->getPasswordHash() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>';
-        echo '<div style="width: 5%; display: inline-block;">' . '<input type="text" name="role" value="' . $user->getRole() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>';
-        echo '<div style="width: 5%; display: inline-block;">' . '<input type="text" name="status" value="' . $user->getStatus() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>';
-        echo '<div style="width: 5%; display: inline-block;">' . '<input type="text" name="tokens" value="' . $user->getTokens() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>';
-        echo '<div style="width: 10%; display: inline-block;">' . '<input type="text" name="lastLoggedIn" value="' . $user->getLastLoggedIn() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>';
-        echo '<div style="width: 5%; display: inline-block;">' . '<input type="text" name="language" value="' . $user->getLanguage() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>';
-        echo '<div style="width: 10%; display: inline-block;">' . '<input type="text" name="comment" value="' . $user->getComment() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>';
-        echo '<div style="width: 10%; display: inline-block; text-align: center;">' . count($user->getBorrowRecords()) . '</div>';
-        echo '<div style="width: 7%; display: inline-block; text-align: center;">
-                    <a href="examprotocolslist.php?borrowedByUsername=' . $user->getUsername() . '" class="styledButton">
+        echo '<form method="POST" action="userslist.php" style="display: table-row;">';
+        echo '<td style="text-align: center;">' . $user->getID() . '</td>';
+        echo '<td>' . '<input type="text" readonly name="username" value="' . $user->getUsername() . '" style="width: 100%;">' . '</td>';
+        echo '<td>' . '<input type="text" name="passwordHash" value="' . $user->getPasswordHash() . '" style="width: 100%;">' . '</td>';
+        echo '<td>' . '<input type="text" name="role" value="' . $user->getRole() . '" style="width: 100%;">' . '</td>';
+        echo '<td>' . '<input type="text" name="status" value="' . $user->getStatus() . '" style="width: 100%;">' . '</td>';
+        echo '<td>' . '<input type="text" name="tokens" value="' . $user->getTokens() . '" style="width: 100%;">' . '</td>';
+        echo '<td>' . '<input type="text" name="lastLoggedIn" value="' . $user->getLastLoggedIn() . '" style="width: 100%;">' . '</td>';
+        echo '<td>' . '<input type="text" name="language" value="' . $user->getLanguage() . '" style="width: 100%;">' . '</td>';
+        echo '<td>' . '<input type="text" name="comment" value="' . $user->getComment() . '" style="width: 100%;">' . '</td>';
+        echo '<td style="text-align: center;">' . count($user->getBorrowRecords()) . '</td>';
+        echo '<td style="text-align: center;">
+                    <a href="examprotocolslist.php?borrowedByUsername=' . $user->getUsername() . '" class="styledButton" style="width: auto; padding: 5px;">
                         <img src="static/img/viewBorrowed.png' . $GLOBALS["VERSION_STRING"] . '" alt="view protocol" style="height: 24px; vertical-align: middle;">
                     </a>
-                </div>';
-        echo '<div style="width: 7%; display: inline-block; text-align: center;">
-                    <a href="examprotocolslist.php?uploadedByUsername=' . $user->getUsername() . '" class="styledButton">
+                </td>';
+        echo '<td style="text-align: center;">
+                    <a href="examprotocolslist.php?uploadedByUsername=' . $user->getUsername() . '" class="styledButton" style="width: auto; padding: 5px;">
                         <img src="static/img/viewUploaded.png' . $GLOBALS["VERSION_STRING"] . '" alt="view protocol" style="height: 24px; vertical-align: middle;">
                     </a>
-                </div>';
-        echo '<div style="width: 8%; display: inline-block; text-align: center;">
-                    <a href="?deleteID=' . $user->getID() . '" class="styledButtonRed">
+                </td>';
+        echo '<td style="text-align: center;">
+                    <a href="?deleteID=' . $user->getID() . '" class="styledButtonRed" style="width: auto; padding: 5px;">
                         <img src="static/img/delete.png' . $GLOBALS["VERSION_STRING"] . '" alt="view protocol" style="height: 24px; vertical-align: middle;">
                     </a>
-                </div>';
-        echo '<div style="width: 8%; display: inline-block; text-align: center;">' . 
+                </td>';
+        echo '<td style="text-align: center;">' . 
                     '<button type="submit" class="styledButton" name="id" value="' . $user->getID() . '" style="padding: 3px; width: 40px; height: 40px; vertical-align: middle;">
                         <img src="static/img/save.png' . $GLOBALS["VERSION_STRING"] . '" alt="submit" style="height: 24px;">
                     </button>' .
-                '</div>';
+                '</td>';
         echo '</form>';
     }
+    echo '</table>';
+    echo '</div>';
+    echo '</div>';
     
     echo '<br>';
     

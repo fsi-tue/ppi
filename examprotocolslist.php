@@ -106,23 +106,19 @@
     
     echo '<center>
                 <details open>
-                    <summary class="styledButton" style="line-height: 10px; margin: 5px;">' . $i18n->get('filter') . '</summary>
-                    <div style="width: 33%; display: inline-block; text-align: right; margin: 0px;">
-                        <form action="examprotocolslist.php" method="GET">
-                            <input type="text" name="lectureID" value="' . $lectureID . '" placeholder="' . $i18n->get('lectureID') . '">
-                            <input type="submit" value="' . $i18n->get('ok') . '">
+                    <summary class="styledButton" style="line-height: 1.5; margin: 5px; width: auto; padding: 10px 20px;">' . $i18n->get('filter') . '</summary>
+                    <div class="main-menu-container" style="padding: 10px;">
+                        <form action="examprotocolslist.php" method="GET" style="display: inline-block; margin: 5px;">
+                            <input type="text" name="lectureID" value="' . $lectureID . '" placeholder="' . $i18n->get('lectureID') . '" style="width: 150px; display: inline-block;">
+                            <input type="submit" value="' . $i18n->get('ok') . '" style="width: auto; height: auto; padding: 10px;">
                         </form>
-                    </div>
-                    <div style="width: 33%; display: inline-block; text-align: center; margin: 0px;">
-                        <form action="examprotocolslist.php" method="GET">
-                            <input type="text" name="uploadedByUsername" value="' . $uploadedByUsername . '" placeholder="' . $i18n->get('uploadedByUsername') . '">
-                            <input type="submit" value="' . $i18n->get('ok') . '">
+                        <form action="examprotocolslist.php" method="GET" style="display: inline-block; margin: 5px;">
+                            <input type="text" name="uploadedByUsername" value="' . $uploadedByUsername . '" placeholder="' . $i18n->get('uploadedByUsername') . '" style="width: 150px; display: inline-block;">
+                            <input type="submit" value="' . $i18n->get('ok') . '" style="width: auto; height: auto; padding: 10px;">
                         </form>
-                    </div>
-                    <div style="width: 33%; display: inline-block; text-align: left; margin: 0px;">
-                        <form action="examprotocolslist.php" method="GET">
-                            <input type="text" name="borrowedByUsername" value="' . $borrowedByUsername . '" placeholder="' . $i18n->get('borrowedByUsername') . '">
-                            <input type="submit" value="' . $i18n->get('ok') . '">
+                        <form action="examprotocolslist.php" method="GET" style="display: inline-block; margin: 5px;">
+                            <input type="text" name="borrowedByUsername" value="' . $borrowedByUsername . '" placeholder="' . $i18n->get('borrowedByUsername') . '" style="width: 150px; display: inline-block;">
+                            <input type="submit" value="' . $i18n->get('ok') . '" style="width: auto; height: auto; padding: 10px;">
                         </form>
                     </div>
                 </details>
@@ -140,19 +136,24 @@
     
     echo '<br><br>';
     
-    echo '<div style="width: 5%; display: inline-block; text-align: center;">' . $i18n->get('ID') . '</div>' .
-         '<div style="width: 5%; display: inline-block;">' . $i18n->get('status') . '</div>' .
-         '<div style="width: 10%; display: inline-block;">' . $i18n->get('uploadedByUserID') . '</div>' .
-         '<div style="width: 10%; display: inline-block;">' . $i18n->get('uploadedDate') . '</div>' .
-         '<div style="width: 10%; display: inline-block;">' . $i18n->get('remark') . '</div>' .
-         '<div style="width: 10%; display: inline-block;">' . $i18n->get('examiners') . '</div>' .
-         '<div style="width: 5%; display: inline-block;">' . $i18n->get('fileName') . '</div>' .
-         '<div style="width: 5%; display: inline-block;">' . $i18n->get('fileSize') . '</div>' .
-         '<div style="width: 10%; display: inline-block;">' . $i18n->get('fileType') . '</div>' .
-         '<div style="width: 10%; display: inline-block;">' . $i18n->get('lecture') . '</div>' .
-         '<div style="width: 6%; display: inline-block; text-align: center;">' . $i18n->get('download') . '</div>' .
-         '<div style="width: 6%; display: inline-block; text-align: center;">' . $i18n->get('details') . '</div>' .
-         '<div style="width: 6%; display: inline-block; text-align: center;">' . $i18n->get('save') . '</div>';
+    echo '<div class="table-container">';
+    echo '<div class="table-responsive">';
+    echo '<table class="gridtable" width="100%">';
+    echo '<tr>';
+    echo '<th>' . $i18n->get('ID') . '</th>';
+    echo '<th>' . $i18n->get('status') . '</th>';
+    echo '<th>' . $i18n->get('uploadedByUserID') . '</th>';
+    echo '<th>' . $i18n->get('uploadedDate') . '</th>';
+    echo '<th>' . $i18n->get('remark') . '</th>';
+    echo '<th>' . $i18n->get('examiners') . '</th>';
+    echo '<th>' . $i18n->get('fileName') . '</th>';
+    echo '<th>' . $i18n->get('fileSize') . '</th>';
+    echo '<th>' . $i18n->get('fileType') . '</th>';
+    echo '<th>' . $i18n->get('lecture') . '</th>';
+    echo '<th>' . $i18n->get('download') . '</th>';
+    echo '<th>' . $i18n->get('details') . '</th>';
+    echo '<th>' . $i18n->get('save') . '</th>';
+    echo '</tr>';
     
     $allProtocols = $examProtocolSystem->getExamProtocols(Constants::NUMBER_OF_ENTRIES_PER_PAGE, $page, $lectureID, $uploadedByUserID, $borrowedByUserID);
     $allLectures = $lectureSystem->getAllLecturesAlphabeticalOrder();
@@ -168,34 +169,37 @@
         if ($protocol->getStatus() == Constants::EXAM_PROTOCOL_STATUS['toBeDeleted']) {
             $color = 'background-color: red; ';
         }
-        echo '<form method="POST" action="examprotocolslist.php" style="' . $color . '">' .
-             '<div style="width: 5%; display: inline-block; text-align: center;">' . $protocol->getID() . '</div>' .
-             '<div style="width: 5%; display: inline-block;">' . '<input type="text" readonly name="status" value="' . $protocol->getStatus() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>' .
-             '<div style="width: 10%; display: inline-block;">' . '<input type="text" readonly name="uploadedByUserID" value="' . $protocol->getUploadedByUserID() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>' .
-             '<div style="width: 10%; display: inline-block;">' . '<input type="text" readonly name="uploadedDate" value="' . $dateUtil->dateTimeToString($protocol->getUploadedDate()) . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>' .
-             '<div style="width: 10%; display: inline-block;">' . '<input type="text" name="remark" value="' . $protocol->getRemark() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>' .
-             '<div style="width: 10%; display: inline-block;">' . '<input type="text" name="examiner" value="' . $protocol->getExaminer() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>' .
-             '<div style="width: 5%; display: inline-block;">' . '<input type="text" readonly name="fileName" value="' . $protocol->getFileName() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>' .
-             '<div style="width: 5%; display: inline-block;">' . '<input type="text" readonly name="fileSize" value="' . $protocol->getFileSize() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>' .
-             '<div style="width: 10%; display: inline-block;">' . '<input type="text" readonly name="fileType" value="' . $protocol->getFileType() . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>' .
-             '<div style="width: 10%; display: inline-block;">' . '<input type="text" readonly name="lectures" value="' . getLecturesOfProtocolAsString($protocol->getID(), $examProtocolSystem, $allLectures) . '" style="display: table-cell; width: calc(100% - 18px);">' . '</div>' .
-             '<div style="width: 6%; display: inline-block; text-align: center;">
-                    <a href="?download=' . $protocol->getID() . '" class="styledButton">
+        echo '<form method="POST" action="examprotocolslist.php" style="display: table-row; ' . $color . '">';
+        echo '<td style="text-align: center;">' . $protocol->getID() . '</td>';
+        echo '<td>' . '<input type="text" readonly name="status" value="' . $protocol->getStatus() . '" style="width: 100%;">' . '</td>';
+        echo '<td>' . '<input type="text" readonly name="uploadedByUserID" value="' . $protocol->getUploadedByUserID() . '" style="width: 100%;">' . '</td>';
+        echo '<td>' . '<input type="text" readonly name="uploadedDate" value="' . $dateUtil->dateTimeToString($protocol->getUploadedDate()) . '" style="width: 100%;">' . '</td>';
+        echo '<td>' . '<input type="text" name="remark" value="' . $protocol->getRemark() . '" style="width: 100%;">' . '</td>';
+        echo '<td>' . '<input type="text" name="examiner" value="' . $protocol->getExaminer() . '" style="width: 100%;">' . '</td>';
+        echo '<td>' . '<input type="text" readonly name="fileName" value="' . $protocol->getFileName() . '" style="width: 100%;">' . '</td>';
+        echo '<td>' . '<input type="text" readonly name="fileSize" value="' . $protocol->getFileSize() . '" style="width: 100%;">' . '</td>';
+        echo '<td>' . '<input type="text" readonly name="fileType" value="' . $protocol->getFileType() . '" style="width: 100%;">' . '</td>';
+        echo '<td>' . '<input type="text" readonly name="lectures" value="' . getLecturesOfProtocolAsString($protocol->getID(), $examProtocolSystem, $allLectures) . '" style="width: 100%;">' . '</td>';
+        echo '<td style="text-align: center;">
+                    <a href="?download=' . $protocol->getID() . '" class="styledButton" style="width: auto; padding: 5px;">
                         <img src="static/img/protocolDownload.png' . $GLOBALS["VERSION_STRING"] . '" alt="download protocol" style="height: 24px; vertical-align: middle;">
                     </a>
-                </div>' .
-             '<div style="width: 6%; display: inline-block; text-align: center;">
-                    <a href="viewexamprotocol.php?id=' . $protocol->getID() . '" class="styledButton">
+                </td>';
+        echo '<td style="text-align: center;">
+                    <a href="viewexamprotocol.php?id=' . $protocol->getID() . '" class="styledButton" style="width: auto; padding: 5px;">
                         <img src="static/img/viewProtocol.png' . $GLOBALS["VERSION_STRING"] . '" alt="reply to protocol" style="height: 24px; vertical-align: middle;">
                     </a>
-                </div>' .
-             '<div style="width: 6%; display: inline-block; text-align: center;">' . 
-                    '<button type="submit" class="styledButton" name="id" value="' . $protocol->getID() . '" style="padding: 3px; width: 40px; height: 40px; vertical-align: middle;">
+                </td>';
+        echo '<td style="text-align: center;">
+                    <button type="submit" class="styledButton" name="id" value="' . $protocol->getID() . '" style="padding: 3px; width: 40px; height: 40px; vertical-align: middle;">
                         <img src="static/img/save.png' . $GLOBALS["VERSION_STRING"] . '" alt="submit" style="height: 24px;">
-                    </button>' .
-                '</div>' .
-             '</form>';
+                    </button>
+                </td>';
+        echo '</form>';
     }
+    echo '</table>';
+    echo '</div>';
+    echo '</div>';
     
     echo '<br>';
     

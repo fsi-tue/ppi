@@ -13,11 +13,10 @@
     echo $header->getHeader($i18n->get('title'), $i18n->get('unitTests'), array('protocols.css', 'button.css', 'searchableTable.css'));
     
     echo $mainMenu->getMainMenu($i18n, $currentUser);
-    
-    echo '<div id="unittestsTable" style="padding-left: 40px; padding-bottom: 40px; padding-right: 40px; margin: 0px;">';
 
-    $headers = array($i18n->get('unitTests'), $i18n->get('status'));
-    $widths = array(80, 20);
+    echo '<div id="unittestsTable" class="table-container">';
+
+    $headers = array($i18n->get('unitTests'), $i18n->get('status'));    $widths = array(80, 20);
     $textAlignments = array('left', 'center');
     $data = array();
     $unitTestsNames = $testUtil->getTestNames();
