@@ -19,6 +19,16 @@ table.gridtable {
     table.gridtable {
         font-size: 13px;
         line-height: 20px;
+        min-width: 0;
+        width: 100%;
+        table-layout: fixed;
+    }
+
+    table.gridtable th,
+    table.gridtable td {
+        padding: 6px 4px;
+        overflow-wrap: anywhere;
+        word-break: break-word;
     }
 }
 

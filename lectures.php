@@ -61,7 +61,7 @@
             if ($currentUser->getTokens() <= 0) {
                 $row[] = '<a class="styledButtonRed" href="?borrow=' . $lecture->getID() . '"><img src="static/img/protocol.png' . $GLOBALS["VERSION_STRING"] . '" style="height: 24px; vertical-align: middle;">&nbsp;&nbsp;' . $i18n->get('noTokens') . '</a>';
             } else if (count($lecture->getAssignedExamProtocols()) > 0) {
-                $row[] = '<a class="styledButton" href="?borrow=' . $lecture->getID() . '"><img src="static/img/protocol.png' . $GLOBALS["VERSION_STRING"] . '" style="height: 24px; vertical-align: middle;">&nbsp;&nbsp;' . $i18n->get('borrow') . '</a>';
+                $row[] = '<a class="styledButton compactActionButton mobileIconOnlyButton" href="?borrow=' . $lecture->getID() . '"><img src="static/img/protocol.png' . $GLOBALS["VERSION_STRING"] . '" style="height: 24px; vertical-align: middle;"><span class="mobileActionText">&nbsp;&nbsp;' . $i18n->get('borrow') . '</span></a>';
             } else {
                 $row[] = '<a class="styledButtonGray" href=""><img src="static/img/protocolNotAvailable.png' . $GLOBALS["VERSION_STRING"] . '" style="height: 24px; vertical-align: middle;">&nbsp;&nbsp;' . $i18n->get('noProtocols') . '</a>';
             }
