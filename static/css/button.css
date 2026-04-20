@@ -61,6 +61,12 @@
 	margin: 5px;
 }
 
+.compactActionButton,
+.reportActionButton {
+	min-width: 0;
+	padding: 8px 10px;
+}
+
 @media (max-width: 600px) {
 	.styledButton,
 	.styledButtonGreen,
@@ -73,5 +79,21 @@
 	}
 	.menuButton {
 		min-width: 100%;
+	}
+	.mobileIconOnlyButton,
+	.reportActionButton {
+		width: auto;
+		max-width: none;
+		min-width: 0;
+		padding: 6px 8px;
+		margin: 2px;
+		white-space: nowrap;
+	}
+	.mobileIconOnlyButton .mobileActionText {
+		display: none;
+	}
+	.mobileIconOnlyButton img,
+	.reportActionButton img {
+		height: 20px !important;
 	}
 }

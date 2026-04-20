@@ -6,7 +6,20 @@
         $redirect->redirectTo('login.php');
     }
 
+    $reportLectureID = null;
+
     if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+        $reportLectureID = filter_input(INPUT_GET, 'report', FILTER_SANITIZE_ENCODED);
+        if (isset($_GET['report'])) {
+            if (is_numeric($reportLectureID)) {
+                $reportingResult = $lectureSystem->reportLectureHasOutdatedProtocols($reportLectureID, $currentUser->getUsername());
+                if ($reportingResult == true) {
+                    $log->info('download.php', 'Successfully reported the lecture as outdated.');
+                }
+            } else {
+                $log->error('download.php', 'Lecture ID is not numeric: ' . $reportLectureID);
+            }
+        }
         if (isset($_GET['lecture'])) {
             $lectureToDownloadID = filter_input(INPUT_GET, 'lecture', FILTER_SANITIZE_ENCODED);
             if (is_numeric($lectureToDownloadID)) {
@@ -76,9 +89,9 @@
 
     echo '<div id="protocolsTable" class="table-container">';
 
-    $headers = array($i18n->get('lectureTitle'), $i18n->get('borrowedUntil'), $i18n->get('download'));
-    $widths = array(60, 20, 20);
-    $textAlignments = array('left', 'left', 'center');
+    $headers = array($i18n->get('lectureTitle'), $i18n->get('borrowedUntil'), $i18n->get('download'), $i18n->get('reportAsOutdated'));
+    $widths = array(50, 20, 15, 15);
+    $textAlignments = array('left', 'left', 'center', 'center');
     
     $allLectures = $lectureSystem->getAllLectures();
     $borrowRecords = $currentUser->getBorrowRecords();
@@ -117,11 +130,23 @@
             $row = array();
             $row[] = $lecture->getName();
             $row[] = getBorrowedUntilFromLectureId($borrowRecords, $lecture->getID(), $dateUtil, $currentUser, $log);
-            if (userHasBorrowed($lecture->getID(), $dateUtil, $currentUser)) {
-                $row[] = '<a class="styledButtonGreen" href="?lecture=' . $lecture->getID() . '"><img src="static/img/protocolDownload.png' . $GLOBALS["VERSION_STRING"] . '" style="height: 24px; vertical-align: middle;">&nbsp;&nbsp;' . $i18n->get('download') . '</a>';
+            $hasValidBorrow = userHasBorrowed($lecture->getID(), $dateUtil, $currentUser);
+            if ($hasValidBorrow) {
+                $row[] = '<a class="styledButtonGreen compactActionButton mobileIconOnlyButton" href="?lecture=' . $lecture->getID() . '"><img src="static/img/protocolDownload.png' . $GLOBALS["VERSION_STRING"] . '" style="height: 24px; vertical-align: middle;"><span class="mobileActionText">&nbsp;&nbsp;' . $i18n->get('download') . '</span></a>';
             } else {
                 $row[] = '<a class="styledButtonRed"><img src="static/img/protocolNotAvailable.png' . $GLOBALS["VERSION_STRING"] . '" style="height: 24px; vertical-align: middle;">&nbsp;&nbsp;' . $i18n->get('invalid') . '</a>';
             }
+
+            $reportingPossible = $hasValidBorrow;
+            if ($reportingPossible && isset($_GET['report']) && is_numeric($reportLectureID) && $lecture->getID() == $reportLectureID) {
+                $reportingPossible = false;
+            }
+            if ($reportingPossible) {
+                $row[] = '<a class="styledButtonRed reportActionButton" href="?report=' . $lecture->getID() . '"><img src="static/img/report.png' . $GLOBALS["VERSION_STRING"] . '" style="height: 24px; vertical-align: middle;"></a>';
+            } else {
+                $row[] = '<a class="styledButtonGray reportActionButton" href=""><img src="static/img/report.png' . $GLOBALS["VERSION_STRING"] . '" style="height: 24px; vertical-align: middle;"></a>';
+            }
+
             $data[] = $row;
         }
     }
