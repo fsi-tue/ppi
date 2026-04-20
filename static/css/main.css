@@ -235,6 +235,17 @@ html, body {
     width: 100%;
 }
 
+.users-actions-mobile-cell {
+    display: none;
+}
+
+.users-actions-mobile-row {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 8px;
+}
+
 @media (max-width: 600px) {
     #headerTitle {
         font-size: 14px;
@@ -280,5 +291,11 @@ html, body {
         min-width: 40px;
         margin: 2px;
         white-space: nowrap;
+    }
+    .users-action-cell {
+        display: none;
+    }
+    .users-actions-mobile-cell {
+        display: flex;
     }
 }

@@ -63,7 +63,7 @@
             } else if (count($lecture->getAssignedExamProtocols()) > 0) {
                 $row[] = '<a class="styledButton compactActionButton mobileIconOnlyButton" href="?borrow=' . $lecture->getID() . '"><img src="static/img/protocol.png' . $GLOBALS["VERSION_STRING"] . '" style="height: 24px; vertical-align: middle;"><span class="mobileActionText">&nbsp;&nbsp;' . $i18n->get('borrow') . '</span></a>';
             } else {
-                $row[] = '<a class="styledButtonGray" href=""><img src="static/img/protocolNotAvailable.png' . $GLOBALS["VERSION_STRING"] . '" style="height: 24px; vertical-align: middle;">&nbsp;&nbsp;' . $i18n->get('noProtocols') . '</a>';
+                $row[] = '<a class="styledButtonGray compactActionButton mobileIconOnlyButton" href=""><img src="static/img/protocolNotAvailable.png' . $GLOBALS["VERSION_STRING"] . '" style="height: 24px; vertical-align: middle;"><span class="mobileActionText">&nbsp;&nbsp;' . $i18n->get('noProtocols') . '</span></a>';
             }
         }
         if ($insertBeginningOfArray) {

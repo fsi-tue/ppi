@@ -165,26 +165,42 @@
         echo '<div class="flex-table-cell" style="width: 5%;">' . '<input type="text" name="language" value="' . $user->getLanguage() . '">' . '</div>';
         echo '<div class="flex-table-cell" style="width: 10%;">' . '<input type="text" name="comment" value="' . $user->getComment() . '">' . '</div>';
         echo '<div class="flex-table-cell" style="width: 10%;">' . count($user->getBorrowRecords()) . '</div>';
-        echo '<div class="flex-table-cell" style="width: 7%;">
+        echo '<div class="flex-table-cell users-action-cell" style="width: 7%;">
                     <a href="examprotocolslist.php?borrowedByUsername=' . $user->getUsername() . '" class="styledButton" style="min-width: 40px; padding: 5px;">
                         <img src="static/img/viewBorrowed.png' . $GLOBALS["VERSION_STRING"] . '" alt="view borrowed" style="height: 24px; vertical-align: middle;">
                     </a>
                 </div>';
-        echo '<div class="flex-table-cell" style="width: 7%;">
+        echo '<div class="flex-table-cell users-action-cell" style="width: 7%;">
                     <a href="examprotocolslist.php?uploadedByUsername=' . $user->getUsername() . '" class="styledButton" style="min-width: 40px; padding: 5px;">
                         <img src="static/img/viewUploaded.png' . $GLOBALS["VERSION_STRING"] . '" alt="view uploaded" style="height: 24px; vertical-align: middle;">
                     </a>
                 </div>';
-        echo '<div class="flex-table-cell" style="width: 8%;">
+        echo '<div class="flex-table-cell users-action-cell" style="width: 8%;">
                     <a href="?deleteID=' . $user->getID() . '" class="styledButtonRed" style="min-width: 40px; padding: 5px;">
                         <img src="static/img/delete.png' . $GLOBALS["VERSION_STRING"] . '" alt="delete" style="height: 24px; vertical-align: middle;">
                     </a>
                 </div>';
-        echo '<div class="flex-table-cell" style="width: 8%;">' . 
+        echo '<div class="flex-table-cell users-action-cell" style="width: 8%;">' . 
                     '<button type="submit" class="styledButton" name="id" value="' . $user->getID() . '" style="padding: 3px; min-width: 40px; height: 40px; vertical-align: middle;">
                         <img src="static/img/save.png' . $GLOBALS["VERSION_STRING"] . '" alt="submit" style="height: 24px;">
                     </button>' .
                 '</div>';
+        echo '<div class="flex-table-cell users-actions-mobile-cell" style="width: 100%;">
+                    <div class="users-actions-mobile-row">
+                        <a href="examprotocolslist.php?borrowedByUsername=' . $user->getUsername() . '" class="styledButton" style="min-width: 40px; padding: 5px;">
+                            <img src="static/img/viewBorrowed.png' . $GLOBALS["VERSION_STRING"] . '" alt="view borrowed" style="height: 24px; vertical-align: middle;">
+                        </a>
+                        <a href="examprotocolslist.php?uploadedByUsername=' . $user->getUsername() . '" class="styledButton" style="min-width: 40px; padding: 5px;">
+                            <img src="static/img/viewUploaded.png' . $GLOBALS["VERSION_STRING"] . '" alt="view uploaded" style="height: 24px; vertical-align: middle;">
+                        </a>
+                        <a href="?deleteID=' . $user->getID() . '" class="styledButtonRed" style="min-width: 40px; padding: 5px;">
+                            <img src="static/img/delete.png' . $GLOBALS["VERSION_STRING"] . '" alt="delete" style="height: 24px; vertical-align: middle;">
+                        </a>
+                        <button type="submit" class="styledButton" name="id" value="' . $user->getID() . '" style="padding: 3px; min-width: 40px; height: 40px; vertical-align: middle;">
+                            <img src="static/img/save.png' . $GLOBALS["VERSION_STRING"] . '" alt="submit" style="height: 24px;">
+                        </button>
+                    </div>
+                </div>';
         echo '</form>';
     }
     echo '</div>';
