@@ -137,23 +137,22 @@
     echo '<br><br>';
     
     echo '<div class="table-container">';
-    echo '<div class="table-responsive">';
-    echo '<table class="gridtable" width="100%">';
-    echo '<tr>';
-    echo '<th>' . $i18n->get('ID') . '</th>';
-    echo '<th>' . $i18n->get('status') . '</th>';
-    echo '<th>' . $i18n->get('uploadedByUserID') . '</th>';
-    echo '<th>' . $i18n->get('uploadedDate') . '</th>';
-    echo '<th>' . $i18n->get('remark') . '</th>';
-    echo '<th>' . $i18n->get('examiners') . '</th>';
-    echo '<th>' . $i18n->get('fileName') . '</th>';
-    echo '<th>' . $i18n->get('fileSize') . '</th>';
-    echo '<th>' . $i18n->get('fileType') . '</th>';
-    echo '<th>' . $i18n->get('lecture') . '</th>';
-    echo '<th>' . $i18n->get('download') . '</th>';
-    echo '<th>' . $i18n->get('details') . '</th>';
-    echo '<th>' . $i18n->get('save') . '</th>';
-    echo '</tr>';
+    echo '<div class="flex-table">';
+    echo '<div class="flex-table-header">';
+    echo '<div class="flex-table-cell" style="width: 5%;">' . $i18n->get('ID') . '</div>';
+    echo '<div class="flex-table-cell" style="width: 5%;">' . $i18n->get('status') . '</div>';
+    echo '<div class="flex-table-cell" style="width: 10%;">' . $i18n->get('uploadedByUserID') . '</div>';
+    echo '<div class="flex-table-cell" style="width: 10%;">' . $i18n->get('uploadedDate') . '</div>';
+    echo '<div class="flex-table-cell" style="width: 10%;">' . $i18n->get('remark') . '</div>';
+    echo '<div class="flex-table-cell" style="width: 10%;">' . $i18n->get('examiners') . '</div>';
+    echo '<div class="flex-table-cell" style="width: 5%;">' . $i18n->get('fileName') . '</div>';
+    echo '<div class="flex-table-cell" style="width: 5%;">' . $i18n->get('fileSize') . '</div>';
+    echo '<div class="flex-table-cell" style="width: 10%;">' . $i18n->get('fileType') . '</div>';
+    echo '<div class="flex-table-cell" style="width: 10%;">' . $i18n->get('lecture') . '</div>';
+    echo '<div class="flex-table-cell" style="width: 6%;">' . $i18n->get('download') . '</div>';
+    echo '<div class="flex-table-cell" style="width: 6%;">' . $i18n->get('details') . '</div>';
+    echo '<div class="flex-table-cell" style="width: 6%;">' . $i18n->get('save') . '</div>';
+    echo '</div>';
     
     $allProtocols = $examProtocolSystem->getExamProtocols(Constants::NUMBER_OF_ENTRIES_PER_PAGE, $page, $lectureID, $uploadedByUserID, $borrowedByUserID);
     $allLectures = $lectureSystem->getAllLecturesAlphabeticalOrder();
@@ -169,35 +168,34 @@
         if ($protocol->getStatus() == Constants::EXAM_PROTOCOL_STATUS['toBeDeleted']) {
             $color = 'background-color: red; ';
         }
-        echo '<form method="POST" action="examprotocolslist.php" style="display: table-row; ' . $color . '">';
-        echo '<td style="text-align: center;">' . $protocol->getID() . '</td>';
-        echo '<td>' . '<input type="text" readonly name="status" value="' . $protocol->getStatus() . '" style="width: 100%;">' . '</td>';
-        echo '<td>' . '<input type="text" readonly name="uploadedByUserID" value="' . $protocol->getUploadedByUserID() . '" style="width: 100%;">' . '</td>';
-        echo '<td>' . '<input type="text" readonly name="uploadedDate" value="' . $dateUtil->dateTimeToString($protocol->getUploadedDate()) . '" style="width: 100%;">' . '</td>';
-        echo '<td>' . '<input type="text" name="remark" value="' . $protocol->getRemark() . '" style="width: 100%;">' . '</td>';
-        echo '<td>' . '<input type="text" name="examiner" value="' . $protocol->getExaminer() . '" style="width: 100%;">' . '</td>';
-        echo '<td>' . '<input type="text" readonly name="fileName" value="' . $protocol->getFileName() . '" style="width: 100%;">' . '</td>';
-        echo '<td>' . '<input type="text" readonly name="fileSize" value="' . $protocol->getFileSize() . '" style="width: 100%;">' . '</td>';
-        echo '<td>' . '<input type="text" readonly name="fileType" value="' . $protocol->getFileType() . '" style="width: 100%;">' . '</td>';
-        echo '<td>' . '<input type="text" readonly name="lectures" value="' . getLecturesOfProtocolAsString($protocol->getID(), $examProtocolSystem, $allLectures) . '" style="width: 100%;">' . '</td>';
-        echo '<td style="text-align: center;">
-                    <a href="?download=' . $protocol->getID() . '" class="styledButton" style="width: auto; padding: 5px;">
+        echo '<form method="POST" action="examprotocolslist.php" class="flex-table-row" style="' . $color . '">';
+        echo '<div class="flex-table-cell" style="width: 5%;">' . $protocol->getID() . '</div>';
+        echo '<div class="flex-table-cell" style="width: 5%;">' . '<input type="text" readonly name="status" value="' . $protocol->getStatus() . '">' . '</div>';
+        echo '<div class="flex-table-cell" style="width: 10%;">' . '<input type="text" readonly name="uploadedByUserID" value="' . $protocol->getUploadedByUserID() . '">' . '</div>';
+        echo '<div class="flex-table-cell" style="width: 10%;">' . '<input type="text" readonly name="uploadedDate" value="' . $dateUtil->dateTimeToString($protocol->getUploadedDate()) . '">' . '</div>';
+        echo '<div class="flex-table-cell" style="width: 10%;">' . '<input type="text" name="remark" value="' . $protocol->getRemark() . '">' . '</div>';
+        echo '<div class="flex-table-cell" style="width: 10%;">' . '<input type="text" name="examiner" value="' . $protocol->getExaminer() . '">' . '</div>';
+        echo '<div class="flex-table-cell" style="width: 5%;">' . '<input type="text" readonly name="fileName" value="' . $protocol->getFileName() . '">' . '</div>';
+        echo '<div class="flex-table-cell" style="width: 5%;">' . '<input type="text" readonly name="fileSize" value="' . $protocol->getFileSize() . '">' . '</div>';
+        echo '<div class="flex-table-cell" style="width: 10%;">' . '<input type="text" readonly name="fileType" value="' . $protocol->getFileType() . '">' . '</div>';
+        echo '<div class="flex-table-cell" style="width: 10%;">' . '<input type="text" readonly name="lectures" value="' . getLecturesOfProtocolAsString($protocol->getID(), $examProtocolSystem, $allLectures) . '">' . '</div>';
+        echo '<div class="flex-table-cell" style="width: 6%;">
+                    <a href="?download=' . $protocol->getID() . '" class="styledButton" style="min-width: 40px; padding: 5px;">
                         <img src="static/img/protocolDownload.png' . $GLOBALS["VERSION_STRING"] . '" alt="download protocol" style="height: 24px; vertical-align: middle;">
                     </a>
-                </td>';
-        echo '<td style="text-align: center;">
-                    <a href="viewexamprotocol.php?id=' . $protocol->getID() . '" class="styledButton" style="width: auto; padding: 5px;">
+                </div>';
+        echo '<div class="flex-table-cell" style="width: 6%;">
+                    <a href="viewexamprotocol.php?id=' . $protocol->getID() . '" class="styledButton" style="min-width: 40px; padding: 5px;">
                         <img src="static/img/viewProtocol.png' . $GLOBALS["VERSION_STRING"] . '" alt="reply to protocol" style="height: 24px; vertical-align: middle;">
                     </a>
-                </td>';
-        echo '<td style="text-align: center;">
-                    <button type="submit" class="styledButton" name="id" value="' . $protocol->getID() . '" style="padding: 3px; width: 40px; height: 40px; vertical-align: middle;">
+                </div>';
+        echo '<div class="flex-table-cell" style="width: 6%;">
+                    <button type="submit" class="styledButton" name="id" value="' . $protocol->getID() . '" style="padding: 3px; min-width: 40px; height: 40px; vertical-align: middle;">
                         <img src="static/img/save.png' . $GLOBALS["VERSION_STRING"] . '" alt="submit" style="height: 24px;">
                     </button>
-                </td>';
+                </div>';
         echo '</form>';
     }
-    echo '</table>';
     echo '</div>';
     echo '</div>';
     

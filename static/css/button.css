@@ -6,8 +6,8 @@
 	font-family: Arial;
 	border-radius: 5px;
 	box-shadow: 0px 0px 1px 1px #999;
-	width: 100%;
-	max-width: 320px;
+	width: auto;
+	min-width: 100px;
 	font-weight: bold;
 	text-align: center;
 	font-size: 15px;
@@ -16,12 +16,11 @@
 	line-height: 1.5;
 	cursor: pointer;
 	border-width: 0px;
-	padding: 15px 10px;
-	margin: 10px;
+	padding: 10px 15px;
+	margin: 5px;
 	display: inline-block;
 	text-decoration: none;
-	white-space: normal;
-	word-wrap: break-word;
+	white-space: nowrap;
 }
 
 .styledButton:hover {
@@ -57,18 +56,22 @@
 }
 
 .menuButton {
-	width: auto;
 	flex: 1;
-	padding: 10px;
+	min-width: 200px;
 	margin: 5px;
 }
 
-@media (max-width: 400px) {
+@media (max-width: 600px) {
 	.styledButton,
 	.styledButtonGreen,
 	.styledButtonRed,
 	.styledButtonGray {
-		width: calc(100% - 20px);
-		margin: 10px;
+		width: 100%;
+		max-width: 100%;
+		margin: 5px 0;
+		white-space: normal;
+	}
+	.menuButton {
+		min-width: 100%;
 	}
 }

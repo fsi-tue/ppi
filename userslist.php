@@ -134,61 +134,59 @@
     echo '<br><br>';
     
     echo '<div class="table-container">';
-    echo '<div class="table-responsive">';
-    echo '<table class="gridtable" width="100%">';
-    echo '<tr>';
-    echo '<th>' . $i18n->get('ID') . '</th>';
-    echo '<th>' . $i18n->get('user') . '</th>';
-    echo '<th>' . $i18n->get('passwordHash') . '</th>';
-    echo '<th>' . $i18n->get('role') . '</th>';
-    echo '<th>' . $i18n->get('status') . '</th>';
-    echo '<th>' . $i18n->get('tokens') . '</th>';
-    echo '<th>' . $i18n->get('lastLoggedIn') . '</th>';
-    echo '<th>' . $i18n->get('language') . '</th>';
-    echo '<th>' . $i18n->get('comment') . '</th>';
-    echo '<th>' . $i18n->get('numberOfBorrowedLectures') . '</th>';
-    echo '<th>' . $i18n->get('viewBorrowedLectures') . '</th>';
-    echo '<th>' . $i18n->get('viewUploadedLectures') . '</th>';
-    echo '<th>' . $i18n->get('markForDeletion') . '</th>';
-    echo '<th>' . $i18n->get('save') . '</th>';
-    echo '</tr>';
+    echo '<div class="flex-table">';
+    echo '<div class="flex-table-header">';
+    echo '<div class="flex-table-cell" style="width: 5%;">' . $i18n->get('ID') . '</div>';
+    echo '<div class="flex-table-cell" style="width: 5%;">' . $i18n->get('user') . '</div>';
+    echo '<div class="flex-table-cell" style="width: 10%;">' . $i18n->get('passwordHash') . '</div>';
+    echo '<div class="flex-table-cell" style="width: 5%;">' . $i18n->get('role') . '</div>';
+    echo '<div class="flex-table-cell" style="width: 5%;">' . $i18n->get('status') . '</div>';
+    echo '<div class="flex-table-cell" style="width: 5%;">' . $i18n->get('tokens') . '</div>';
+    echo '<div class="flex-table-cell" style="width: 10%;">' . $i18n->get('lastLoggedIn') . '</div>';
+    echo '<div class="flex-table-cell" style="width: 5%;">' . $i18n->get('language') . '</div>';
+    echo '<div class="flex-table-cell" style="width: 10%;">' . $i18n->get('comment') . '</div>';
+    echo '<div class="flex-table-cell" style="width: 10%;">' . $i18n->get('numberOfBorrowedLectures') . '</div>';
+    echo '<div class="flex-table-cell" style="width: 7%;">' . $i18n->get('viewBorrowedLectures') . '</div>';
+    echo '<div class="flex-table-cell" style="width: 7%;">' . $i18n->get('viewUploadedLectures') . '</div>';
+    echo '<div class="flex-table-cell" style="width: 8%;">' . $i18n->get('markForDeletion') . '</div>';
+    echo '<div class="flex-table-cell" style="width: 8%;">' . $i18n->get('save') . '</div>';
+    echo '</div>';
     
     $allUsers = $userSystem->getUsers(Constants::NUMBER_OF_ENTRIES_PER_PAGE, $page, $role, $username, $userID);
     foreach ($allUsers as &$user) {
-        echo '<form method="POST" action="userslist.php" style="display: table-row;">';
-        echo '<td style="text-align: center;">' . $user->getID() . '</td>';
-        echo '<td>' . '<input type="text" readonly name="username" value="' . $user->getUsername() . '" style="width: 100%;">' . '</td>';
-        echo '<td>' . '<input type="text" name="passwordHash" value="' . $user->getPasswordHash() . '" style="width: 100%;">' . '</td>';
-        echo '<td>' . '<input type="text" name="role" value="' . $user->getRole() . '" style="width: 100%;">' . '</td>';
-        echo '<td>' . '<input type="text" name="status" value="' . $user->getStatus() . '" style="width: 100%;">' . '</td>';
-        echo '<td>' . '<input type="text" name="tokens" value="' . $user->getTokens() . '" style="width: 100%;">' . '</td>';
-        echo '<td>' . '<input type="text" name="lastLoggedIn" value="' . $user->getLastLoggedIn() . '" style="width: 100%;">' . '</td>';
-        echo '<td>' . '<input type="text" name="language" value="' . $user->getLanguage() . '" style="width: 100%;">' . '</td>';
-        echo '<td>' . '<input type="text" name="comment" value="' . $user->getComment() . '" style="width: 100%;">' . '</td>';
-        echo '<td style="text-align: center;">' . count($user->getBorrowRecords()) . '</td>';
-        echo '<td style="text-align: center;">
-                    <a href="examprotocolslist.php?borrowedByUsername=' . $user->getUsername() . '" class="styledButton" style="width: auto; padding: 5px;">
-                        <img src="static/img/viewBorrowed.png' . $GLOBALS["VERSION_STRING"] . '" alt="view protocol" style="height: 24px; vertical-align: middle;">
+        echo '<form method="POST" action="userslist.php" class="flex-table-row">';
+        echo '<div class="flex-table-cell" style="width: 5%;">' . $user->getID() . '</div>';
+        echo '<div class="flex-table-cell" style="width: 5%;">' . '<input type="text" readonly name="username" value="' . $user->getUsername() . '">' . '</div>';
+        echo '<div class="flex-table-cell" style="width: 10%;">' . '<input type="text" name="passwordHash" value="' . $user->getPasswordHash() . '">' . '</div>';
+        echo '<div class="flex-table-cell" style="width: 5%;">' . '<input type="text" name="role" value="' . $user->getRole() . '">' . '</div>';
+        echo '<div class="flex-table-cell" style="width: 5%;">' . '<input type="text" name="status" value="' . $user->getStatus() . '">' . '</div>';
+        echo '<div class="flex-table-cell" style="width: 5%;">' . '<input type="text" name="tokens" value="' . $user->getTokens() . '">' . '</div>';
+        echo '<div class="flex-table-cell" style="width: 10%;">' . '<input type="text" name="lastLoggedIn" value="' . $user->getLastLoggedIn() . '">' . '</div>';
+        echo '<div class="flex-table-cell" style="width: 5%;">' . '<input type="text" name="language" value="' . $user->getLanguage() . '">' . '</div>';
+        echo '<div class="flex-table-cell" style="width: 10%;">' . '<input type="text" name="comment" value="' . $user->getComment() . '">' . '</div>';
+        echo '<div class="flex-table-cell" style="width: 10%;">' . count($user->getBorrowRecords()) . '</div>';
+        echo '<div class="flex-table-cell" style="width: 7%;">
+                    <a href="examprotocolslist.php?borrowedByUsername=' . $user->getUsername() . '" class="styledButton" style="min-width: 40px; padding: 5px;">
+                        <img src="static/img/viewBorrowed.png' . $GLOBALS["VERSION_STRING"] . '" alt="view borrowed" style="height: 24px; vertical-align: middle;">
                     </a>
-                </td>';
-        echo '<td style="text-align: center;">
-                    <a href="examprotocolslist.php?uploadedByUsername=' . $user->getUsername() . '" class="styledButton" style="width: auto; padding: 5px;">
-                        <img src="static/img/viewUploaded.png' . $GLOBALS["VERSION_STRING"] . '" alt="view protocol" style="height: 24px; vertical-align: middle;">
+                </div>';
+        echo '<div class="flex-table-cell" style="width: 7%;">
+                    <a href="examprotocolslist.php?uploadedByUsername=' . $user->getUsername() . '" class="styledButton" style="min-width: 40px; padding: 5px;">
+                        <img src="static/img/viewUploaded.png' . $GLOBALS["VERSION_STRING"] . '" alt="view uploaded" style="height: 24px; vertical-align: middle;">
                     </a>
-                </td>';
-        echo '<td style="text-align: center;">
-                    <a href="?deleteID=' . $user->getID() . '" class="styledButtonRed" style="width: auto; padding: 5px;">
-                        <img src="static/img/delete.png' . $GLOBALS["VERSION_STRING"] . '" alt="view protocol" style="height: 24px; vertical-align: middle;">
+                </div>';
+        echo '<div class="flex-table-cell" style="width: 8%;">
+                    <a href="?deleteID=' . $user->getID() . '" class="styledButtonRed" style="min-width: 40px; padding: 5px;">
+                        <img src="static/img/delete.png' . $GLOBALS["VERSION_STRING"] . '" alt="delete" style="height: 24px; vertical-align: middle;">
                     </a>
-                </td>';
-        echo '<td style="text-align: center;">' . 
-                    '<button type="submit" class="styledButton" name="id" value="' . $user->getID() . '" style="padding: 3px; width: 40px; height: 40px; vertical-align: middle;">
+                </div>';
+        echo '<div class="flex-table-cell" style="width: 8%;">' . 
+                    '<button type="submit" class="styledButton" name="id" value="' . $user->getID() . '" style="padding: 3px; min-width: 40px; height: 40px; vertical-align: middle;">
                         <img src="static/img/save.png' . $GLOBALS["VERSION_STRING"] . '" alt="submit" style="height: 24px;">
                     </button>' .
-                '</td>';
+                '</div>';
         echo '</form>';
     }
-    echo '</table>';
     echo '</div>';
     echo '</div>';
     
