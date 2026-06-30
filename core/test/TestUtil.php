@@ -56,6 +56,9 @@ class TestUtil {
         $phpstanDirectory = __DIR__ . '/code_analysis/';
         $staticCodeAnalysis = new StaticCodeAnalysis($this->fileUtil);
         $result = $staticCodeAnalysis->analyze($ppiRootDirectory, $phpstanDirectory);
+        if ($result == null) {
+            $result = "[RETURNED NULL]";
+        }
         if (strpos($result, '[OK]') !== false) {
             $result = '<div style="background-color: ' . Constants::SUCCESS_COLOR . '">' . $result . '<div>';
         } else {
