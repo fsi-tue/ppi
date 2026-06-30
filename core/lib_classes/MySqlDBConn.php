@@ -8,7 +8,7 @@ class DBConn {
     function __construct($host, $port, $databaseName, $user, $password, $mode) {
         $dsn = "mysql:host=$host:$port;dbname=$databaseName";
         try {
-            $this->pdo = new PDO($dsn, $user, $password, array(PDO::MYSQL_ATTR_FOUND_ROWS => true));
+            $this->pdo = new PDO($dsn, $user, $password, array(Pdo\Mysql::ATTR_FOUND_ROWS => true));
             if (!$this->pdo){
                 echo 'Could not connect to DB!';
             }
