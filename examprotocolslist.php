@@ -83,19 +83,26 @@
     }
     
     function getLecturesOfProtocolAsString($examProtocolID, $examProtocolSystem, $allLectures) {
+        $lecturesToDisplay = [];
         $lectureIDsOfExamProtocol = $examProtocolSystem->getLectureIDsOfExamProtocol($examProtocolID);
-        $retVal = '';
         for ($i = 0; $i < count($allLectures); $i++) {
             $lecture = $allLectures[$i];
             if (count($lectureIDsOfExamProtocol) > 0 && $lecture->getID() == $lectureIDsOfExamProtocol[0]) {
-                $retVal .= $lecture->getName();
+                $lecturesToDisplay[] = $lecture->getName();
             }
             if (count($lectureIDsOfExamProtocol) > 1 && $lecture->getID() == $lectureIDsOfExamProtocol[1]) {
-                $retVal .= ', ' . $lecture->getName();
+                $lecturesToDisplay[] = $lecture->getName();
             }
             if (count($lectureIDsOfExamProtocol) > 2 && $lecture->getID() == $lectureIDsOfExamProtocol[2]) {
-                $retVal .= ', ' . $lecture->getName();
+                $lecturesToDisplay[] = $lecture->getName();
             }
+        }
+        $retVal = '';
+        for ($i = 0; $i < count($lecturesToDisplay); $i++) {
+            if ($retVal !== '') {
+                $retVal .= ', ';
+            }
+            $retVal .= $lecturesToDisplay[$i];
         }
         return $retVal;
     }
