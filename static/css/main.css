@@ -4,6 +4,7 @@ html, body {
     padding: 0;
     height: 100%;
     background-color: #f9f9f9;
+    overflow-x: hidden;
 }
 
 #container {
@@ -48,7 +49,7 @@ html, body {
     text-align: right;
     color: white;
     font-size: 18px;
-    padding: 5px;
+    margin-right: 15px;
 }
 
 .dropdown {
