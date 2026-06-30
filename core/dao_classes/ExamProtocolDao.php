@@ -71,7 +71,7 @@ class ExamProtocolDao {
      */
     function getExamProtocols($numberOfResultsWanted, $page, $lectureID, $uploadedByUserID, $borrowedByUserID) {
         $offset = $numberOfResultsWanted * $page;
-        $sql = "SELECT DISTINCT * FROM \"ExamProtocols\"
+        $sql = "SELECT DISTINCT \"ExamProtocols\".* FROM \"ExamProtocols\"
         INNER JOIN \"ExamProtocolAssignedToLectures\" ON \"ExamProtocols\".\"ID\"=\"ExamProtocolAssignedToLectures\".\"examProtocolID\"";
         if ($lectureID != '') {
             $sql = "SELECT * FROM \"ExamProtocols\"
