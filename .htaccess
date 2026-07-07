@@ -1,0 +1,9 @@
+# block acecss to specific files
+<FilesMatch "^(\.env|composer\.(json|lock)|package(-lock)?\.json|yarn\.lock|\.git|\.htaccess|\.htpasswd)">
+    Require all denied
+</FilesMatch>
+
+# block access to generic hidden files
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>
