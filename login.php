@@ -32,7 +32,7 @@
                     <br>
                     <br>
                     <form method="POST" action="">
-                        <input type="text" id="username" name="username" placeholder="' . $i18n->get('userZxShort') . '"' . $colorStyle . ' maxlength="7" autocomplete="username" autocapitalize="none" spellcheck="false" required>
+                        <input type="text" id="username" name="username" placeholder="' . $i18n->get('userZxShort') . '"' . $colorStyle . ' maxlength="7" autocomplete="username" required>
                         <input type="password" id="password" name="password" placeholder="' . $i18n->get('password') . '"' . $colorStyle . ' autocomplete="current-password" required>
                         <input type="submit" id="login" value="' . $i18n->get('login') . '">
                     </form>

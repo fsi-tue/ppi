@@ -54,7 +54,7 @@
                 <div id="infoText">' . $message . '</div>
                 <br>
                 <form method="POST" action="">
-                    <input type="text" id="username" name="username" placeholder="' . $i18n->get('userZxShort') . '" value="' . $username . '" maxlength="7" autocomplete="username" autocapitalize="none" spellcheck="false" required>
+                    <input type="text" id="username" name="username" placeholder="' . $i18n->get('userZxShort') . '" value="' . $username . '" maxlength="7" autocomplete="username" required>
                     <input type="password" id="password" name="password" placeholder="' . $i18n->get('password') . '" autocomplete="new-password" required>
                     <input type="password" id="password_repeated" name="password_repeated" placeholder="' . $i18n->get('repeatPassword') . '" autocomplete="new-password" required>
                     <input type="submit" id="login" value="' . $i18n->get('createAccount') . '">
