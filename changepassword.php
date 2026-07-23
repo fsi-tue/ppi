@@ -63,9 +63,9 @@
                     <center><div id="ppiLogo"><img src="static/img/ppiLogo.png' . $GLOBALS["VERSION_STRING"] . '" style="height: 55px;" alt="ppi logo"></div></center>
                     <div id="infoText">' . $message . '</div>
                     <form method="POST" action="">
-                        <input type="' . $typePassword . '" id="username" name="old_password" placeholder="' . $i18n->get('oldPassword') . '"' . $colorOldPassword . ' required>
-                        <input type="' . $typePassword . '" id="password" name="new_password" placeholder="' . $i18n->get('newPassword') . '"' . $colorNewPasswords . ' required>
-                        <input type="' . $typePassword . '" id="password_repeated" name="repeat_new_password" placeholder="' . $i18n->get('repeatNewPassword') . '"' . $colorNewPasswords . ' required>
+                        <input type="' . $typePassword . '" id="old_password" name="old_password" placeholder="' . $i18n->get('oldPassword') . '"' . $colorOldPassword . ' autocomplete="current-password" required>
+                        <input type="' . $typePassword . '" id="new_password" name="new_password" placeholder="' . $i18n->get('newPassword') . '"' . $colorNewPasswords . ' autocomplete="new-password" required>
+                        <input type="' . $typePassword . '" id="repeat_new_password" name="repeat_new_password" placeholder="' . $i18n->get('repeatNewPassword') . '"' . $colorNewPasswords . ' autocomplete="new-password" required>
                         <input type="' . $typeSubmit . '" id="login" value="' . $i18n->get('changePassword') . '">
                     </form>
                     ' . $backButton . '
